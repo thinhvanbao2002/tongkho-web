@@ -1,1 +1,2 @@
-npm test
+echo "============== run here to check lint =============="
+yarn check:all
