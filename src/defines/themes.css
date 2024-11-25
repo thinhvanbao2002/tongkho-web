@@ -1,0 +1,13 @@
+@layer base {
+  :root {
+    --primary: #000;
+    --baseBackground: #fff;
+    --hover: #000077;
+    --button: #000;
+    --buttonConfirm: #000;
+    --text-custom-xl: '24px';
+    --text-custom-sm: '18px';
+    --text-custom-xs: '16px';
+
+  }
+}
