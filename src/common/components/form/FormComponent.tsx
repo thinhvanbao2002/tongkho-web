@@ -1,4 +1,4 @@
-import { Form, Row, Spin } from 'antd'
+import { Form } from 'antd'
 import { FormInstance, FormLayout } from 'antd/lib/form/Form'
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
@@ -40,9 +40,9 @@ const FormComponent: React.FC<IPropsFormLayout> = ({
     onSubmit(values)
   }
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
-  }
+  // const onFinishFailed = (errorInfo: any) => {
+
+  // }
 
   return (
     <FormStyled
@@ -55,7 +55,7 @@ const FormComponent: React.FC<IPropsFormLayout> = ({
       layout={layoutType}
       initialValues={initialValues}
       onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
+      // onFinishFailed={onFinishFailed}
       scrollToFirstError
     >
       {children}

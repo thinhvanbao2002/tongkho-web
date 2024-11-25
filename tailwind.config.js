@@ -1,7 +1,7 @@
 const COLORS = {
   primary: 'var(--primary)',
   baseBackground: 'var(--baseBackground)',
-  hover: 'var(--hover)',
+  hover: 'var(--hover)'
 }
 
 /** @type {import('tailwindcss').Config} */
@@ -17,10 +17,10 @@ export default {
     },
     colors: {
       ...COLORS,
-      'black': '#000',
-      'while': '#fff',
+      black: '#000',
+      while: '#fff',
       'border-basic': '#ccc',
-      'money': '#f15e2c'
+      money: '#f15e2c'
     },
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],
@@ -37,11 +37,11 @@ export default {
       fontSize: {
         'custom-xl': '24px', // Cỡ chữ XL
         'custom-sm': '18px', // Cỡ chữ SM
-        'custom-xs': '16px', // Cỡ chữ XS
+        'custom-xs': '16px' // Cỡ chữ XS
       },
       boxShadow: {
-        'custom': '10px 10px 15px rgba(0, 0, 0, 0.1)',  // Tạo shadow tùy chỉnh
-        'custom-lg': '1px 1px 13px 6px rgba(0, 0, 0, 0.1)', // Shadow lớn
+        custom: '10px 10px 15px rgba(0, 0, 0, 0.1)', // Tạo shadow tùy chỉnh
+        'custom-lg': '1px 1px 13px 6px rgba(0, 0, 0, 0.1)' // Shadow lớn
       }
     }
   }

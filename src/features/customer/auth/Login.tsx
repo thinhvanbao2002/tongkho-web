@@ -4,7 +4,6 @@ import { authService } from './service/Apis'
 import LocalStorage from 'apis/localStorage'
 import { openNotification } from 'common/utils'
 import { useNavigate } from 'react-router-dom'
-import { USER_PATH } from 'common/constants/paths'
 
 function LoginPage() {
   const navigate = useNavigate()

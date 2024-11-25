@@ -1,6 +1,3 @@
-import { ReactNode } from 'react'
-import { Outlet } from 'react-router'
-
 function AdminDashboardScreen({ children }: any) {
   return (
     <>

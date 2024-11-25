@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react'
 import { Layout, Checkbox, Slider, Divider, Input, Pagination, Spin } from 'antd'
 import CartComponent from 'common/components/cart/Cart'

@@ -1,8 +1,8 @@
-import { Image, Select, Space } from 'antd'
+import { Image, Select } from 'antd'
 function DetailProductPage() {
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`)
-  }
+  // const handleChange = (value: string) => {
+  //   console.log(`selected ${value}`)
+  // }
   return (
     <>
       <div className='w-full h-[50px] pl-20 pr-20'>
@@ -79,7 +79,7 @@ function DetailProductPage() {
                 <Select
                   defaultValue='l'
                   style={{ width: 180 }}
-                  onChange={handleChange}
+                  // onChange={handleChange}
                   options={[
                     { value: 's', label: 'S' },
                     { value: 'm', label: 'M' },
@@ -96,7 +96,7 @@ function DetailProductPage() {
                 <Select
                   defaultValue='1'
                   style={{ width: 180 }}
-                  onChange={handleChange}
+                  // onChange={handleChange}
                   options={[
                     { value: '1', label: '1' },
                     { value: '2', label: '2' },
