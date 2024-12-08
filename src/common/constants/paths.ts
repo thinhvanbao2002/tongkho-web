@@ -6,7 +6,9 @@ export const ADMIN_PATH = {
   CATEGORY: '/ad-category',
   PRODUCT: '/ad-product',
   ORDER: '/ad-order',
-  BLOG: '/ad-blog'
+  BLOG: '/ad-blog',
+  UPLOAD: '/upload',
+  UPLOADS: '/upload-multipart'
 }
 
 export const USER_PATH = {

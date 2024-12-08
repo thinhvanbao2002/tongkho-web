@@ -21,6 +21,7 @@ const RangerPicker = ({
   return (
     <Tooltip title={tooltipTitle}>
       <RangePicker
+        className='w-full'
         onChange={(date: any, dateStrings: string[]) => {
           return onChange(
             name,

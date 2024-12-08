@@ -1,4 +1,4 @@
-import AxiosClient from 'apis/axiosClient'
+import { AxiosClient } from 'apis/axiosClient'
 
 interface ILogin {
   phone: string

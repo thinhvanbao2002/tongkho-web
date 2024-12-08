@@ -23,9 +23,9 @@ const ModalComponent: React.FC<IProps> = ({
 }) => {
   return (
     <ModalStyled
+      maskClosable={false}
       width={width}
       destroyOnClose
-      maskClosable={false}
       closable={false}
       bodyStyle={bodyStyle}
       footer={null}
@@ -40,7 +40,7 @@ const ModalComponent: React.FC<IProps> = ({
 
 const ModalStyled = styled(Modal)`
   & .ant-modal-title {
-    text-align: center;
+    text-align: left;
     font-weight: 700;
     font-size: 18px;
   }

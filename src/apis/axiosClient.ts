@@ -3,7 +3,7 @@ import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 import LocalStorage from './localStorage'
 const API_URL = import.meta.env.VITE_API_URL
 
-const AxiosClient = axios.create({
+export const AxiosClient = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json'
@@ -42,5 +42,3 @@ AxiosClient.interceptors.response.use(
     console.log(error)
   }
 )
-
-export default AxiosClient

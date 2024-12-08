@@ -4,8 +4,10 @@ import React, { lazy } from 'react'
 //Layout
 const AdminLayout = lazy(() => import('../common/layout/AdminLayout/adminLayout.tsx'))
 
+//Admin
 const AdminLogin = lazy(() => import('../features/admin/Auth/auth.tsx'))
 const AdminDashBoard = lazy(() => import('../features/admin/AdminDashboard/adminDashboard.tsx'))
+const ManagerPage = lazy(() => import('../features/admin/Manager/ManagerPage.tsx'))
 
 //User
 const HomePage = lazy(() => import('../features/customer/home/Home.tsx'))
@@ -16,6 +18,8 @@ const ProductPage = lazy(() => import('../features/customer/product/Product.tsx'
 const ProductDetail = lazy(() => import('../features/customer/detailProduct/DetailProduct.tsx'))
 const CartPage = lazy(() => import('../features/customer/cart/Cart.tsx'))
 const OrderPage = lazy(() => import('../features/customer/order/Order.tsx'))
+const UploadFile = lazy(() => import('../common/components/upload/UploadComponent.tsx'))
+const UploadMultipartFile = lazy(() => import('../common/components/upload/UploadMultipartComponent.tsx'))
 
 interface RouterProps {
   path: string
@@ -28,6 +32,21 @@ export const adminRoutes: Array<RouterProps> = [
   {
     path: ADMIN_PATH.OVERVIEW,
     component: AdminDashBoard,
+    layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.MANAGER,
+    component: ManagerPage,
+    layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.UPLOAD,
+    component: UploadFile,
+    layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.UPLOADS,
+    component: UploadMultipartFile,
     layout: AdminLayout
   }
 ]

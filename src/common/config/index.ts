@@ -46,3 +46,5 @@ export const CUSTOMER_ROUTER_PATH = {
 }
 
 export const SESSION_ID = 'session_id'
+
+export const RECORD_SIZE = 12

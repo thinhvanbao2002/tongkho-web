@@ -21,7 +21,7 @@ interface IFormItemLayout {
 
 interface IPropsFormLayout {
   layoutType?: FormLayout
-  onSubmit: (data: any) => void
+  onSubmit: (value: any) => void
   children?: ReactNode
   formItemLayout?: IFormItemLayout
   initialValues?: object
@@ -37,12 +37,13 @@ const FormComponent: React.FC<IPropsFormLayout> = ({
   form
 }) => {
   const onFinish = (values: any) => {
+    console.log('🚀 ~ onFinish ~ values:', values)
     onSubmit(values)
   }
 
-  // const onFinishFailed = (errorInfo: any) => {
-
-  // }
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('🚀 ~ onFinishFailed ~ errorInfo:', errorInfo)
+  }
 
   return (
     <FormStyled
@@ -55,7 +56,7 @@ const FormComponent: React.FC<IPropsFormLayout> = ({
       layout={layoutType}
       initialValues={initialValues}
       onFinish={onFinish}
-      // onFinishFailed={onFinishFailed}
+      onFinishFailed={onFinishFailed}
       scrollToFirstError
     >
       {children}

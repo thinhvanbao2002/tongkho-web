@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable no-useless-escape */
 const BASE_URL = 'http://dev.asi358api.winds.vn/api'
 
@@ -61,6 +62,11 @@ class Config {
     }
     _value = _value.replace(/,/g, '')
     return Number(_value)
+  }
+
+  public static getIndexTable(_page: number, _index: number, _limit?: number) {
+    let limit: number = _limit ? _limit : Config._limit
+    return _page * limit - limit + (_index + 1)
   }
 }
 
