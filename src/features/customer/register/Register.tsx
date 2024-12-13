@@ -62,6 +62,24 @@ function RegisterPage() {
               >
                 <Input type='password' placeholder='Mật khẩu của bạn...' className='h-12' />
               </Form.Item>
+              <Form.Item
+                label='Nhập lại mật khẩu'
+                className='mt-5'
+                name='pass'
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập lại mật khẩu!'
+                  },
+                  {
+                    pattern: Config._reg.pass,
+                    required: true,
+                    message: 'Mật khẩu không hợp lệ!'
+                  }
+                ]}
+              >
+                <Input type='password' placeholder='Mật khẩu của bạn...' className='h-12' />
+              </Form.Item>
               <Form.Item>
                 <Button className='bg-[black] hover:bg-hover mt-5' type='primary' htmlType='submit'>
                   Gửi

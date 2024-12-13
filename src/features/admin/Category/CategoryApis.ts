@@ -1,35 +1,30 @@
 import { handleObjectEmpty } from 'common/utils'
 import { AxiosClient } from '../../../apis/axiosClient'
 import { RECORD_SIZE } from 'common/config'
-import { IAccount } from './Manager.props'
+import { ICategory, IPayLoadLisCategory } from './Category.props'
 
-export interface IQuery {
-  page: number
-}
-
-export const accountServices = {
-  get: (params: IQuery) => {
-    const url = '/admin'
+export const categoryServices: any = {
+  get: (params: IPayLoadLisCategory) => {
+    const url = '/a/category'
     const handleParams = handleObjectEmpty(params)
     return AxiosClient.get(url, {
       params: { ...handleParams, limit: RECORD_SIZE }
     })
   },
-  post: (value: IAccount) => {
-    const url = '/admin'
+  post: (payload: ICategory) => {
+    const url = '/a/category'
     return AxiosClient.post(url, {
-      ...value,
-      role: 'admin'
+      ...payload
     })
   },
-  put: (value: IAccount) => {
-    const url = `/admin/${value?.id}`
-    return AxiosClient.put(url, {
+  patch: (value: any) => {
+    const url = `/a/category/${value?.id}`
+    return AxiosClient.patch(url, {
       ...value
     })
   },
   delete: (id: number) => {
-    const url = `/admin/${id}`
+    const url = `/a/category/${id}`
     return AxiosClient.delete(url)
   }
 }

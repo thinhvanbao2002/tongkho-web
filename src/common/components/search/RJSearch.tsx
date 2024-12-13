@@ -19,6 +19,11 @@ const RJSearch = ({ onInputSearch, placeholder, defaultValue, enterButton, ...pr
     [value]
   )
 
+  const handleClear = useCallback(() => {
+    setValue('')
+    if (onInputSearch) onInputSearch('')
+  }, [onInputSearch])
+
   return (
     <div>
       <Input
@@ -31,6 +36,7 @@ const RJSearch = ({ onInputSearch, placeholder, defaultValue, enterButton, ...pr
         onChange={(e) => {
           handleChangeText(e.target?.value)
         }}
+        onClear={handleClear}
       />
     </div>
   )

@@ -1,35 +1,27 @@
 import { handleObjectEmpty } from 'common/utils'
 import { AxiosClient } from '../../../apis/axiosClient'
 import { RECORD_SIZE } from 'common/config'
-import { IAccount } from './Manager.props'
 
 export interface IQuery {
   page: number
 }
 
-export const accountServices = {
+export const customerServices = {
   get: (params: IQuery) => {
-    const url = '/admin'
+    const url = '/customer'
     const handleParams = handleObjectEmpty(params)
     return AxiosClient.get(url, {
       params: { ...handleParams, limit: RECORD_SIZE }
     })
   },
-  post: (value: IAccount) => {
-    const url = '/admin'
-    return AxiosClient.post(url, {
-      ...value,
-      role: 'admin'
-    })
-  },
-  put: (value: IAccount) => {
-    const url = `/admin/${value?.id}`
+  put: (value: any) => {
+    const url = `/customer/${value?.id}`
     return AxiosClient.put(url, {
       ...value
     })
   },
   delete: (id: number) => {
-    const url = `/admin/${id}`
+    const url = `/customer/${id}`
     return AxiosClient.delete(url)
   }
 }

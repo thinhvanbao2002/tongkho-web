@@ -8,6 +8,8 @@ const AdminLayout = lazy(() => import('../common/layout/AdminLayout/adminLayout.
 const AdminLogin = lazy(() => import('../features/admin/Auth/auth.tsx'))
 const AdminDashBoard = lazy(() => import('../features/admin/AdminDashboard/adminDashboard.tsx'))
 const ManagerPage = lazy(() => import('../features/admin/Manager/ManagerPage.tsx'))
+const CustomerPage = lazy(() => import('../features/admin/Customer/CustomerPage.tsx'))
+const CategoryPage = lazy(() => import('../features/admin/Category/CategoryPage.tsx'))
 
 //User
 const HomePage = lazy(() => import('../features/customer/home/Home.tsx'))
@@ -47,6 +49,16 @@ export const adminRoutes: Array<RouterProps> = [
   {
     path: ADMIN_PATH.UPLOADS,
     component: UploadMultipartFile,
+    layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.CUSTOMER,
+    component: CustomerPage,
+    layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.CATEGORY,
+    component: CategoryPage,
     layout: AdminLayout
   }
 ]

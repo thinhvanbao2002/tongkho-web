@@ -15,16 +15,6 @@ export interface IAccount {
   avatar?: string
   status: string
 }
-
-export interface IColumnAntD {
-  title: string | null
-  dataIndex: string
-  key: string
-  width?: number
-  render?: (value: number, row?: any, index?: any) => any
-  alight?: string
-}
-
 export interface IPayLoadListUser {
   page?: number
   limit?: number

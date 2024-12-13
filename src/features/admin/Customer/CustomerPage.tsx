@@ -1,20 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button, Row } from 'antd'
 import { Styled } from 'styles/stylesComponent'
-import { useCallback, useEffect, useState } from 'react'
-import FilterAccount from './components/FilterAccount'
-import { IAccount, IColumnAntD, IPayLoadListUser } from './Manager.props'
-import { accountServices } from './ManagerApis'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import { getDataSource, openNotification } from 'common/utils'
 import ModalComponent from 'common/components/modal/Modal'
-import { AddEditManager } from './components/AddEditAccount'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { ShowConfirm } from 'common/components/Alert'
+import { customerServices } from './CustomerApis'
+import { IColumnAntD } from 'common/constants/interface'
+import { IAccount, IPayLoadListUser } from '../Manager/Manager.props'
+import FilterCustomer from './components/FilterCustomer'
+import { EditCustomer } from './components/EditCustomer'
 
-function ManagerPage() {
+function CustomerPage() {
   const [page, setPage] = useState<number>(1)
-  const [payload, setPayload] = useState<IPayLoadListUser>({
+  const [payload, setPayload] = useState({
     page: 1,
     limit: 10,
     q: '',
@@ -22,7 +23,6 @@ function ManagerPage() {
     to_date: '',
     from_date: ''
   })
-  console.log('🚀 ~ ManagerPage ~ payload:', payload)
   const [accounts, setAccount] = useState<any>([])
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [title, setTitle] = useState<string>('')
@@ -54,8 +54,8 @@ function ManagerPage() {
     },
     {
       title: 'Trạng thái',
-      key: 'textStatus',
-      dataIndex: 'textStatus'
+      key: 'status',
+      dataIndex: 'status'
     },
     {
       width: 80,
@@ -76,17 +76,6 @@ function ManagerPage() {
                 />
               }
             />
-            <ShowConfirm
-              placement='bottomLeft'
-              onConfirm={() => handleRemoveAccount(record)}
-              confirmText={'Xóa'}
-              title={'Bạn có chắc chắn muốn xóa?'}
-            >
-              <TooltipCustom
-                title='Xóa'
-                children={<Button type='text' className={'btn-delete-text'} icon={<DeleteOutlined />} />}
-              />
-            </ShowConfirm>
           </div>
         )
       }
@@ -95,7 +84,7 @@ function ManagerPage() {
 
   const handleGetAccount = async (payload?: IPayLoadListUser) => {
     try {
-      const res = await accountServices.get(payload)
+      const res = await customerServices.get(payload)
       setAccount(getDataSource(res?.data, 1))
     } catch (error) {
       console.log('🚀 ~ handleGetAccount ~ error:', error)
@@ -137,79 +126,17 @@ function ManagerPage() {
     setRowSelected(undefined)
   }, [])
 
-  const handleSubmit = async (value: any) => {
-    setIsLoading(true)
-    const payLoadAccount = {
-      id: rowSelected?.id,
-      name: value?.name,
-      phone: value?.phone,
-      email: value?.email,
-      status: value?.status
-    }
-    let res
-    try {
-      if (rowSelected?.id) {
-        res = await accountServices.put(payLoadAccount)
-      } else {
-        res = await accountServices.post({ ...payLoadAccount, password: value?.password })
-      }
-      console.log('🚀 ~ handleSubmit ~ res:', res)
-
-      if (res.status == 1) {
-        if (rowSelected) {
-          console.log('1')
-
-          openNotification('success', 'Thành công', 'Cập nhật thành công')
-        } else {
-          console.log('2')
-
-          openNotification('success', 'Thành công', 'Thêm mới thành công')
-        }
-        setIsLoading(false)
-        setModalVisible(false)
-        handleGetAccount()
-      }
-    } catch (error) {
-      console.log('🚀 ~ handleSubmit ~ error:', error)
-    }
-  }
-
   const handleEditAccount = useCallback(async (record: IAccount) => {
     setModalVisible(true)
     setRowSelected(record)
   }, [])
 
-  const handleRemoveAccount = useCallback(
-    async (value: any) => {
-      try {
-        const res = await accountServices.delete(value?.id)
-        if (res) {
-          openNotification('success', 'Thành công', 'Xóa tài khoản thành công')
-          handleGetAccount()
-        }
-      } catch (error) {
-        console.log('🚀 ~ error:', error)
-      }
-    },
-    [payload]
-  )
-
   return (
     <>
       <Row gutter={[15, 6]} className='mb-2'>
-        <FilterAccount onChangeValue={handleFilter} />
+        <FilterCustomer onChangeValue={handleFilter} />
       </Row>
       <Row className='mb-2 flex justify-end'>
-        <Button
-          type='primary'
-          onClick={() => {
-            setModalVisible(true)
-            setTitle('Thêm mới quản trị viên')
-            setTextButton('Thêm mới')
-          }}
-        >
-          Thêm mới
-        </Button>
         <Button className='ml-2' type='primary'>
           Xuất Excel
         </Button>
@@ -226,13 +153,13 @@ function ManagerPage() {
       />
       <ModalComponent
         loading={isLoading}
-        title='Thêm mới / cập nhật tài khoản'
+        title='Cập nhật thông tin khách hàng'
         width={1000}
         modalVisible={modalVisible}
-        children={<AddEditManager rowSelected={rowSelected} onFinish={handleSubmit} onClose={handleSetModalVisible} />}
+        children={<EditCustomer onClose={handleSetModalVisible} rowSelected={rowSelected} />}
       />
     </>
   )
 }
 
-export default ManagerPage
+export default CustomerPage
