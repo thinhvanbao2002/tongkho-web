@@ -5,6 +5,7 @@ import { Flex, message, Upload } from 'antd'
 import type { GetProp, UploadProps } from 'antd'
 import { openNotification } from 'common/utils'
 import { AxiosClient } from 'apis/axiosClient'
+import styled from 'styled-components'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -86,7 +87,7 @@ const UploadSingleFile = ({ onSuccessUpload, initialImage }: IUpload) => {
 
   return (
     <Flex gap='middle' wrap>
-      <Upload
+      <UploadStyles
         name='avatar'
         listType='picture-card'
         className='avatar-uploader'
@@ -102,9 +103,16 @@ const UploadSingleFile = ({ onSuccessUpload, initialImage }: IUpload) => {
         ) : (
           uploadButton
         )}
-      </Upload>
+      </UploadStyles>
     </Flex>
   )
 }
+
+const UploadStyles = styled(Upload)`
+  & .ant-upload-select {
+    width: 200px !important;
+    height: 150px !important;
+  }
+`
 
 export default UploadSingleFile

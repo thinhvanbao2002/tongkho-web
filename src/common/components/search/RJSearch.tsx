@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { SearchOutlined } from '@ant-design/icons'
 import { Input, InputProps } from 'antd'
 import React, { useCallback, useState } from 'react'
 
@@ -32,6 +33,7 @@ const RJSearch = ({ onInputSearch, placeholder, defaultValue, enterButton, ...pr
         style={{ borderRadius: 4 }}
         defaultValue={defaultValue}
         value={value}
+        prefix={<SearchOutlined />}
         placeholder={placeholder}
         onChange={(e) => {
           handleChangeText(e.target?.value)

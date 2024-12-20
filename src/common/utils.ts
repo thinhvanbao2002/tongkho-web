@@ -10,6 +10,16 @@ export const openNotification = (type: NotificationType, title: string, desc: st
   })
 }
 
+export const openNotificationError = (err: any) => {
+  console.log('🚀 ~ openNotificationError ~ err:', err)
+  if (err) {
+    notification['error']({
+      message: 'Có lỗi',
+      description: err.response.data.message
+    })
+  }
+}
+
 export const handleObjectEmpty = (obj: any) => {
   const cloneObj = { ...obj }
 
@@ -39,8 +49,10 @@ export const getDataSource = (data: any, page: number) => {
       key: value.id,
       STT: Config.getIndexTable(page, index),
       textStatus: value.status === 'active' ? 'Đang hoạt động' : 'Ngừng hoạt động',
-      status: value.status === 1 ? 'Đang hoạt động' : 'Ngừng hoạt động',
-      createdAt: formatDate(value.created_at)
+      status: value.status == 1 ? 'Đang hoạt động' : 'Ngừng hoạt động',
+      s: value.status,
+      createdAt: formatDate(value.created_at),
+      category: value?.category?.name
     }
   })
 }

@@ -5,6 +5,7 @@ export const ADMIN_PATH = {
   MANAGER: '/ad-manager',
   CATEGORY: '/ad-category',
   PRODUCT: '/ad-product',
+  CREATE_UPDATE_PRODUCT: '/ad-cu-product',
   ORDER: '/ad-order',
   BLOG: '/ad-blog',
   UPLOAD: '/upload',

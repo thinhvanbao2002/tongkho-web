@@ -122,6 +122,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
             >
               <RadiusSelection
                 onChange={() => {}}
+                defaultValue={'active'}
                 options={[
                   { value: 'active', text: 'Hoạt động' },
                   { value: 'inactive', text: 'Ngừng hoạt động' }

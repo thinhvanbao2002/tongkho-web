@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   DesktopOutlined,
   PieChartOutlined,
@@ -10,8 +10,9 @@ import {
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Avatar, Dropdown, Layout, Menu, theme } from 'antd'
+import { ADMIN_PATH } from 'common/constants/paths'
 
-const { Header, Content, Footer, Sider } = Layout
+const { Header, Content, Sider } = Layout
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -60,9 +61,33 @@ const items: MenuItem[] = [
 
 const AdminLayout: React.FC = ({ children }: any) => {
   const [collapsed, setCollapsed] = useState(false)
+  const [titleHeader, setTitleHeader] = useState<string>('Tổng quan')
+  const [keySider, setKeySider] = useState<string>('')
   const {
     token: { colorBgContainer }
   } = theme.useToken()
+
+  const { pathname } = window.location
+
+  useEffect(() => {
+    switch (pathname) {
+      case ADMIN_PATH.PRODUCT:
+        setTitleHeader('Danh sách sản phẩm')
+        setKeySider('5')
+        break
+      case ADMIN_PATH.CREATE_UPDATE_PRODUCT:
+        setTitleHeader('Thêm mới/Cập nhật sản phẩm')
+        setKeySider('5')
+        break
+      case ADMIN_PATH.CATEGORY:
+        setTitleHeader('Danh sách danh mục')
+        setKeySider('4')
+        break
+
+      default:
+        setTitleHeader('Tổng quan')
+    }
+  }, [pathname])
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -70,11 +95,11 @@ const AdminLayout: React.FC = ({ children }: any) => {
         <div className='w-full flex justify-center'>
           <img src='/LOGO-WEBSHOP.jpg' className='w-[60px]' />
         </div>
-        <Menu defaultSelectedKeys={['1']} mode='inline' items={itemsMenu} />
+        <Menu selectedKeys={[keySider]} defaultSelectedKeys={['1']} mode='inline' items={itemsMenu} />
       </Sider>
       <Layout>
         <Header style={{ background: colorBgContainer }} className='flex items-center justify-between pr-4 pl-4'>
-          <div className='text-custom-sm'>Danh sách sản phẩm</div>
+          <div className='text-custom-sm'>{titleHeader}</div>
           <div>
             <Dropdown menu={{ items }} placement='bottomRight' arrow>
               <Avatar size={40} icon={<UserOutlined />} />
@@ -82,7 +107,7 @@ const AdminLayout: React.FC = ({ children }: any) => {
           </div>
         </Header>
         <Content className='bg-while p-4'>{children}</Content>
-        <Footer style={{ textAlign: 'center' }}>Ant Design ©{new Date().getFullYear()} Created by Ant UED</Footer>
+        {/* <Footer style={{ textAlign: 'center' }}>Ant Design ©{new Date().getFullYear()} Created by Ant UED</Footer> */}
       </Layout>
     </Layout>
   )

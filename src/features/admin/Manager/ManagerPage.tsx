@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import FilterAccount from './components/FilterAccount'
 import { IAccount, IColumnAntD, IPayLoadListUser } from './Manager.props'
 import { accountServices } from './ManagerApis'
-import { getDataSource, openNotification } from 'common/utils'
+import { getDataSource, openNotification, openNotificationError } from 'common/utils'
 import ModalComponent from 'common/components/modal/Modal'
 import { AddEditManager } from './components/AddEditAccount'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
@@ -144,16 +144,15 @@ function ManagerPage() {
       name: value?.name,
       phone: value?.phone,
       email: value?.email,
-      status: value?.status
+      status: value?.status || null
     }
     let res
     try {
       if (rowSelected?.id) {
         res = await accountServices.put(payLoadAccount)
       } else {
-        res = await accountServices.post({ ...payLoadAccount, password: value?.password })
+        res = await accountServices.post({ ...payLoadAccount, password: value?.password, status: 'active' })
       }
-      console.log('🚀 ~ handleSubmit ~ res:', res)
 
       if (res.status == 1) {
         if (rowSelected) {
@@ -170,7 +169,8 @@ function ManagerPage() {
         handleGetAccount()
       }
     } catch (error) {
-      console.log('🚀 ~ handleSubmit ~ error:', error)
+      openNotificationError(error)
+      setIsLoading(false)
     }
   }
 

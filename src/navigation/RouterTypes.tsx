@@ -10,6 +10,9 @@ const AdminDashBoard = lazy(() => import('../features/admin/AdminDashboard/admin
 const ManagerPage = lazy(() => import('../features/admin/Manager/ManagerPage.tsx'))
 const CustomerPage = lazy(() => import('../features/admin/Customer/CustomerPage.tsx'))
 const CategoryPage = lazy(() => import('../features/admin/Category/CategoryPage.tsx'))
+const AdminProductPage = lazy(() => import('../features/admin/Product/ProductPage.tsx'))
+const AdminProductForm = lazy(() => import('../features/admin/Product/components/AddEditProduct.tsx'))
+const BlogForm = lazy(() => import('../features/admin/Blog/BlogPage.tsx'))
 
 //User
 const HomePage = lazy(() => import('../features/customer/home/Home.tsx'))
@@ -59,6 +62,21 @@ export const adminRoutes: Array<RouterProps> = [
   {
     path: ADMIN_PATH.CATEGORY,
     component: CategoryPage,
+    layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.PRODUCT,
+    component: AdminProductPage,
+    layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.CREATE_UPDATE_PRODUCT,
+    component: AdminProductForm,
+    layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.BLOG,
+    component: BlogForm,
     layout: AdminLayout
   }
 ]
