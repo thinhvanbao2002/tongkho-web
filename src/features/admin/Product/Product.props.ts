@@ -14,6 +14,7 @@ export interface IProduct {
   product_code: string
   images: string
   product_photo: []
+  introduce: string
 }
 
 export interface IPayLoadLisCategory {

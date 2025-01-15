@@ -4,9 +4,12 @@ import { authService } from './service/Apis'
 import LocalStorage from 'apis/localStorage'
 import { openNotification } from 'common/utils'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setLogin } from 'redux/slice/login.slice'
 
 function LoginPage() {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleSubmit = (value: any) => {
@@ -23,6 +26,7 @@ function LoginPage() {
           LocalStorage.setRole(res?.data?.role)
           setIsLoading(false)
           openNotification('success', 'Thành công!', 'Đăng nhập thành công.')
+          dispatch(setLogin(res?.data))
           navigate('/')
         }
       })

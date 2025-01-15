@@ -40,8 +40,7 @@ export default {
         'custom-xs': '16px' // Cỡ chữ XS
       },
       boxShadow: {
-        custom: '10px 10px 15px rgba(0, 0, 0, 0.1)', // Tạo shadow tùy chỉnh
-        'custom-lg': '1px 1px 13px 6px rgba(0, 0, 0, 0.1)' // Shadow lớn
+        custom: '0 9px 6px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06)'
       }
     }
   }

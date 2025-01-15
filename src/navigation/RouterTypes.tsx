@@ -13,6 +13,9 @@ const CategoryPage = lazy(() => import('../features/admin/Category/CategoryPage.
 const AdminProductPage = lazy(() => import('../features/admin/Product/ProductPage.tsx'))
 const AdminProductForm = lazy(() => import('../features/admin/Product/components/AddEditProduct.tsx'))
 const BlogForm = lazy(() => import('../features/admin/Blog/BlogPage.tsx'))
+const AddEditBlogPage = lazy(() => import('../features/admin/Blog/components/AddEditBlog.tsx'))
+const AdminOrderPage = lazy(() => import('../features/admin/Order/OrderPage.tsx'))
+const AdminEditOrder = lazy(() => import('../features/admin/Order/components/OrderDetail.tsx'))
 
 //User
 const HomePage = lazy(() => import('../features/customer/home/Home.tsx'))
@@ -77,6 +80,21 @@ export const adminRoutes: Array<RouterProps> = [
   {
     path: ADMIN_PATH.BLOG,
     component: BlogForm,
+    layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.CREATE_UPDATE_BLOG,
+    component: AddEditBlogPage,
+    layout: AdminLayout
+  },
+  {
+    path: ADMIN_PATH.ORDER,
+    component: AdminOrderPage,
+    layout: AdminLayout
+  },
+  {
+    path: `${ADMIN_PATH.UPDATE_ORDER}/:id`,
+    component: AdminEditOrder,
     layout: AdminLayout
   }
 ]

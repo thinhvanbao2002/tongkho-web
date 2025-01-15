@@ -15,6 +15,7 @@ import { openNotification } from 'common/utils'
 import { productServices } from '../ProductApis'
 import { IProduct } from '../Product.props'
 import { useNavigate } from 'react-router-dom'
+import TextArea from 'antd/es/input/TextArea'
 
 const AddEditProduct = () => {
   const [form] = Form.useForm()
@@ -37,7 +38,8 @@ const AddEditProduct = () => {
     price: record?.price,
     quantity: record?.quantity,
     image: record?.image,
-    description: record?.description
+    description: record?.description,
+    introduce: record?.introduce
   }
 
   useEffect(() => {
@@ -93,7 +95,8 @@ const AddEditProduct = () => {
       quantity: Number(value?.quantity),
       description: value?.description,
       image: value?.image,
-      product_photo: value?.product_photo
+      product_photo: value?.product_photo,
+      introduce: value?.introduce
     }
     console.log('🚀 ~ handleSubmit ~ payLoadAccount:', payLoadAccount)
     let res
@@ -261,6 +264,13 @@ const AddEditProduct = () => {
                 form.setFieldsValue({ product_photo: standardizationImage })
               }}
             />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item name='introduce' label='Giới thiệu sản phẩm'>
+            <TextArea rows={4} placeholder='Nhập giới thiệu về sản phẩm' maxLength={2000} />
           </Form.Item>
         </Col>
       </Row>

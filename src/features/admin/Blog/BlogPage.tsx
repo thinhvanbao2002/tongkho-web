@@ -6,15 +6,25 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { ShowConfirm } from 'common/components/Alert'
 import { Styled } from 'styles/stylesComponent'
 import { IColumnAntD } from 'common/constants/interface'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { IBlog } from './Blog.props'
 import { blogServices } from './BlogApis'
-import { getDataSource } from 'common/utils'
+import { getDataSource, openNotification, openNotificationError } from 'common/utils'
+import { isNil } from 'lodash'
+import { useNavigate } from 'react-router'
+import { ADMIN_PATH } from 'common/constants/paths'
 
 function BlogPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const navigate = useNavigate()
+  const [payload, setPayload] = useState<any>({
+    page: 1,
+    limit: 10,
+    q: '',
+    to_date: '',
+    from_date: ''
+  })
   const [blogs, setBlogs] = useState<Array<IBlog>>([])
-  console.log('🚀 ~ BlogPage ~ blogs:', blogs)
   const columnsListCategory: IColumnAntD[] = [
     {
       title: 'STT',
@@ -53,13 +63,13 @@ function BlogPage() {
                   type={'text'}
                   className={'btn-success-text'}
                   icon={<EditOutlined />}
-                  // onClick={() => handleNavigateEditProduct(record)}
+                  onClick={() => handleNavigateEditProduct(record)}
                 />
               }
             />
             <ShowConfirm
               placement='bottomLeft'
-              // onConfirm={() => handleRemoveAccount(record)}
+              onConfirm={() => handleRemoveAccount(record)}
               confirmText={'Xóa'}
               title={'Bạn có chắc chắn muốn xóa?'}
             >
@@ -74,6 +84,14 @@ function BlogPage() {
     }
   ]
 
+  const handleNavigateEditProduct = (record: any) => {
+    navigate('/ad-cu-blog', { state: { record: { ...record } } })
+  }
+
+  const handleNavigateAddProduct = () => {
+    navigate(ADMIN_PATH.CREATE_UPDATE_BLOG, { state: {} })
+  }
+
   const getBlogList = async (value?: any) => {
     try {
       const res = await blogServices.get(value)
@@ -83,15 +101,73 @@ function BlogPage() {
     }
   }
 
+  const handleRemoveAccount = async (value: any) => {
+    try {
+      const res = await blogServices.delete(value?.id)
+      if (res) {
+        openNotification('success', 'Thành công', 'Xóa bài viết thành công')
+        getBlogList()
+      }
+    } catch (error) {
+      openNotificationError(error)
+    }
+  }
+
+  const handleFilterBlog = useCallback(
+    (value: any) => {
+      if (!isNil(value.status)) {
+        setPayload({
+          ...payload,
+          status: value?.status,
+          page: 1
+        })
+      }
+      if (!isNil(value?.date)) {
+        setPayload({
+          ...payload,
+          from_date: value?.date.split(',')[0],
+          to_date: value?.date.split(',')[1]
+        })
+      }
+      if (!isNil(value?.search)) {
+        setPayload({
+          ...payload,
+          q: value?.search
+        })
+      }
+      if (!isNil(value?.product_type)) {
+        setPayload({
+          ...payload,
+          product_status: value?.product_type
+        })
+      }
+      if (!isNil(value?.categoryId)) {
+        setPayload({
+          ...payload,
+          branch: value?.categoryId
+        })
+      }
+      if (!isNil(value.sortBy)) {
+        setPayload({
+          ...payload,
+          order: value?.sortBy
+        })
+      }
+    },
+    [payload]
+  )
+
   useEffect(() => {
-    getBlogList()
-  }, [])
+    getBlogList(payload)
+  }, [payload])
 
   return (
     <>
-      <FilterBlog />
+      <FilterBlog onChangeValue={handleFilterBlog} />
       <Row className='mb-2 flex justify-end mt-2'>
-        <Button type='primary'>Thêm mới</Button>
+        <Button type='primary' onClick={handleNavigateAddProduct}>
+          Thêm mới
+        </Button>
         <Button className='ml-2' type='primary'>
           Xuất Excel
         </Button>

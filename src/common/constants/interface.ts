@@ -3,6 +3,6 @@ export interface IColumnAntD {
   dataIndex: string
   key: string
   width?: number
-  render?: (value: number, row?: any, index?: any) => any
+  render?: (value: any, row?: any, index?: any) => any
   alight?: string
 }

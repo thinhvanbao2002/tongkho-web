@@ -5,12 +5,12 @@ import {
   UserOutlined,
   LogoutOutlined,
   SettingOutlined,
-  NotificationOutlined,
   BookOutlined
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Avatar, Dropdown, Layout, Menu, theme } from 'antd'
 import { ADMIN_PATH } from 'common/constants/paths'
+import { Link } from 'react-router-dom'
 
 const { Header, Content, Sider } = Layout
 
@@ -27,16 +27,15 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 
 const itemsMenu: MenuItem[] = [
   getItem('Tổng quan', '1', <PieChartOutlined />),
-  getItem('Khách hàng', '2', <UserOutlined />),
-  getItem('Quản trị', '3', <DesktopOutlined />),
+  getItem(<Link to={ADMIN_PATH.CUSTOMER}>Khách hàng</Link>, '2', <UserOutlined />),
+  getItem(<Link to={ADMIN_PATH.MANAGER}>Tài khoản</Link>, '3', <DesktopOutlined />),
   getItem('Bán hàng', 'sub1', <UserOutlined />, [
-    getItem('Danh mục', '4'),
-    getItem('Sản phẩm', '5'),
-    getItem('Đơn hàng', '6')
+    getItem(<Link to={ADMIN_PATH.CATEGORY}>Danh mục</Link>, '4'),
+    getItem(<Link to={ADMIN_PATH.PRODUCT}>Sản phẩm</Link>, '5'),
+    getItem(<Link to={ADMIN_PATH.ORDER}>Đơn hàng</Link>, '6')
   ]),
   getItem('Cấu hình', 'sub2', <SettingOutlined />, [
-    getItem('Bài viết', '7', <BookOutlined />),
-    getItem('Thông báo', '8', <NotificationOutlined />)
+    getItem(<Link to={ADMIN_PATH.BLOG}>Bài viết</Link>, '7', <BookOutlined />)
   ])
 ]
 
@@ -68,24 +67,42 @@ const AdminLayout: React.FC = ({ children }: any) => {
   } = theme.useToken()
 
   const { pathname } = window.location
+  console.log('🚀 ~ pathname:', pathname)
 
   useEffect(() => {
-    switch (pathname) {
-      case ADMIN_PATH.PRODUCT:
-        setTitleHeader('Danh sách sản phẩm')
-        setKeySider('5')
-        break
-      case ADMIN_PATH.CREATE_UPDATE_PRODUCT:
-        setTitleHeader('Thêm mới/Cập nhật sản phẩm')
-        setKeySider('5')
-        break
-      case ADMIN_PATH.CATEGORY:
-        setTitleHeader('Danh sách danh mục')
-        setKeySider('4')
-        break
+    if (/^\/ad-e-order\/\d+$/.test(pathname)) {
+      setTitleHeader('Chi tiết đơn hàng')
+      setKeySider('6')
+    } else {
+      switch (pathname) {
+        case ADMIN_PATH.PRODUCT:
+          setTitleHeader('Danh sách sản phẩm')
+          setKeySider('5')
+          break
+        case ADMIN_PATH.CREATE_UPDATE_PRODUCT:
+          setTitleHeader('Thêm mới/Cập nhật sản phẩm')
+          setKeySider('5')
+          break
+        case ADMIN_PATH.CATEGORY:
+          setTitleHeader('Danh sách danh mục')
+          setKeySider('4')
+          break
+        case ADMIN_PATH.MANAGER:
+          setTitleHeader('Danh sách tài khoản quản trị')
+          setKeySider('3')
+          break
+        case ADMIN_PATH.CUSTOMER:
+          setTitleHeader('Danh sách khách hàng')
+          setKeySider('2')
+          break
+        case ADMIN_PATH.ORDER:
+          setTitleHeader('Danh sách đơn hàng')
+          setKeySider('6')
+          break
 
-      default:
-        setTitleHeader('Tổng quan')
+        default:
+          setTitleHeader('Tổng quan')
+      }
     }
   }, [pathname])
 

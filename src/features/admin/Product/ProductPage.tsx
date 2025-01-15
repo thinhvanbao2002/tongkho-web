@@ -12,6 +12,7 @@ import { IProduct } from './Product.props'
 import { getDataSource, openNotification } from 'common/utils'
 import { productServices } from './ProductApis'
 import { useNavigate } from 'react-router-dom'
+import { ADMIN_PATH } from 'common/constants/paths'
 
 function ProductPage() {
   const [payload, setPayload] = useState<any>({
@@ -122,7 +123,6 @@ function ProductPage() {
   const handleGetProducts = async (payload?: any) => {
     try {
       const res = await productServices.get(payload)
-      console.log('🚀 ~ handleGetProducts ~ res:', res)
       setProducts(getDataSource(res?.data, 1))
       setCount(res?.meta?.item_count)
     } catch (error) {
@@ -190,11 +190,11 @@ function ProductPage() {
   )
 
   const handleNavigateEditProduct = (record: any) => {
-    navigate('/ad-cu-product/', { state: { record: { ...record } } })
+    navigate('/ad-ce-product/', { state: { record: { ...record } } })
   }
 
   const handleNavigateAddProduct = () => {
-    navigate('/ad-cu-product', { state: {} })
+    navigate(ADMIN_PATH.CREATE_UPDATE_PRODUCT, { state: {} })
   }
   return (
     <>

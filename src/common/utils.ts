@@ -1,5 +1,8 @@
+/* eslint-disable no-useless-escape */
 import { notification } from 'antd'
 import Config from './constants/config'
+import { cloneDeep } from 'lodash'
+import { ORDER_STATUS } from './constants/constants'
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error'
 
@@ -11,7 +14,6 @@ export const openNotification = (type: NotificationType, title: string, desc: st
 }
 
 export const openNotificationError = (err: any) => {
-  console.log('🚀 ~ openNotificationError ~ err:', err)
   if (err) {
     notification['error']({
       message: 'Có lỗi',
@@ -21,8 +23,7 @@ export const openNotificationError = (err: any) => {
 }
 
 export const handleObjectEmpty = (obj: any) => {
-  const cloneObj = { ...obj }
-
+  const cloneObj = cloneDeep(obj)
   // remove key from object value empty
   for (const key in cloneObj) {
     if (Object.prototype.hasOwnProperty.call(cloneObj, key)) {
@@ -33,7 +34,7 @@ export const handleObjectEmpty = (obj: any) => {
   return cloneObj
 }
 
-function formatDate(value) {
+function formatDate(value: any) {
   const date = new Date(value) // Chuyển chuỗi ISO thành đối tượng Date
   const day = String(date.getDate()).padStart(2, '0')
   const month = String(date.getMonth() + 1).padStart(2, '0') // Tháng bắt đầu từ 0
@@ -55,4 +56,42 @@ export const getDataSource = (data: any, page: number) => {
       category: value?.category?.name
     }
   })
+}
+
+export const vldOrderStatus = (value: string) => {
+  console.log('🚀 ~ vldOrderStatus ~ value:', value)
+  return `${ORDER_STATUS[value].text}`
+}
+
+export function formatPrice(num: string | any, type?: 'VND' | '$') {
+  const tmpType = type || ''
+  if (num === null || num === undefined || num === '0' || Number.isNaN(parseFloat(num))) return ''
+  const result = num.toString().replace(/,/g, '')
+  return `${
+    result
+      .toString()
+      .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+      .replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|' '|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, '') + tmpType
+  }`
+}
+
+export const timeSince = (date: Date) => {
+  const seconds = Math.floor((new Date() - new Date(date)) / 1000)
+  let interval = Math.floor(seconds / 31536000)
+
+  if (interval >= 1) return `${interval} năm trước`
+
+  interval = Math.floor(seconds / 2592000)
+  if (interval >= 1) return `${interval} tháng trước`
+
+  interval = Math.floor(seconds / 86400)
+  if (interval >= 1) return `${interval} ngày trước`
+
+  interval = Math.floor(seconds / 3600)
+  if (interval >= 1) return `${interval} giờ trước`
+
+  interval = Math.floor(seconds / 60)
+  if (interval >= 1) return `${interval} phút trước`
+
+  return 'vừa xong'
 }

@@ -9,6 +9,13 @@ import styled from 'styled-components'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
+const UploadStyles = styled(Upload)<{ width: string; height: string }>`
+  & .ant-upload-select {
+    width: ${(props) => props.width} !important;
+    height: ${(props) => props.height} !important;
+  }
+`
+
 const beforeUpload = (file: FileType) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
   if (!isJpgOrPng) {
@@ -24,9 +31,11 @@ const beforeUpload = (file: FileType) => {
 interface IUpload {
   onSuccessUpload?: (value: any) => void
   initialImage?: string
+  width?: string
+  height?: string
 }
 
-const UploadSingleFile = ({ onSuccessUpload, initialImage }: IUpload) => {
+const UploadSingleFile = ({ onSuccessUpload, initialImage, width = '200px', height = '150px' }: IUpload) => {
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState<string>()
   const [progress, setProgress] = React.useState(0)
@@ -95,6 +104,8 @@ const UploadSingleFile = ({ onSuccessUpload, initialImage }: IUpload) => {
         customRequest={handleUpload}
         beforeUpload={beforeUpload}
         onChange={handleOnChange}
+        width={width}
+        height={height}
       >
         {imageUrl ? (
           <img src={imageUrl} alt='avatar' style={{ width: '100%' }} />
@@ -107,12 +118,5 @@ const UploadSingleFile = ({ onSuccessUpload, initialImage }: IUpload) => {
     </Flex>
   )
 }
-
-const UploadStyles = styled(Upload)`
-  & .ant-upload-select {
-    width: 200px !important;
-    height: 150px !important;
-  }
-`
 
 export default UploadSingleFile
