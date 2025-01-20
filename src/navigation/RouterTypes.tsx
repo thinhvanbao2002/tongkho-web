@@ -28,6 +28,7 @@ const CartPage = lazy(() => import('../features/customer/cart/Cart.tsx'))
 const OrderPage = lazy(() => import('../features/customer/order/Order.tsx'))
 const UploadFile = lazy(() => import('../common/components/upload/UploadComponent.tsx'))
 const UploadMultipartFile = lazy(() => import('../common/components/upload/UploadMultipartComponent.tsx'))
+const OrderSuccess = lazy(() => import('../features/customer/successOrder/SuccessOrder.tsx'))
 
 interface RouterProps {
   path: string
@@ -104,6 +105,10 @@ export const userRoutes: Array<RouterProps> = [
     path: USER_PATH.CART,
     component: AdminLogin,
     layout: UserLayout
+  },
+  {
+    path: USER_PATH.ORDER_SUCCESS,
+    component: OrderSuccess
   }
 ]
 

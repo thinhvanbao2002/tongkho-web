@@ -3,7 +3,7 @@ import React, { CSSProperties } from 'react'
 import styled from 'styled-components'
 
 interface IProps {
-  title: string
+  title: any
   modalVisible: boolean
   children: React.ReactNode
   width?: number

@@ -20,5 +20,6 @@ export const USER_PATH = {
   CART: '/cart',
   PRODUCT: '/product',
   PRODUCT_DETAIL: '/product-detail',
-  ORDER: '/order'
+  ORDER: '/order',
+  ORDER_SUCCESS: '/order/success'
 }

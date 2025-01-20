@@ -95,3 +95,10 @@ export const timeSince = (date: Date) => {
 
   return 'vừa xong'
 }
+
+export const getOptionListSelector = (data: Array<any>, labelKey: string, valueKey: string) => {
+  return data.map((item) => ({
+    label: item[labelKey], // Gán label từ key tương ứng
+    value: item[valueKey] // Gán value từ key tương ứng
+  }))
+}

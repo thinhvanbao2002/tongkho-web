@@ -9,6 +9,15 @@ const COLORS = {
 export default {
   content: ['./src/styles/index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    animation: {
+      'fade-in': 'fadeIn 0.7s ease-in'
+    },
+    keyframes: {
+      fadeIn: {
+        '0%': { opacity: '0', transform: 'scale(0.75)' },
+        '100%': { opacity: '1', transform: 'scale(1)' }
+      }
+    },
     screens: {
       sm: '480px',
       md: '768px',

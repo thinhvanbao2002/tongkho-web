@@ -26,7 +26,7 @@ function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode,
 }
 
 const itemsMenu: MenuItem[] = [
-  getItem('Tổng quan', '1', <PieChartOutlined />),
+  getItem(<Link to={ADMIN_PATH.OVERVIEW}>Tổng quan</Link>, '1', <PieChartOutlined />),
   getItem(<Link to={ADMIN_PATH.CUSTOMER}>Khách hàng</Link>, '2', <UserOutlined />),
   getItem(<Link to={ADMIN_PATH.MANAGER}>Tài khoản</Link>, '3', <DesktopOutlined />),
   getItem('Bán hàng', 'sub1', <UserOutlined />, [
@@ -98,6 +98,10 @@ const AdminLayout: React.FC = ({ children }: any) => {
         case ADMIN_PATH.ORDER:
           setTitleHeader('Danh sách đơn hàng')
           setKeySider('6')
+          break
+        case ADMIN_PATH.OVERVIEW:
+          setTitleHeader('Thống kê báo cáo')
+          setKeySider('1')
           break
 
         default:

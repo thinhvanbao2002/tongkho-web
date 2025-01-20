@@ -9,6 +9,7 @@ import { setLogin } from 'redux/slice/login.slice'
 import { openNotification } from 'common/utils'
 import _ from 'lodash'
 import { USER_PATH } from 'common/constants/paths'
+import AccountUser from 'features/customer/account/components/Account'
 
 const { Header, Footer, Content } = Layout
 
@@ -27,6 +28,7 @@ const UserLayout: React.FC = ({ children }: any) => {
   const dispatch = useDispatch()
   const [userData, setUserData] = useState<any>({})
   const data = useSelector((state: any) => state.login)
+  const [modalAccountIsvisible, setModalAccountIsVisible] = useState<boolean>(false)
 
   const handleNavigate = (path: string) => {
     navigate(path)
@@ -39,6 +41,10 @@ const UserLayout: React.FC = ({ children }: any) => {
     dispatch(setLogin(undefined))
     openNotification('success', 'Thành công', 'Đăng xuất thành công!')
   }, [])
+
+  const handleCloseModal = () => {
+    setModalAccountIsVisible(false)
+  }
 
   useEffect(() => {
     setUserData(data)
@@ -56,9 +62,14 @@ const UserLayout: React.FC = ({ children }: any) => {
     {
       key: '2',
       label: (
-        <a target='_blank' rel='noopener noreferrer' href='https://www.aliyun.com'>
+        <p
+          rel='noopener noreferrer'
+          onClick={() => {
+            setModalAccountIsVisible(!modalAccountIsvisible)
+          }}
+        >
           Tài khoản
-        </a>
+        </p>
       )
     },
     {
@@ -174,6 +185,7 @@ const UserLayout: React.FC = ({ children }: any) => {
           </div>
         </div>
       </Footer>
+      <AccountUser openModal={modalAccountIsvisible} titleModal='Thông tin tài khoản' onClose={handleCloseModal} />
     </Layout>
   )
 }

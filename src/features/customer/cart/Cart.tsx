@@ -4,10 +4,14 @@ import CustomButton from 'common/components/button/Button'
 import { formatPrice, openNotification, openNotificationError } from 'common/utils'
 import { useCallback, useEffect, useState } from 'react'
 import { cartServices } from './cartApis'
+import { useNavigate } from 'react-router'
+import { USER_PATH } from 'common/constants/paths'
 
 function CartPage() {
+  const navigate = useNavigate()
   const [cartId, setCartId] = useState<number>()
   const [carts, setCarts] = useState<any>([])
+  console.log('🚀 ~ CartPage ~ carts:', carts)
   const [totalPrice, setTotalPrice] = useState(0)
   const [cartPayload, setCartPayload] = useState<any>({})
 
@@ -195,7 +199,12 @@ function CartPage() {
             <div className='font-extrabold text-money'>{formatPrice(totalPrice)} VNĐ</div>
           </div>
           <div className='mt-16'>
-            <CustomButton label='Đặt hàng ngay' />
+            <CustomButton
+              label='Đặt hàng ngay'
+              onClick={() => {
+                navigate(`${USER_PATH.ORDER}`, { state: { cart: carts } })
+              }}
+            />
           </div>
         </div>
       </div>
