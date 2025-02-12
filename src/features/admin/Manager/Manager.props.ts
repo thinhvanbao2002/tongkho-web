@@ -17,7 +17,7 @@ export interface IAccount {
 }
 export interface IPayLoadListUser {
   page?: number
-  limit?: number
+  take?: number
   q?: string
   status?: string
   from_date?: string

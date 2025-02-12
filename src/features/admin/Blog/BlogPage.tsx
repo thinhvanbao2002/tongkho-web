@@ -19,12 +19,13 @@ function BlogPage() {
   const navigate = useNavigate()
   const [payload, setPayload] = useState<any>({
     page: 1,
-    limit: 10,
+    take: 10,
     q: '',
     to_date: '',
     from_date: ''
   })
   const [blogs, setBlogs] = useState<Array<IBlog>>([])
+  const [count, setCount] = useState<number>(0)
   const columnsListCategory: IColumnAntD[] = [
     {
       title: 'STT',
@@ -85,7 +86,7 @@ function BlogPage() {
   ]
 
   const handleNavigateEditProduct = (record: any) => {
-    navigate('/ad-cu-blog', { state: { record: { ...record } } })
+    navigate('/ad-ce-blog', { state: { record: { ...record } } })
   }
 
   const handleNavigateAddProduct = () => {
@@ -96,6 +97,7 @@ function BlogPage() {
     try {
       const res = await blogServices.get(value)
       setBlogs(getDataSource(res?.data, 1))
+      setCount(res?.meta?.item_count)
     } catch (error) {
       console.log('🚀 ~ getBlogList ~ error:', error)
     }
@@ -177,17 +179,18 @@ function BlogPage() {
           bordered
           columns={columnsListCategory}
           dataSource={blogs}
-          // pagination={{
-          //   onChange: (page) => {
-          //     setIsLoading(true)
-          //     setTimeout(() => {
-          //       setPayload({ ...payload, page: page })
-          //       setIsLoading(false)
-          //     }, 200)
-          //   },
-          //   total: count,
-          //   current: payload.page
-          // }}
+          pagination={{
+            onChange: (page) => {
+              setIsLoading(true)
+              setTimeout(() => {
+                setPayload({ ...payload, page: page })
+                setIsLoading(false)
+              }, 200)
+            },
+            total: count,
+            current: payload.page,
+            pageSize: payload.take
+          }}
         />
       </Spin>
     </>

@@ -3,8 +3,9 @@ import { AxiosClient } from '../../../apis/axiosClient'
 import { RECORD_SIZE } from 'common/config'
 import { ICategory, IPayLoadLisCategory } from './Category.props'
 
-export const categoryServices: any = {
+export const categoryServices = {
   get: (params: IPayLoadLisCategory) => {
+    console.log('🚀 ~ params:', params)
     const url = '/a/category'
     const handleParams = handleObjectEmpty(params)
     return AxiosClient.get(url, {

@@ -3,10 +3,11 @@ import { IColumnAntD } from 'common/constants/interface'
 import OrderStep from './OrderSteps'
 import { Styled } from 'styles/stylesComponent'
 import { Button, Col, Image, Row } from 'antd'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { orderServices } from '../OrderApis'
 import { formatPrice, getDataSource, openNotificationError } from 'common/utils'
+import { OrderStatus } from '../constants/order.constant'
 
 function OrderDetail() {
   const { id } = useParams()
@@ -116,12 +117,20 @@ function OrderDetail() {
             <span className='font-semibold'>{formatPrice(total_price)}</span>
           </div>
           <div className='flex justify-end'>
-            <Button type='primary' onClick={handleNextStep}>
-              {getButtonText(Number(order_status))}
-            </Button>
-            <Button type='primary' className='ml-2' danger>
-              Hủy đơn hàng
-            </Button>
+            {order_status !== OrderStatus.PAID ? (
+              <Button type='primary' onClick={handleNextStep}>
+                {getButtonText(Number(order_status))}
+              </Button>
+            ) : (
+              <Fragment />
+            )}
+            {order_status !== OrderStatus.PAID ? (
+              <Button type='primary' className='ml-2' danger>
+                Hủy đơn hàng
+              </Button>
+            ) : (
+              <Fragment />
+            )}
           </div>
         </Col>
       </Row>

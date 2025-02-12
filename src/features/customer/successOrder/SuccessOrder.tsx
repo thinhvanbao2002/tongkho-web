@@ -29,7 +29,7 @@ function OrderSuccess() {
               onClick={() => {
                 navigate(`${USER_PATH.PRODUCT}`)
               }}
-              className='text-custom-xs text-[#0b11bd] ml-2 underline'
+              className='text-custom-xs text-[#0b11bd] ml-2 underline cursor-pointer'
             >
               Tiếp tục mua hàng
             </a>

@@ -34,7 +34,7 @@ export const handleObjectEmpty = (obj: any) => {
   return cloneObj
 }
 
-function formatDate(value: any) {
+export function formatDate(value: any) {
   const date = new Date(value) // Chuyển chuỗi ISO thành đối tượng Date
   const day = String(date.getDate()).padStart(2, '0')
   const month = String(date.getMonth() + 1).padStart(2, '0') // Tháng bắt đầu từ 0

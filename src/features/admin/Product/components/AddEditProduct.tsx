@@ -16,6 +16,7 @@ import { productServices } from '../ProductApis'
 import { IProduct } from '../Product.props'
 import { useNavigate } from 'react-router-dom'
 import TextArea from 'antd/es/input/TextArea'
+import { ADMIN_PATH } from 'common/constants/paths'
 
 const AddEditProduct = () => {
   const [form] = Form.useForm()
@@ -102,18 +103,17 @@ const AddEditProduct = () => {
     let res
     try {
       if (record.id) {
-        console.log('a')
         res = await productServices.put(payLoadAccount)
       } else {
-        console.log('a')
         res = await productServices.post(payLoadAccount)
       }
-
       if (res.status == 1) {
-        if (record) {
+        if (record.id) {
           openNotification('success', 'Thành công', 'Cập nhật thành công')
+          navigate(`${ADMIN_PATH.PRODUCT}`)
         } else {
           openNotification('success', 'Thành công', 'Thêm mới thành công')
+          navigate(`${ADMIN_PATH.PRODUCT}`)
         }
       }
     } catch (error) {
@@ -217,7 +217,7 @@ const AddEditProduct = () => {
           </Form.Item>
         </Col>
         <Col span={8}>
-          <Form.Item name='qty' label='Số lượng'>
+          <Form.Item name='quantity' label='Số lượng'>
             <Input />
           </Form.Item>
         </Col>

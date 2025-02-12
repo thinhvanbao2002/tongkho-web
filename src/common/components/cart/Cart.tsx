@@ -43,7 +43,12 @@ function CardComponent({ data }: { data: ProductData }) {
             className='w-full object-cover block'
           />
           <div className='absolute inset-0 bg-black bg-opacity-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transform transition-all '>
-            <button className='text-while bg-black px-6 py-2 hover:bg-money absolute bottom-0 left-0 ml-16 uppercase font-medium  transform transition-all'>
+            <button
+              onClick={() => {
+                navigate(`${USER_PATH.PRODUCT_DETAIL}/${data?.id}`)
+              }}
+              className='text-while bg-black px-6 py-2 hover:bg-money absolute bottom-0 left-0 ml-16 uppercase font-medium  transform transition-all'
+            >
               Mua ngay
             </button>
             <button
@@ -64,8 +69,6 @@ function CardComponent({ data }: { data: ProductData }) {
         <div
           className='text-center cursor-pointer'
           onClick={() => {
-            console.log('>>>>>>')
-
             navigate(`${USER_PATH.PRODUCT_DETAIL}/${data?.id}`)
           }}
         >

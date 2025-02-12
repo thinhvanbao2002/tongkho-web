@@ -43,7 +43,7 @@ function LoginPage() {
               <Form onFinish={handleSubmit} layout='vertical'>
                 <Form.Item
                   label='Số điện thoại'
-                  className='mt-10 '
+                  className='mt-5'
                   name='phone'
                   rules={[
                     {
@@ -60,7 +60,7 @@ function LoginPage() {
                 </Form.Item>
                 <Form.Item
                   label='Mật khẩu'
-                  className='mt-10'
+                  className='mt-5'
                   name='password'
                   rules={[
                     {
@@ -71,11 +71,19 @@ function LoginPage() {
                 >
                   <Input placeholder='Mật khẩu của bạn...' className='h-12' />
                 </Form.Item>
-                <Form.Item>
-                  <Button className='bg-[black] hover:bg-hover mt-5' type='primary' htmlType='submit'>
-                    Gửi
+                <Form.Item className='text-center'>
+                  <Button className='bg-[black] hover:bg-hover mt-5 w-full' type='primary' htmlType='submit'>
+                    Đăng nhập
                   </Button>
                 </Form.Item>
+                <div className='text-custom-sm text-center'>
+                  <p>
+                    Bạn chưa có tài khoản{' '}
+                    <a className='text-[blue]' href='/register'>
+                      Đăng kí tại đây
+                    </a>
+                  </p>
+                </div>
               </Form>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Avatar, Button, Dropdown, Form, Input, Layout } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { UserOutlined } from '@ant-design/icons'
 import { MenuProps } from 'antd/lib'
 import { useDispatch, useSelector } from 'react-redux'
@@ -40,6 +40,7 @@ const UserLayout: React.FC = ({ children }: any) => {
     localStorage.removeItem('data')
     dispatch(setLogin(undefined))
     openNotification('success', 'Thành công', 'Đăng xuất thành công!')
+    handleNavigate('/')
   }, [])
 
   const handleCloseModal = () => {
@@ -53,11 +54,7 @@ const UserLayout: React.FC = ({ children }: any) => {
   const items: MenuProps['items'] = [
     {
       key: '1',
-      label: (
-        <a target='_blank' rel='noopener noreferrer' href='https://www.antgroup.com'>
-          Đơn hàng
-        </a>
-      )
+      label: <Link to='/order/history'>Đơn hàng</Link>
     },
     {
       key: '2',
@@ -113,9 +110,9 @@ const UserLayout: React.FC = ({ children }: any) => {
               onClick={() => handleNavigate('/cart')} // Trang sản phẩm
             >
               <div>Giỏ hàng</div>
-              <div className='absolute top-7 right-1 text-while text-xs rounded-full w-5 h-5 flex items-center justify-center bg-money'>
-                {10} {/* Biến số lượng sản phẩm trong giỏ */}
-              </div>
+              {/* <div className='absolute top-7 right-1 text-while text-xs rounded-full w-5 h-5 flex items-center justify-center bg-money'>
+                {10} 
+              </div> */}
             </div>
             <h4
               className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200'

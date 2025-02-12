@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios'
 import LocalStorage from './localStorage'
+import { openNotificationError } from 'common/utils'
+import { ADMIN_PATH } from 'common/constants/paths'
 const API_URL = import.meta.env.VITE_API_URL
 
 export const AxiosClient = axios.create({
@@ -39,6 +41,12 @@ AxiosClient.interceptors.response.use(
     return response
   },
   (error) => {
+    console.log('🚀 ~ error:', error)
+    if (error.status === 403) {
+      window.location.href = `${ADMIN_PATH.LOGIN}`
+      openNotificationError(error)
+      LocalStorage.removeToken()
+    }
     return Promise.reject(error)
   }
 )

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { Button, Row, Tag, Tooltip } from 'antd'
+import { Button, Row, Spin, Tag, Tooltip } from 'antd'
 import { ShowConfirm } from 'common/components/Alert'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
 import { IColumnAntD } from 'common/constants/interface'
@@ -17,12 +17,13 @@ import IconAntd from 'common/components/iconAntd'
 
 function AdminOrderPage() {
   const [loadingRefresh, setLoadingRefresh] = useState(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [orders, setOrders] = useState<Array<any>>([])
   const [orderCount, setOrderCount] = useState<number>(0)
   const navigate = useNavigate()
   const [payload, setPayload] = useState<any>({
     page: 1,
-    limit: 10,
+    take: 10,
     q: '',
     status: null,
     to_date: '',
@@ -181,16 +182,25 @@ function AdminOrderPage() {
           </div>
         </ResultStyled>
       </Row>
-      <Styled.TableStyle
-        bordered
-        columns={columnsListAccount}
-        dataSource={orders}
-        // pagination={{
-        //   onChange: (page) => setPayload({ ...payload, page: page }),
-        //   total: 100,
-        //   current: payload.page
-        // }}
-      />
+      <Spin spinning={isLoading}>
+        <Styled.TableStyle
+          bordered
+          columns={columnsListAccount}
+          dataSource={orders}
+          pagination={{
+            pageSize: payload.take,
+            onChange: (page) => {
+              setIsLoading(true)
+              setTimeout(() => {
+                setPayload({ ...payload, page: page })
+                setIsLoading(false)
+              }, 200)
+            },
+            total: orderCount,
+            current: payload.page
+          }}
+        />
+      </Spin>
     </>
   )
 }

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useCallback, useEffect, useState } from 'react'
 import FilterProduct from './components/FilterProduct'
-import { isNil } from 'lodash'
+import { isNil, values } from 'lodash'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { ShowConfirm } from 'common/components/Alert'
@@ -17,7 +17,7 @@ import { ADMIN_PATH } from 'common/constants/paths'
 function ProductPage() {
   const [payload, setPayload] = useState<any>({
     page: 1,
-    limit: 10,
+    take: 10,
     q: '',
     status: 1,
     to_date: '',
@@ -141,6 +141,18 @@ function ProductPage() {
     }
   }
 
+  const handleExportProduct = async (value: any) => {
+    try {
+      const res = await productServices.export(value)
+      console.log('🚀 ~ handleExportProduct ~ res:', res)
+      if (res) {
+        window.open(res?.data)
+      }
+    } catch (error) {
+      console.log('🚀 ~ handleExportProduct ~ error:', error)
+    }
+  }
+
   useEffect(() => {
     handleGetProducts(payload)
   }, [payload])
@@ -203,7 +215,7 @@ function ProductPage() {
         <Button type='primary' onClick={handleNavigateAddProduct}>
           Thêm mới
         </Button>
-        <Button className='ml-2' type='primary'>
+        <Button className='ml-2' type='primary' onClick={() => handleExportProduct(payload)}>
           Xuất Excel
         </Button>
       </Row>
@@ -220,6 +232,7 @@ function ProductPage() {
                 setIsLoading(false)
               }, 200)
             },
+            pageSize: payload.take,
             total: count,
             current: payload.page
           }}

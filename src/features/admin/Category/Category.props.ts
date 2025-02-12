@@ -6,7 +6,7 @@ export interface ICategory {
 
 export interface IPayLoadLisCategory {
   page?: number
-  limit?: number
+  take?: number
   q?: string
   status?: number
   from_date?: string

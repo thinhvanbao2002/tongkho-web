@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { ADMIN_PATH, USER_PATH } from 'common/constants/paths.ts'
 import React, { lazy } from 'react'
 
@@ -29,6 +30,7 @@ const OrderPage = lazy(() => import('../features/customer/order/Order.tsx'))
 const UploadFile = lazy(() => import('../common/components/upload/UploadComponent.tsx'))
 const UploadMultipartFile = lazy(() => import('../common/components/upload/UploadMultipartComponent.tsx'))
 const OrderSuccess = lazy(() => import('../features/customer/successOrder/SuccessOrder.tsx'))
+const OrderHistory = lazy(() => import('../features/customer/order/OrderHistory.tsx'))
 
 interface RouterProps {
   path: string
@@ -148,6 +150,11 @@ export const publicRoutes: Array<RouterProps> = [
   {
     path: USER_PATH.ORDER,
     component: OrderPage,
+    layout: UserLayout
+  },
+  {
+    path: USER_PATH.ORDER_HISTORY,
+    component: OrderHistory,
     layout: UserLayout
   }
 ]

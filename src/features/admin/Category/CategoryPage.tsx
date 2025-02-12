@@ -1,4 +1,4 @@
-import { Button, Row } from 'antd'
+import { Button, Row, Spin } from 'antd'
 import FilterCategory from './components/FilterCategory'
 import { useCallback, useEffect, useState } from 'react'
 import { IColumnAntD } from 'common/constants/interface'
@@ -15,7 +15,7 @@ import { AddEditCategory } from './components/AddEditCategory'
 function CategoryPage() {
   const [payload, setPayload] = useState<IPayLoadLisCategory>({
     page: 1,
-    limit: 10,
+    take: 10,
     q: '',
     status: 1,
     to_date: '',
@@ -25,6 +25,7 @@ function CategoryPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [title, setTitle] = useState<string>('')
+  const [count, setCount] = useState<number>(12)
   const [rowSelected, setRowSelected] = useState<ICategory>()
 
   const columnsListCategory: IColumnAntD[] = [
@@ -85,10 +86,11 @@ function CategoryPage() {
     }
   ]
 
-  const handleGetCategories = async (payload?: IPayLoadLisCategory) => {
+  const handleGetCategories = async (payload?: any) => {
     try {
       const res = await categoryServices.get(payload)
       setCategory(getDataSource(res?.data, 1))
+      setCount(res?.meta?.item_count)
     } catch (error) {
       console.log('🚀 ~ handleGetAccount ~ error:', error)
     }
@@ -203,16 +205,25 @@ function CategoryPage() {
           Xuất Excel
         </Button>
       </Row>
-      <Styled.TableStyle
-        bordered
-        columns={columnsListCategory}
-        dataSource={categories}
-        pagination={{
-          onChange: (page) => setPayload({ ...payload, page: page }),
-          total: 100,
-          current: payload.page
-        }}
-      />
+      <Spin spinning={isLoading}>
+        <Styled.TableStyle
+          bordered
+          columns={columnsListCategory}
+          dataSource={categories}
+          pagination={{
+            onChange: (page) => {
+              setIsLoading(true)
+              setTimeout(() => {
+                setPayload({ ...payload, page: page })
+                setIsLoading(false)
+              }, 200)
+            },
+            total: count,
+            current: payload.page,
+            pageSize: payload.take
+          }}
+        />
+      </Spin>
       <ModalComponent
         loading={isLoading}
         title={title}

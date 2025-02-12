@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button, Row } from 'antd'
+import { Button, Row, Spin } from 'antd'
 import { Styled } from 'styles/stylesComponent'
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { getDataSource, openNotification } from 'common/utils'
@@ -17,7 +17,7 @@ function CustomerPage() {
   const [page, setPage] = useState<number>(1)
   const [payload, setPayload] = useState({
     page: 1,
-    limit: 10,
+    take: 10,
     q: '',
     status: '',
     to_date: '',
@@ -26,6 +26,7 @@ function CustomerPage() {
   const [accounts, setAccount] = useState<any>([])
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [title, setTitle] = useState<string>('')
+  const [count, setCount] = useState<number>(0)
   const [textButton, setTextButton] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [rowSelected, setRowSelected] = useState<IAccount>()
@@ -86,6 +87,7 @@ function CustomerPage() {
     try {
       const res = await customerServices.get(payload)
       setAccount(getDataSource(res?.data, 1))
+      setCount(res?.meta?.item_count)
     } catch (error) {
       console.log('🚀 ~ handleGetAccount ~ error:', error)
     }
@@ -141,16 +143,25 @@ function CustomerPage() {
           Xuất Excel
         </Button>
       </Row>
-      <Styled.TableStyle
-        bordered
-        columns={columnsListAccount}
-        dataSource={accounts}
-        pagination={{
-          onChange: (page) => setPayload({ ...payload, page: page }),
-          total: 100,
-          current: payload.page
-        }}
-      />
+      <Spin spinning={isLoading}>
+        <Styled.TableStyle
+          bordered
+          columns={columnsListAccount}
+          dataSource={accounts}
+          pagination={{
+            pageSize: payload.take,
+            onChange: (page) => {
+              setIsLoading(true)
+              setTimeout(() => {
+                setPayload({ ...payload, page: page })
+                setIsLoading(false)
+              }, 200)
+            },
+            total: count,
+            current: payload.page
+          }}
+        />
+      </Spin>
       <ModalComponent
         loading={isLoading}
         title='Cập nhật thông tin khách hàng'

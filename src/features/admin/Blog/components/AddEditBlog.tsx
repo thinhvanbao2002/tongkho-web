@@ -54,6 +54,7 @@ function AddEditBlogPage() {
           if (record.id) {
             console.log('🚀 ~ handleSubmit ~ record:', record)
             openNotification('success', 'Thành công', 'Cập nhật thành công')
+            navigate(ADMIN_PATH.BLOG)
           } else {
             openNotification('success', 'Thành công', 'Thêm mới thành công')
             navigate(ADMIN_PATH.BLOG)

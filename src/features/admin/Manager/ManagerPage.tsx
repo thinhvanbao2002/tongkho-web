@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Button, Row } from 'antd'
+import { Button, Row, Spin } from 'antd'
 import { Styled } from 'styles/stylesComponent'
 import { useCallback, useEffect, useState } from 'react'
 import FilterAccount from './components/FilterAccount'
@@ -16,7 +16,7 @@ function ManagerPage() {
   const [page, setPage] = useState<number>(1)
   const [payload, setPayload] = useState<IPayLoadListUser>({
     page: 1,
-    limit: 10,
+    take: 10,
     q: '',
     status: '',
     to_date: '',
@@ -27,6 +27,7 @@ function ManagerPage() {
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [title, setTitle] = useState<string>('')
   const [textButton, setTextButton] = useState<string>('')
+  const [count, setCount] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [rowSelected, setRowSelected] = useState<IAccount>()
 
@@ -97,6 +98,8 @@ function ManagerPage() {
     try {
       const res = await accountServices.get(payload)
       setAccount(getDataSource(res?.data, 1))
+
+      setCount(res?.meta?.item_count)
     } catch (error) {
       console.log('🚀 ~ handleGetAccount ~ error:', error)
     }
@@ -214,16 +217,25 @@ function ManagerPage() {
           Xuất Excel
         </Button>
       </Row>
-      <Styled.TableStyle
-        bordered
-        columns={columnsListAccount}
-        dataSource={accounts}
-        pagination={{
-          onChange: (page) => setPayload({ ...payload, page: page }),
-          total: 100,
-          current: payload.page
-        }}
-      />
+      <Spin spinning={isLoading}>
+        <Styled.TableStyle
+          bordered
+          columns={columnsListAccount}
+          dataSource={accounts}
+          pagination={{
+            pageSize: payload.take,
+            onChange: (page) => {
+              setIsLoading(true)
+              setTimeout(() => {
+                setPayload({ ...payload, page: page })
+                setIsLoading(false)
+              }, 200)
+            },
+            total: count,
+            current: payload.page
+          }}
+        />
+      </Spin>
       <ModalComponent
         loading={isLoading}
         title='Thêm mới / cập nhật tài khoản'

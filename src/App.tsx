@@ -14,6 +14,7 @@ function App() {
     try {
       const res = await authService.getUserInfo()
       if (res) {
+        console.log('🚀 ~ getUserInfo ~ res:', res.data)
         dispatch(setLogin(res?.data))
       }
     } catch (error) {

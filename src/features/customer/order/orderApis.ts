@@ -52,5 +52,13 @@ export const orderServices = {
   createOrder: (payload: any) => {
     const url = `/order`
     return AxiosClient.post(url, { ...payload })
+  },
+  getOrders: (payload: any) => {
+    const url = `/order`
+    return AxiosClient.get(url, { ...payload })
+  },
+  cancelOrder: (id: number) => {
+    const url = `/order/cancel/${id}`
+    return AxiosClient.patch(url)
   }
 }

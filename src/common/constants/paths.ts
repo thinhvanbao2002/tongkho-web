@@ -1,6 +1,6 @@
 export const ADMIN_PATH = {
   LOGIN: '/ad-login',
-  OVERVIEW: '/ad-dashboard',
+  OVERVIEW: '/admin',
   CUSTOMER: '/ad-customer',
   MANAGER: '/ad-manager',
   CATEGORY: '/ad-category',
@@ -21,5 +21,6 @@ export const USER_PATH = {
   PRODUCT: '/product',
   PRODUCT_DETAIL: '/product-detail',
   ORDER: '/order',
-  ORDER_SUCCESS: '/order/success'
+  ORDER_SUCCESS: '/order/success',
+  ORDER_HISTORY: '/order/history'
 }
