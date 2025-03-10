@@ -30,6 +30,7 @@ function ManagerPage() {
   const [count, setCount] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [rowSelected, setRowSelected] = useState<IAccount>()
+  console.log('🚀 ~ ManagerPage ~ rowSelected:', rowSelected)
 
   const columnsListAccount: IColumnAntD[] = [
     {
@@ -147,7 +148,8 @@ function ManagerPage() {
       name: value?.name,
       phone: value?.phone,
       email: value?.email,
-      status: value?.status || null
+      status: value?.status || null,
+      avatar: value?.avatar
     }
     let res
     try {
@@ -213,9 +215,9 @@ function ManagerPage() {
         >
           Thêm mới
         </Button>
-        <Button className='ml-2' type='primary'>
+        {/* <Button className='ml-2' type='primary'>
           Xuất Excel
-        </Button>
+        </Button> */}
       </Row>
       <Spin spinning={isLoading}>
         <Styled.TableStyle

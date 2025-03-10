@@ -81,7 +81,7 @@ function DetailProductPage() {
     if (product?.category_id) {
       setPayload((prev: any) => ({
         ...prev,
-        brand: product.category_id
+        brand: product?.category_id
       }))
     }
   }, [product, handleRelatedProductClick])
@@ -95,7 +95,7 @@ function DetailProductPage() {
   useEffect(() => {
     setCartPayload((prev: any) => ({
       ...prev,
-      product_id: product.id
+      product_id: product?.id
     }))
   }, [product])
 
@@ -107,7 +107,7 @@ function DetailProductPage() {
           <div className='border-r-2 border-border-basic ml-2 mr-2 w-[1px] h-[16px]'></div>
           <span>{product.category?.name}</span>
           <div className='border-r-2 border-border-basic ml-2 mr-2 w-[1px] h-[16px] '></div>
-          <span className='font-semibold'>{product.name}</span>
+          <span className='font-semibold'>{product?.name}</span>
         </div>
       </div>
       <div className='w-full pl-20 pr-20 pt-10 pb-20 flex sm:flex-col md:flex-col lg:flex-row'>
@@ -117,20 +117,20 @@ function DetailProductPage() {
           </div>
           <div className='flex mt-2 overflow-x-scroll'>
             {product.product_photo &&
-              product.product_photo.length > 0 &&
-              product.product_photo.map((p: any) => (
+              product?.product_photo.length &&
+              product?.product_photo.map((p: any) => (
                 <Image width={150} height={150} className='object-cover p-1' src={p?.url} />
               ))}
           </div>
         </div>
         <div className='w-full p-6 lg:w-[40%]'>
           <div>
-            <h2 className='uppercase text-custom-xl font-semibold'>{product.name}</h2>
+            <h2 className='uppercase text-custom-xl font-semibold'>{product?.name}</h2>
           </div>
           <div className='flex items-center justify-between text-custom-sm mt-4'>
             <div className='flex'>
               <span>Mã sản phẩm:</span>
-              <h3 className='font-semibold ml-2'>{product.product_code}</h3>
+              <h3 className='font-semibold ml-2'>{product?.product_code}</h3>
             </div>
             <div className='flex'>
               <span>Tình trạng:</span>

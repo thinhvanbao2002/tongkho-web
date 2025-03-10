@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   DesktopOutlined,
   PieChartOutlined,
@@ -10,18 +10,28 @@ import {
 import type { MenuProps } from 'antd'
 import { Avatar, Dropdown, Layout, Menu, theme } from 'antd'
 import { ADMIN_PATH } from 'common/constants/paths'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { openNotification } from 'common/utils'
+import { setLogin } from 'redux/slice/login.slice'
 
 const { Header, Content, Sider } = Layout
 
 type MenuItem = Required<MenuProps>['items'][number]
 
-function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode, children?: MenuItem[]): MenuItem {
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  fnc?: () => void
+): MenuItem {
   return {
     key,
     icon,
     children,
-    label
+    label,
+    onClick: fnc
   } as MenuItem
 }
 
@@ -39,35 +49,49 @@ const itemsMenu: MenuItem[] = [
   ])
 ]
 
-const items: MenuItem[] = [
-  getItem(
-    'Đổi mật khẩu',
-    '1',
-    <svg
-      viewBox='64 64 896 896'
-      focusable='false'
-      data-icon='edit'
-      width='1em'
-      height='1em'
-      fill='currentColor'
-      aria-hidden='true'
-    >
-      <path d='M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z'></path>
-    </svg>
-  ),
-  getItem('Đăng xuất', '2', <LogoutOutlined />)
-]
-
 const AdminLayout: React.FC = ({ children }: any) => {
   const [collapsed, setCollapsed] = useState(false)
   const [titleHeader, setTitleHeader] = useState<string>('Tổng quan')
   const [keySider, setKeySider] = useState<string>('')
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const {
     token: { colorBgContainer }
   } = theme.useToken()
 
   const { pathname } = window.location
-  console.log('🚀 ~ pathname:', pathname)
+
+  const handleNavigate = (path: string) => {
+    navigate(path)
+  }
+
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('role')
+    localStorage.removeItem('data')
+    dispatch(setLogin(undefined))
+    openNotification('success', 'Thành công', 'Đăng xuất thành công!')
+    handleNavigate(`${ADMIN_PATH.LOGIN}`)
+  }, [])
+
+  const items: MenuItem[] = [
+    getItem(
+      'Đổi mật khẩu',
+      '1',
+      <svg
+        viewBox='64 64 896 896'
+        focusable='false'
+        data-icon='edit'
+        width='1em'
+        height='1em'
+        fill='currentColor'
+        aria-hidden='true'
+      >
+        <path d='M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z'></path>
+      </svg>
+    ),
+    getItem('Đăng xuất', '2', <LogoutOutlined />, undefined, handleLogout)
+  ]
 
   useEffect(() => {
     if (/^\/ad-e-order\/\d+$/.test(pathname)) {

@@ -15,4 +15,5 @@ export interface IAccount {
   password?: string
   avatar?: string
   status: string
+  textStatus?: string
 }

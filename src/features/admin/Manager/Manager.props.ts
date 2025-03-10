@@ -14,6 +14,7 @@ export interface IAccount {
   password?: string
   avatar?: string
   status: string
+  s?: string
 }
 export interface IPayLoadListUser {
   page?: number

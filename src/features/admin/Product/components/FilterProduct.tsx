@@ -4,7 +4,7 @@ import RJSearch from 'common/components/search/RJSearch'
 import RadiusSelection from 'common/components/select/RadiusSelection'
 import RangerPicker from 'common/components/rangePicker/RangePicker'
 import { CommonStatus } from 'common/constants/constants'
-import { ProductTypes, SortBy } from '../constants/product.constants'
+import { SortBy } from '../constants/product.constants'
 import { useEffect, useState } from 'react'
 import { categoryServices } from 'features/admin/Category/CategoryApis'
 
@@ -77,7 +77,7 @@ function FilterProduct({ onChangeValue }: IFilter) {
         </Col>
       </Row>
       <Row gutter={24} className='mt-4'>
-        <Col md={8}>
+        {/* <Col md={8}>
           <RadiusSelection
             placeholder={'Trạng thái hoạt động'}
             onChange={(value: number) => {
@@ -91,11 +91,13 @@ function FilterProduct({ onChangeValue }: IFilter) {
               { value: ProductTypes.NEW_PRODUCT, text: 'Hàng mới về' }
             ]}
           />
-        </Col>
+        </Col> */}
         <Col md={8}>
           <RadiusSelection
+            allowClear
             placeholder={'Sắp xếp theo'}
             onChange={(value: number) => {
+              console.log('🚀 ~ FilterProduct ~ value:', value)
               let tmpValue
               value === undefined ? (tmpValue = null) : (tmpValue = value)
               onChangeValue({ sortBy: tmpValue })

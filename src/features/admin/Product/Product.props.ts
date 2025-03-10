@@ -11,10 +11,10 @@ export interface IProduct {
   sold?: number
   description: string
   image: string
-  product_code: string
   images: string
   product_photo: []
   introduce: string
+  product_code?: string
 }
 
 export interface IPayLoadLisCategory {

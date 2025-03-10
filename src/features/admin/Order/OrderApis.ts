@@ -32,5 +32,13 @@ export const orderServices = {
   delete: (id: number) => {
     const url = `/a/order/${id}`
     return AxiosClient.delete(url)
+  },
+  export: (value: IQuery) => {
+    const url = '/a/order/export'
+    const handleParams = handleObjectEmpty(value)
+    return AxiosClient.post(url, {
+      ...handleParams,
+      limit: RECORD_SIZE
+    })
   }
 }

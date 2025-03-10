@@ -9,7 +9,7 @@ import FilterOrder from './components/FilterOrder'
 import { useCallback, useEffect, useState } from 'react'
 import { orderServices } from './OrderApis'
 import { formatPrice, getDataSource, vldOrderStatus } from 'common/utils'
-import { isNil } from 'lodash'
+import { isNil, values } from 'lodash'
 import { useNavigate } from 'react-router'
 import { ADMIN_PATH } from 'common/constants/paths'
 import styled from 'styled-components'
@@ -122,6 +122,18 @@ function AdminOrderPage() {
     }
   }
 
+  const handleExportOrders = async (value?: any) => {
+    try {
+      const res = await orderServices.export(value)
+      if (res) {
+        const path = res?.data
+        window.open(path)
+      }
+    } catch (error) {
+      console.log('🚀 ~ handleExportOrders ~ error:', error)
+    }
+  }
+
   const handleEditOrder = useCallback((record: any) => {
     navigate(`${ADMIN_PATH.UPDATE_ORDER}/${record?.id}`)
   }, [])
@@ -158,7 +170,7 @@ function AdminOrderPage() {
     <>
       <FilterOrder onChangeValue={handleFilterProduct} />
       <Row className='mb-2 mt-2 flex justify-end'>
-        <Button className='ml-2' type='primary'>
+        <Button className='ml-2' type='primary' onClick={() => handleExportOrders(payload)}>
           Xuất Excel
         </Button>
       </Row>
@@ -170,7 +182,11 @@ function AdminOrderPage() {
           </Tag>
           <div>
             <Tooltip title='Tải lại dữ liệu'>
-              <ReloadStyled>
+              <ReloadStyled
+                onClick={() => {
+                  handleGetOrders(values)
+                }}
+              >
                 <IconAntd
                   spin={false}
                   style={{ color: loadingRefresh ? 'red' : 'black' }}

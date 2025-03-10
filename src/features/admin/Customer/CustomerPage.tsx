@@ -56,7 +56,7 @@ function CustomerPage() {
     {
       title: 'Trạng thái',
       key: 'status',
-      dataIndex: 'status'
+      dataIndex: 'textStatus'
     },
     {
       width: 80,
@@ -126,6 +126,7 @@ function CustomerPage() {
   const handleSetModalVisible = useCallback(() => {
     setModalVisible(false)
     setRowSelected(undefined)
+    handleGetAccount()
   }, [])
 
   const handleEditAccount = useCallback(async (record: IAccount) => {
@@ -138,11 +139,11 @@ function CustomerPage() {
       <Row gutter={[15, 6]} className='mb-2'>
         <FilterCustomer onChangeValue={handleFilter} />
       </Row>
-      <Row className='mb-2 flex justify-end'>
+      {/* <Row className='mb-2 flex justify-end'>
         <Button className='ml-2' type='primary'>
           Xuất Excel
         </Button>
-      </Row>
+      </Row> */}
       <Spin spinning={isLoading}>
         <Styled.TableStyle
           bordered

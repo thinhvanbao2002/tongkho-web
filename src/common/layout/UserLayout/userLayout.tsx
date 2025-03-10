@@ -95,19 +95,19 @@ const UserLayout: React.FC = ({ children }: any) => {
           <div className='text-primary flex items-center justify-center uppercase font-semibold'>
             <h4
               className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200'
-              onClick={() => handleNavigate('/')} // Trang chủ
+              onClick={() => handleNavigate('/')}
             >
               Trang chủ
             </h4>
             <h4
               className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200'
-              onClick={() => handleNavigate('/product')} // Trang sản phẩm
+              onClick={() => handleNavigate('/product')}
             >
               Sản phẩm
             </h4>
             <div
               className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200 relative'
-              onClick={() => handleNavigate('/cart')} // Trang sản phẩm
+              onClick={() => handleNavigate('/cart')}
             >
               <div>Giỏ hàng</div>
               {/* <div className='absolute top-7 right-1 text-while text-xs rounded-full w-5 h-5 flex items-center justify-center bg-money'>
@@ -116,7 +116,7 @@ const UserLayout: React.FC = ({ children }: any) => {
             </div>
             <h4
               className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200'
-              onClick={() => handleNavigate('/help')} // Trợ giúp
+              onClick={() => handleNavigate('/blog')}
             >
               Bài viết
             </h4>

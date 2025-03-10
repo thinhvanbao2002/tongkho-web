@@ -36,7 +36,8 @@ export const productServices = {
     const url = '/a/product/export'
     const handleParams = handleObjectEmpty(value)
     return AxiosClient.post(url, {
-      params: { ...handleParams, limit: RECORD_SIZE }
+      ...handleParams,
+      limit: RECORD_SIZE
     })
   }
 }

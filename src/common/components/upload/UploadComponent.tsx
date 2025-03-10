@@ -13,6 +13,7 @@ const UploadStyles = styled(Upload)<{ width: string; height: string }>`
   & .ant-upload-select {
     width: ${(props) => props.width} !important;
     height: ${(props) => props.height} !important;
+    over-flow: hidden;
   }
 `
 

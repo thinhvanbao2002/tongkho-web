@@ -59,7 +59,6 @@ export const getDataSource = (data: any, page: number) => {
 }
 
 export const vldOrderStatus = (value: string) => {
-  console.log('🚀 ~ vldOrderStatus ~ value:', value)
   return `${ORDER_STATUS[value].text}`
 }
 

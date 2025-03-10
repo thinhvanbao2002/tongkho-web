@@ -23,12 +23,12 @@ function ProductPage() {
     to_date: '',
     from_date: ''
   })
+  console.log('🚀 ~ ProductPage ~ payload:', payload)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [title, setTitle] = useState<string>('')
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [products, setProducts] = useState<Array<IProduct>>([])
   const [count, setCount] = useState<number>(12)
-  console.log('🚀 ~ ProductPage ~ count:', count)
   const navigate = useNavigate()
 
   const columnsListCategory: IColumnAntD[] = [
@@ -159,6 +159,7 @@ function ProductPage() {
 
   const handleFilterProduct = useCallback(
     (value: any) => {
+      console.log('🚀 ~ ProductPage ~ value:', value)
       if (!isNil(value.status)) {
         setPayload({
           ...payload,
@@ -188,13 +189,13 @@ function ProductPage() {
       if (!isNil(value?.categoryId)) {
         setPayload({
           ...payload,
-          branch: value?.categoryId
+          brand: value?.categoryId
         })
       }
       if (!isNil(value.sortBy)) {
         setPayload({
           ...payload,
-          order: value?.sortBy
+          order_price: value?.sortBy
         })
       }
     },

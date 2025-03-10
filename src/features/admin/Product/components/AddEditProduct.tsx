@@ -3,6 +3,7 @@ import RadiusSelection from 'common/components/select/RadiusSelection'
 import { TEXT_CONSTANTS } from 'common/constants/constants'
 import { categoryServices } from 'features/admin/Category/CategoryApis'
 import { useEffect, useState } from 'react'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { ProductTypes } from '../constants/product.constants'
@@ -30,12 +31,13 @@ const AddEditProduct = () => {
   const location = useLocation()
   const { state } = location || {}
   const record = state?.record || {}
+  console.log('🚀 ~ AddEditProduct ~ record:', record)
 
   const initialValues = {
-    product_code: record?.product_code,
     name: record?.name,
     category_id: record?.category_id,
     product_type: record?.product_type,
+    product_code: record?.product_code,
     price: record?.price,
     quantity: record?.quantity,
     image: record?.image,
@@ -88,7 +90,6 @@ const AddEditProduct = () => {
   const handleSubmit = async (value: IProduct) => {
     const payLoadAccount = {
       id: record?.id,
-      product_code: value?.product_code,
       name: value?.name,
       category_id: value?.category_id,
       price: value?.price,
@@ -97,7 +98,8 @@ const AddEditProduct = () => {
       description: value?.description,
       image: value?.image,
       product_photo: value?.product_photo,
-      introduce: value?.introduce
+      introduce: value?.introduce,
+      product_code: value?.product_code
     }
     console.log('🚀 ~ handleSubmit ~ payLoadAccount:', payLoadAccount)
     let res
@@ -134,7 +136,7 @@ const AddEditProduct = () => {
       <Row gutter={24}>
         <Col span={8}>
           <Form.Item name='product_code' label='Mã sản phẩm'>
-            <Input />
+            <Input disabled placeholder='Mã sản phẩm tự động tạo' />
           </Form.Item>
         </Col>
         <Col span={8}>
@@ -235,6 +237,8 @@ const AddEditProduct = () => {
             ]}
           >
             <UploadSingleFile
+              width='200px'
+              height='250px'
               initialImage={record?.image}
               onSuccessUpload={(imageUrl) => {
                 form.setFieldsValue({ image: imageUrl })
@@ -242,7 +246,7 @@ const AddEditProduct = () => {
             />
           </Form.Item>
         </Col>
-        <Col span={16}>
+        <Col span={12} className='pl-[12px]'>
           <Form.Item name='product_photo' label='Ảnh chi tiết sản phẩm'>
             <UploadMultipart
               defaultFileList={images}
@@ -274,13 +278,13 @@ const AddEditProduct = () => {
           </Form.Item>
         </Col>
       </Row>
-      <Row gutter={24}>
+      {/* <Row gutter={24}>
         <Col span={24}>
           <Form.Item name={'description'} label={'Mô tả sản phẩm'}>
             <ReactQuill placeholder='Nhập mô tả sản phẩm' theme='snow' className='h-[350px]' />
           </Form.Item>
         </Col>
-      </Row>
+      </Row> */}
       <Row gutter={24} className='mt-10'>
         <Col span={12}> </Col>
         <Col span={12} className='flex items-center justify-end'>

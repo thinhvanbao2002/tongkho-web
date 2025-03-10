@@ -20,8 +20,9 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
     email: rowSelected?.email,
     password: rowSelected?.password,
     avatar: rowSelected?.avatar,
-    status: rowSelected?.status
+    status: rowSelected?.s
   }
+  console.log('🚀 ~ AddEditManager ~ initialvalue:', initialvalue)
 
   return (
     <Form
@@ -65,7 +66,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
               }
             ]}
           >
-            <Input />
+            <Input readOnly />
           </Form.Item>
         </Col>
       </Row>
@@ -85,7 +86,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
               }
             ]}
           >
-            <Input />
+            <Input readOnly />
           </Form.Item>
         </Col>
         {!rowSelected && (
@@ -121,7 +122,9 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
               ]}
             >
               <RadiusSelection
-                onChange={() => {}}
+                onChange={(value: string) => {
+                  initialvalue.status = value
+                }}
                 defaultValue={'active'}
                 options={[
                   { value: 'active', text: 'Hoạt động' },
@@ -139,6 +142,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
             <UploadSingleFile
               initialImage={initialvalue.avatar}
               onSuccessUpload={(imageUrl) => {
+                console.log('🚀 ~ AddEditManager ~ imageUrl:', imageUrl)
                 form.setFieldsValue({ avatar: imageUrl })
               }}
             />

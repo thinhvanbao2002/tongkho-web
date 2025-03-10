@@ -69,7 +69,7 @@ function Comment({ id, reviews, getProduct }: IPropsComment) {
                           <Avatar size={40} icon={<UserOutlined />} />
                         </div>
                         <div>
-                          <p className='text-custom-sm'>{p.user.name}</p>
+                          <p className='text-custom-sm'>{p.user?.name ? p.user?.name : 'Người tham gia'}</p>
                         </div>
                       </div>
                       <div className='flex items-center'>

@@ -5,6 +5,9 @@ import { TEXT_CONSTANTS } from 'common/constants/constants'
 
 import RadiusSelection from 'common/components/select/RadiusSelection'
 import { IAccount } from '../Customer.props'
+import { useCallback, useState } from 'react'
+import { customerServices } from '../CustomerApis'
+import { openNotification } from 'common/utils'
 
 interface IAddEditAccount {
   onFinish?: (value: any) => void
@@ -13,16 +16,33 @@ interface IAddEditAccount {
 }
 
 export const EditCustomer = ({ onFinish, onClose, rowSelected }: IAddEditAccount) => {
+  console.log('🚀 ~ EditCustomer ~ rowSelected:', rowSelected)
   const [form] = Form.useForm()
+  const [status, setStatus] = useState<string>('')
+  console.log('🚀 ~ EditCustomer ~ status:', status)
+
+  const handleUpdateCustomer = useCallback(async (id: string, data: any) => {
+    try {
+      const res = await customerServices.updateCustomer(id, data)
+      if (res) {
+        openNotification('success', 'Thành công', 'Cập nhật thành công!')
+        onClose?.()
+      }
+    } catch (error) {
+      console.log('🚀 ~ handleUpdateCustomer ~ error:', error)
+    }
+  }, [])
 
   const initialvalue = {
+    id: rowSelected?.id,
     name: rowSelected?.name,
     phone: rowSelected?.phone,
     email: rowSelected?.email,
     password: rowSelected?.password,
     avatar: rowSelected?.avatar,
-    status: rowSelected?.status
+    status: rowSelected?.textStatus
   }
+  console.log('🚀 ~ EditCustomer ~ initialvalue:', initialvalue)
 
   return (
     <Form
@@ -46,7 +66,7 @@ export const EditCustomer = ({ onFinish, onClose, rowSelected }: IAddEditAccount
               }
             ]}
           >
-            <Input />
+            <Input readOnly />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -66,7 +86,7 @@ export const EditCustomer = ({ onFinish, onClose, rowSelected }: IAddEditAccount
               }
             ]}
           >
-            <Input />
+            <Input readOnly />
           </Form.Item>
         </Col>
       </Row>
@@ -86,7 +106,7 @@ export const EditCustomer = ({ onFinish, onClose, rowSelected }: IAddEditAccount
               }
             ]}
           >
-            <Input />
+            <Input readOnly />
           </Form.Item>
         </Col>
         {!rowSelected && (
@@ -122,7 +142,9 @@ export const EditCustomer = ({ onFinish, onClose, rowSelected }: IAddEditAccount
               ]}
             >
               <RadiusSelection
-                onChange={() => {}}
+                onChange={(value) => {
+                  setStatus(value)
+                }}
                 options={[
                   { value: 'active', text: 'Hoạt động' },
                   { value: 'inactive', text: 'Ngừng hoạt động' }
@@ -152,7 +174,14 @@ export const EditCustomer = ({ onFinish, onClose, rowSelected }: IAddEditAccount
           <Button danger onClick={onClose}>
             Thoát
           </Button>
-          <Button htmlType='submit' className='btn-confirm' style={{ marginLeft: '10px' }}>
+          <Button
+            onClick={() => {
+              handleUpdateCustomer(String(initialvalue.id), { status })
+            }}
+            htmlType='submit'
+            className='btn-confirm'
+            style={{ marginLeft: '10px' }}
+          >
             Xác nhận
           </Button>
         </Col>

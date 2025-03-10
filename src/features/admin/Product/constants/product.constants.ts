@@ -5,6 +5,6 @@ export enum ProductTypes {
 }
 
 export enum SortBy {
-  ASC = 'asc',
-  DESC = 'desc'
+  ASC = 'ASC',
+  DESC = 'DESC'
 }

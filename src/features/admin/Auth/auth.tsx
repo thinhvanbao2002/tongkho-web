@@ -2,7 +2,7 @@ import { Button, Form, Input, Spin } from 'antd'
 import { useState } from 'react'
 import { authService } from './services/Apis'
 import LocalStorage from 'apis/localStorage'
-import { openNotification } from 'common/utils'
+import { openNotification, openNotificationError } from 'common/utils'
 import { useNavigate } from 'react-router'
 import { ADMIN_PATH } from 'common/constants/paths'
 
@@ -26,11 +26,17 @@ function LoginAdminPage() {
             setIsLoading(false)
             openNotification('success', 'Thành công!', 'Đăng nhập thành công.')
             navigate(ADMIN_PATH.OVERVIEW)
+            console.log('11111111111')
           } else {
+            console.log('2222222222222')
             openNotification('warning', 'Thất bại!', 'Không có quyền truy cập.')
             setIsLoading(false)
           }
         }
+      })
+      .catch((err) => {
+        openNotificationError(err)
+        setIsLoading(false)
       })
   }
 

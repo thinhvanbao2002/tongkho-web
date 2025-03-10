@@ -14,10 +14,10 @@ export const customerServices = {
       params: { ...handleParams, limit: RECORD_SIZE }
     })
   },
-  put: (value: any) => {
-    const url = `/customer/${value?.id}`
-    return AxiosClient.put(url, {
-      ...value
+  updateCustomer: (id: any, data: any) => {
+    const url = `/a/customer/${id}`
+    return AxiosClient.patch(url, {
+      ...data
     })
   },
   delete: (id: number) => {

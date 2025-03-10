@@ -31,6 +31,8 @@ const UploadFile = lazy(() => import('../common/components/upload/UploadComponen
 const UploadMultipartFile = lazy(() => import('../common/components/upload/UploadMultipartComponent.tsx'))
 const OrderSuccess = lazy(() => import('../features/customer/successOrder/SuccessOrder.tsx'))
 const OrderHistory = lazy(() => import('../features/customer/order/OrderHistory.tsx'))
+const BlogPage = lazy(() => import('../features/customer/blog/BlogPage.tsx'))
+const BlogDetail = lazy(() => import('../features/customer/blog/BlogDetail.tsx'))
 
 interface RouterProps {
   path: string
@@ -155,6 +157,16 @@ export const publicRoutes: Array<RouterProps> = [
   {
     path: USER_PATH.ORDER_HISTORY,
     component: OrderHistory,
+    layout: UserLayout
+  },
+  {
+    path: USER_PATH.BLOG,
+    component: BlogPage,
+    layout: UserLayout
+  },
+  {
+    path: USER_PATH.BLOG + '/:id',
+    component: BlogDetail,
     layout: UserLayout
   }
 ]

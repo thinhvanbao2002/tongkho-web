@@ -124,13 +124,6 @@ function OrderDetail() {
             ) : (
               <Fragment />
             )}
-            {order_status !== OrderStatus.PAID ? (
-              <Button type='primary' className='ml-2' danger>
-                Hủy đơn hàng
-              </Button>
-            ) : (
-              <Fragment />
-            )}
           </div>
         </Col>
       </Row>

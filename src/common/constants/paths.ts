@@ -22,5 +22,6 @@ export const USER_PATH = {
   PRODUCT_DETAIL: '/product-detail',
   ORDER: '/order',
   ORDER_SUCCESS: '/order/success',
-  ORDER_HISTORY: '/order/history'
+  ORDER_HISTORY: '/order/history',
+  BLOG: '/blog'
 }
