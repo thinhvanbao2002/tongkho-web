@@ -6,6 +6,7 @@ import { Image, Upload } from 'antd'
 import type { GetProp, UploadFile, UploadProps } from 'antd'
 import { v4 as uuidv4 } from 'uuid'
 import { AxiosClient } from 'apis/axiosClient'
+import { openNotificationError } from 'common/utils'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -70,6 +71,7 @@ const UploadMultipart: React.FC<UploadMultipartProps> = ({ defaultFileList = [],
       const res: any = await AxiosClient.post(`uploads/image`, fmData, config)
       onSuccess({ url: res?.data?.absoluteUrl })
     } catch (error) {
+      openNotificationError(error)
       onError(error)
     }
   }
