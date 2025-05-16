@@ -1,4 +1,4 @@
-import { Image, Select } from 'antd'
+import { Image, Select, InputNumber } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { productServices } from '../product/productApis'
@@ -6,9 +6,12 @@ import { formatPrice, openNotification, openNotificationError } from 'common/uti
 import RelatedProducts from 'features/admin/Product/components/RelatedProducts'
 import { USER_PATH } from 'common/constants/paths'
 import Comment from '../comment/Comment'
+import { motion } from 'framer-motion'
+import { ShoppingCart } from 'lucide-react'
 
 function DetailProductPage() {
   const [product, setProduct] = useState<any>({})
+  const [selectedImage, setSelectedImage] = useState<string>('')
   const navigate = useNavigate()
   const [relatedProducts, setRelatedProducts] = useState<Array<any>>([])
   const [payload, setPayload] = useState<any>({
@@ -99,59 +102,98 @@ function DetailProductPage() {
     }))
   }, [product])
 
+  useEffect(() => {
+    if (product?.image) {
+      setSelectedImage(product.image)
+    }
+  }, [product])
+
   return (
-    <>
-      <div className='w-full h-[50px] pl-20 pr-20'>
+    <div className='min-h-screen bg-gray-50'>
+      {/* Breadcrumb */}
+      <div className='w-full h-[50px] pl-20 pr-20 bg-white shadow-sm'>
         <div className='w-full border-b-2 h-[50px] flex items-center justify-start text-custom-sm'>
-          <span>Sản phẩm</span>
-          <div className='border-r-2 border-border-basic ml-2 mr-2 w-[1px] h-[16px]'></div>
-          <span>{product.category?.name}</span>
-          <div className='border-r-2 border-border-basic ml-2 mr-2 w-[1px] h-[16px] '></div>
-          <span className='font-semibold'>{product?.name}</span>
+          <span className='text-gray-600'>Sản phẩm</span>
+          <div className='border-r-2 border-gray-200 ml-2 mr-2 w-[1px] h-[16px]'></div>
+          <span className='text-gray-600'>{product.category?.name}</span>
+          <div className='border-r-2 border-gray-200 ml-2 mr-2 w-[1px] h-[16px]'></div>
+          <span className='font-semibold text-black'>{product?.name}</span>
         </div>
       </div>
-      <div className='w-full pl-20 pr-20 pt-10 pb-20 flex sm:flex-col md:flex-col lg:flex-row'>
-        <div className='p-6 sm:w-full  md:w-full lg:w-[60%]'>
-          <div className='w-full '>
-            <Image width={'100%'} className='object-cover h-auto' src={product.image} />
-          </div>
-          <div className='flex mt-2 overflow-x-scroll'>
-            {product.product_photo &&
-              product?.product_photo.length &&
-              product?.product_photo.map((p: any) => (
-                <Image width={150} height={150} className='object-cover p-1' src={p?.url} />
-              ))}
+
+      {/* Main Content */}
+      <div className='w-full pl-20 pr-20 pt-10 pb-20 flex sm:flex-col md:flex-col lg:flex-row gap-8'>
+        {/* Product Images */}
+        <div className='p-6 sm:w-full md:w-full lg:w-[60%] bg-white rounded-lg shadow-sm'>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className='w-full aspect-square overflow-hidden rounded-lg'
+          >
+            <Image
+              width={'100%'}
+              height={'100%'}
+              className='object-cover'
+              src={selectedImage || product.image}
+              preview={false}
+            />
+          </motion.div>
+
+          <div className='flex mt-4 gap-2 overflow-x-auto pb-2'>
+            {product.product_photo?.map((p: any, index: number) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.05 }}
+                className={`cursor-pointer rounded-lg overflow-hidden border-2 ${
+                  selectedImage === p.url ? 'border-black' : 'border-transparent'
+                }`}
+                onClick={() => setSelectedImage(p.url)}
+              >
+                <Image width={100} height={100} className='object-cover' src={p?.url} preview={false} />
+              </motion.div>
+            ))}
           </div>
         </div>
-        <div className='w-full p-6 lg:w-[40%]'>
-          <div>
-            <h2 className='uppercase text-custom-xl font-semibold'>{product?.name}</h2>
-          </div>
-          <div className='flex items-center justify-between text-custom-sm mt-4'>
-            <div className='flex'>
-              <span>Mã sản phẩm:</span>
-              <h3 className='font-semibold ml-2'>{product?.product_code}</h3>
+
+        {/* Product Info */}
+        <div className='w-full p-6 lg:w-[40%] bg-white rounded-lg shadow-sm'>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <h2 className='uppercase text-2xl font-bold text-gray-800'>{product?.name}</h2>
+
+            <div className='flex items-center justify-between text-sm mt-4 text-gray-600'>
+              <div className='flex items-center'>
+                <span>Mã sản phẩm:</span>
+                <h3 className='font-semibold ml-2'>{product?.product_code}</h3>
+              </div>
+              <div className='flex items-center'>
+                <span>Tình trạng:</span>
+                <h3 className='font-semibold ml-2 text-green-600'>Còn hàng</h3>
+              </div>
             </div>
-            <div className='flex'>
-              <span>Tình trạng:</span>
-              <h3 className='font-semibold ml-2'>Còn hàng</h3>
+
+            <div className='mt-6'>
+              <h2 className='font-extrabold text-3xl text-money'>{formatPrice(product.price)} VND</h2>
             </div>
-          </div>
-          <div className='mt-6'>
-            <h2 className='font-extrabold text-custom-xl text-money'>{formatPrice(product.price)} VND</h2>
-          </div>
-          <div className='w-full border-t-2 border-dashed mt-6'></div>
-          <div className='mt-5'>
-            <p className='text-custom-xs text-justify'>{product.introduce}</p>
-          </div>
-          <div className='w-full border-t-2 border-dashed mt-6'></div>
-          <div className='flex items-center justify-between text-custom-sm mt-6'>
-            <div>
-              <div className='flex flex-col'>
-                <span>SIZE</span>
+
+            <div className='w-full border-t border-gray-200 my-6'></div>
+
+            <div className='mt-5'>
+              <p className='text-sm text-gray-600 leading-relaxed'>{product.introduce}</p>
+            </div>
+
+            <div className='w-full border-t border-gray-200 my-6'></div>
+
+            <div className='flex items-center justify-between gap-4 mt-6'>
+              <div className='flex-1'>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>SIZE</label>
                 <Select
                   defaultValue='l'
-                  style={{ width: 180 }}
+                  className='w-full'
                   onChange={(value) => handleSetCartPayload('size', value)}
                   options={[
                     { value: 's', label: 'S' },
@@ -163,55 +205,48 @@ function DetailProductPage() {
                   ]}
                 />
               </div>
-            </div>
-            <div>
-              <div className='flex flex-col'>
-                <span>SỐ LƯỢNG</span>
-                <Select
-                  defaultValue='1'
-                  style={{ width: 180 }}
+              <div className='flex-1'>
+                <label className='block text-sm font-medium text-gray-700 mb-2'>SỐ LƯỢNG</label>
+                <InputNumber
+                  min={1}
+                  defaultValue={1}
+                  className='w-full'
                   onChange={(value) => handleSetCartPayload('product_number', value)}
-                  options={[
-                    { value: '1', label: '1' },
-                    { value: '2', label: '2' },
-                    { value: '3', label: '3' },
-                    { value: '4', label: '4' },
-                    { value: '5', label: '5' },
-                    { value: '6', label: '6' },
-                    { value: '7', label: '7' },
-                    { value: '8', label: '8' }
-                  ]}
                 />
               </div>
             </div>
-          </div>
-          <div className='w-full border-t-2 border-dashed mt-6'></div>
-          <div className='mt-10'>
-            <div>
-              <div>
-                <button
-                  onClick={() => handleAddToCart(cartPayload)}
-                  className='uppercase w-full p-5 bg-black text-while text-custom-xl rounded-lg shadow-xl hover:bg-money'
-                >
-                  thêm vào giỏ hàng
-                </button>
-              </div>
-            </div>
-            {/* <div>
-              <button className='mt-6 uppercase w-full p-5 bg-money text-while text-custom-xl rounded-lg shadow-xl'>
-                thanh toán
-              </button>
-            </div> */}
-          </div>
+
+            <div className='w-full border-t border-gray-200 my-6'></div>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => handleAddToCart(cartPayload)}
+              className='
+                w-full py-3 px-6 rounded-lg
+                bg-primary hover:bg-primary-dark
+                !text-white font-medium
+                transition-colors duration-300
+                flex items-center justify-center gap-2
+              '
+            >
+              <ShoppingCart className='w-5 h-5' />
+              Thêm vào giỏ hàng
+            </motion.button>
+          </motion.div>
         </div>
       </div>
+
+      {/* Related Products */}
       <div className='mb-10'>
         <RelatedProducts productList={relatedProducts} handleClick={handleRelatedProductClick} />
       </div>
+
+      {/* Comments */}
       <div className='mt-20'>
         <Comment id={id} reviews={product.product_reviews} getProduct={getProductById} />
       </div>
-    </>
+    </div>
   )
 }
 

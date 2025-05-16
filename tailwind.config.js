@@ -29,7 +29,7 @@ export default {
       black: '#000',
       while: '#fff',
       'border-basic': '#ccc',
-      money: '#f15e2c'
+      money: '#6ec6ff'
     },
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],

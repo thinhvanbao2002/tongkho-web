@@ -1,11 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import {
-  DesktopOutlined,
-  PieChartOutlined,
   UserOutlined,
   LogoutOutlined,
-  SettingOutlined,
-  BookOutlined
+  HomeOutlined,
+  ImportOutlined,
+  ExportOutlined,
+  FileTextOutlined,
+  FileSearchOutlined,
+  HistoryOutlined,
+  TeamOutlined,
+  LineChartOutlined
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Avatar, Dropdown, Layout, Menu, theme } from 'antd'
@@ -36,17 +40,26 @@ function getItem(
 }
 
 const itemsMenu: MenuItem[] = [
-  getItem(<Link to={ADMIN_PATH.OVERVIEW}>Tổng quan</Link>, '1', <PieChartOutlined />),
+  getItem(<Link to={ADMIN_PATH.OVERVIEW}>Tổng quan</Link>, '1', <LineChartOutlined />),
   getItem(<Link to={ADMIN_PATH.CUSTOMER}>Khách hàng</Link>, '2', <UserOutlined />),
-  getItem(<Link to={ADMIN_PATH.MANAGER}>Tài khoản</Link>, '3', <DesktopOutlined />),
+  getItem(<Link to={ADMIN_PATH.MANAGER}>Tài khoản</Link>, '3', <TeamOutlined />),
   getItem('Bán hàng', 'sub1', <UserOutlined />, [
     getItem(<Link to={ADMIN_PATH.CATEGORY}>Danh mục</Link>, '4'),
     getItem(<Link to={ADMIN_PATH.PRODUCT}>Sản phẩm</Link>, '5'),
     getItem(<Link to={ADMIN_PATH.ORDER}>Đơn hàng</Link>, '6')
   ]),
-  getItem('Cấu hình', 'sub2', <SettingOutlined />, [
-    getItem(<Link to={ADMIN_PATH.BLOG}>Bài viết</Link>, '7', <BookOutlined />)
+  getItem('Kho hàng', 'sub2', <HomeOutlined />, [
+    getItem(<Link to={ADMIN_PATH.BLOG}>Nhà kho</Link>, '7', <ImportOutlined />),
+    getItem(<Link to={ADMIN_PATH.BLOG}>Nhập hàng</Link>, '7', <ImportOutlined />),
+    getItem(<Link to={ADMIN_PATH.BLOG}>Xuất hàng</Link>, '8', <ExportOutlined />)
+  ]),
+  getItem('Báo cáo', 'sub4', <FileTextOutlined />, [
+    getItem(<Link to={ADMIN_PATH.BLOG}>Báo cáo tồn kho</Link>, '7', <FileSearchOutlined />),
+    getItem(<Link to={ADMIN_PATH.BLOG}>Số lịch sử nhập xuất</Link>, '8', <HistoryOutlined />)
   ])
+  // getItem('Cấu hình', 'sub3', <SettingOutlined />, [
+  //   getItem(<Link to={ADMIN_PATH.BLOG}>Bài viết</Link>, '7', <BookOutlined />)
+  // ])
 ]
 
 const AdminLayout: React.FC = ({ children }: any) => {
@@ -137,9 +150,7 @@ const AdminLayout: React.FC = ({ children }: any) => {
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider theme='light' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className='w-full flex justify-center'>
-          <img src='/LOGO-WEBSHOP.jpg' className='w-[60px]' />
-        </div>
+        <div className='w-full flex justify-center'>{/* <img src='/LOGO-WEBSHOP.jpg' className='w-[60px]' /> */}</div>
         <Menu selectedKeys={[keySider]} defaultSelectedKeys={['1']} mode='inline' items={itemsMenu} />
       </Sider>
       <Layout>

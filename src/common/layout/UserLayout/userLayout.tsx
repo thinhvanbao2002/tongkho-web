@@ -114,18 +114,20 @@ const UserLayout: React.FC = ({ children }: any) => {
                 {10} 
               </div> */}
             </div>
-            <h4
+            {/* <h4
               className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200'
               onClick={() => handleNavigate('/blog')}
             >
               Bài viết
-            </h4>
-            <h4 className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200'>
-              <Dropdown menu={{ items }} placement='bottomRight' arrow={{ pointAtCenter: true }}>
-                <Avatar size={40} src={userData?.user?.avatar} icon={<UserOutlined />} />
-              </Dropdown>
-            </h4>
+            </h4> */}
           </div>
+        </div>
+        <div className='flex items-center'>
+          <h4 className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200'>
+            <Dropdown menu={{ items }} placement='bottomRight' arrow={{ pointAtCenter: true }}>
+              <Avatar size={40} src={userData?.user?.avatar} icon={<UserOutlined />} />
+            </Dropdown>
+          </h4>
         </div>
       </Header>
       <Content className='bg-baseBackground'>
