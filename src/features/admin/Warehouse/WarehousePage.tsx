@@ -1,0 +1,238 @@
+import { Button, Row, Spin } from 'antd'
+import FilterWarehouse from './components/FilterWarehouse'
+import { useCallback, useEffect, useState } from 'react'
+import { IColumnAntD } from 'common/constants/interface'
+import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { ShowConfirm } from 'common/components/Alert'
+import { Styled } from 'styles/stylesComponent'
+import ModalComponent from 'common/components/modal/Modal'
+import { getDataSource, openNotification } from 'common/utils'
+import { AddEditWarehouse } from './components/AddEditWarehouse'
+import { warehouseServices } from './warehouseApis'
+import { IPayLoadLisWarehouse, IWarehouse } from './Warehouse.props'
+
+function WarehousePage() {
+  const [payload, setPayload] = useState<IPayLoadLisWarehouse>({
+    page: 1,
+    take: 10,
+    q: '',
+    status: 1,
+    to_date: '',
+    from_date: ''
+  })
+  const [warehouses, setWarehouses] = useState<any>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [modalVisible, setModalVisible] = useState<boolean>(false)
+  const [title, setTitle] = useState<string>('')
+  const [count, setCount] = useState<number>(12)
+  const [rowSelected, setRowSelected] = useState<IWarehouse>()
+
+  const columnsListWarehouse: IColumnAntD[] = [
+    {
+      title: 'STT',
+      key: 'STT',
+      dataIndex: 'STT',
+      width: 20
+    },
+    {
+      title: 'Mã kho',
+      key: 'warehouse_code',
+      dataIndex: 'warehouse_code'
+    },
+    {
+      title: 'Tên kho',
+      key: 'warehouse_name',
+      dataIndex: 'warehouse_name'
+    },
+    {
+      title: 'Trạng thái',
+      key: 'status',
+      dataIndex: 'status'
+    },
+    {
+      title: 'Ngày tạo',
+      key: 'createdAt',
+      dataIndex: 'createdAt'
+    },
+    {
+      width: 80,
+      title: 'Thao tác',
+      key: 'tt',
+      dataIndex: 'tt',
+      render: (value: number, record: any) => {
+        return (
+          <div style={{ display: 'flex' }}>
+            <TooltipCustom
+              title={'Cập nhật'}
+              children={
+                <Button
+                  type={'text'}
+                  className={'btn-success-text'}
+                  icon={<EditOutlined />}
+                  onClick={() => handleEditWarehouse(record)}
+                />
+              }
+            />
+            <ShowConfirm
+              placement='bottomLeft'
+              onConfirm={() => handleRemoveWarehouse(record)}
+              confirmText={'Xóa'}
+              title={'Bạn có chắc chắn muốn xóa?'}
+            >
+              <TooltipCustom
+                title='Xóa'
+                children={<Button type='text' className={'btn-delete-text'} icon={<DeleteOutlined />} />}
+              />
+            </ShowConfirm>
+          </div>
+        )
+      }
+    }
+  ]
+
+  const handleGetWarehouses = async (payload?: any) => {
+    try {
+      const res = await warehouseServices.get(payload)
+      setWarehouses(getDataSource(res?.data, 1))
+      setCount(res?.meta?.item_count)
+    } catch (error) {
+      console.log('🚀 ~ handleGetWarehouses ~ error:', error)
+    }
+  }
+
+  useEffect(() => {
+    handleGetWarehouses(payload)
+  }, [payload])
+
+  const handleFilter = useCallback(
+    (value: any) => {
+      if (value?.status !== null || value?.status !== undefined) {
+        setPayload({
+          ...payload,
+          status: value.status,
+          page: 1
+        })
+      }
+      if (value?.date) {
+        setPayload({
+          ...payload,
+          from_date: value?.date.split(',')[0],
+          to_date: value?.date.split(',')[1]
+        })
+      }
+      if (value?.search) {
+        setPayload({
+          ...payload,
+          q: value?.search
+        })
+      }
+    },
+    [payload]
+  )
+
+  const handleSubmit = async (value: any) => {
+    setIsLoading(true)
+    const payLoadWarehouse = {
+      id: rowSelected?.id,
+      warehouse_name: value?.warehouse_name,
+      warehouse_code: value?.warehouse_code,
+      status: value?.status
+    }
+    let res
+    try {
+      if (rowSelected?.id) {
+        res = await warehouseServices.patch(payLoadWarehouse)
+      } else {
+        res = await warehouseServices.post({ ...payLoadWarehouse })
+      }
+
+      if (res.status == 1) {
+        if (rowSelected) {
+          openNotification('success', 'Thành công', 'Cập nhật thành công')
+        } else {
+          openNotification('success', 'Thành công', 'Thêm mới thành công')
+        }
+        setIsLoading(false)
+        setModalVisible(false)
+        handleGetWarehouses()
+      }
+    } catch (error) {
+      console.log('🚀 ~ handleSubmit ~ error:', error)
+    }
+  }
+
+  const handleEditWarehouse = useCallback(async (record: any) => {
+    setModalVisible(true)
+    setRowSelected(record)
+  }, [])
+
+  const handleRemoveWarehouse = useCallback(async (record: any) => {
+    try {
+      const res = await warehouseServices.delete(record?.id)
+      if (res) {
+        openNotification('success', 'Thành công', 'Xóa kho thành công')
+        setIsLoading(true)
+        handleGetWarehouses()
+        setIsLoading(false)
+      }
+    } catch (error) {
+      console.log('🚀 ~ handleRemoveWarehouse ~ error:', error)
+    }
+  }, [])
+
+  const handleClose = useCallback(() => {
+    setModalVisible(false)
+    setRowSelected(undefined)
+  }, [])
+
+  return (
+    <>
+      <Row gutter={[15, 6]} className='mb-2'>
+        <FilterWarehouse onChangeValue={handleFilter} />
+      </Row>
+      <Row className='mb-2 flex justify-end'>
+        <Button
+          type='primary'
+          onClick={() => {
+            setModalVisible(true)
+            setTitle('Thêm mới kho')
+          }}
+        >
+          Thêm mới
+        </Button>
+        <Button className='ml-2' type='primary'>
+          Xuất Excel
+        </Button>
+      </Row>
+      <Spin spinning={isLoading}>
+        <Styled.TableStyle
+          bordered
+          columns={columnsListWarehouse}
+          dataSource={warehouses}
+          pagination={{
+            onChange: (page) => {
+              setIsLoading(true)
+              setTimeout(() => {
+                setPayload({ ...payload, page: page })
+                setIsLoading(false)
+              }, 200)
+            },
+            total: count,
+            current: payload.page,
+            pageSize: payload.take
+          }}
+        />
+      </Spin>
+      <ModalComponent
+        loading={isLoading}
+        title={title}
+        width={500}
+        modalVisible={modalVisible}
+        children={<AddEditWarehouse onFinish={handleSubmit} onClose={handleClose} rowSelected={rowSelected} />}
+      />
+    </>
+  )
+}
+
+export default WarehousePage

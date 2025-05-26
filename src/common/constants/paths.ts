@@ -11,7 +11,9 @@ export const ADMIN_PATH = {
   ORDER: '/ad-order',
   BLOG: '/ad-blog',
   UPLOAD: '/upload',
-  UPLOADS: '/upload-multipart'
+  UPLOADS: '/upload-multipart',
+  WAREHOUSE: '/ad-warehouse',
+  IMPORT_WAREHOUSE: '/ad-import-warehouse'
 }
 
 export const USER_PATH = {

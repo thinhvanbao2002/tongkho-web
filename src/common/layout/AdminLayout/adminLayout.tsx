@@ -9,12 +9,18 @@ import {
   FileSearchOutlined,
   HistoryOutlined,
   TeamOutlined,
-  LineChartOutlined
+  LineChartOutlined,
+  DashboardOutlined,
+  ShoppingOutlined,
+  ShoppingCartOutlined,
+  FileAddOutlined,
+  AppstoreOutlined,
+  InboxOutlined
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Avatar, Dropdown, Layout, Menu, theme } from 'antd'
 import { ADMIN_PATH } from 'common/constants/paths'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { openNotification } from 'common/utils'
 import { setLogin } from 'redux/slice/login.slice'
@@ -49,14 +55,14 @@ const itemsMenu: MenuItem[] = [
     getItem(<Link to={ADMIN_PATH.ORDER}>Đơn hàng</Link>, '6')
   ]),
   getItem('Kho hàng', 'sub2', <HomeOutlined />, [
-    getItem(<Link to={ADMIN_PATH.BLOG}>Nhà kho</Link>, '7', <ImportOutlined />),
-    getItem(<Link to={ADMIN_PATH.BLOG}>Nhập hàng</Link>, '7', <ImportOutlined />),
-    getItem(<Link to={ADMIN_PATH.BLOG}>Xuất hàng</Link>, '8', <ExportOutlined />)
-  ]),
-  getItem('Báo cáo', 'sub4', <FileTextOutlined />, [
-    getItem(<Link to={ADMIN_PATH.BLOG}>Báo cáo tồn kho</Link>, '7', <FileSearchOutlined />),
-    getItem(<Link to={ADMIN_PATH.BLOG}>Số lịch sử nhập xuất</Link>, '8', <HistoryOutlined />)
+    getItem(<Link to={ADMIN_PATH.WAREHOUSE}>Nhà kho</Link>, '7', <ImportOutlined />),
+    getItem(<Link to={ADMIN_PATH.IMPORT_WAREHOUSE}>Nhập hàng</Link>, '8', <ImportOutlined />),
+    getItem(<Link to={ADMIN_PATH.BLOG}>Xuất hàng</Link>, '9', <ExportOutlined />)
   ])
+  // getItem('Báo cáo', 'sub4', <FileTextOutlined />, [
+  //   getItem(<Link to={ADMIN_PATH.BLOG}>Báo cáo tồn kho</Link>, '7', <FileSearchOutlined />),
+  //   getItem(<Link to={ADMIN_PATH.BLOG}>Số lịch sử nhập xuất</Link>, '8', <HistoryOutlined />)
+  // ])
   // getItem('Cấu hình', 'sub3', <SettingOutlined />, [
   //   getItem(<Link to={ADMIN_PATH.BLOG}>Bài viết</Link>, '7', <BookOutlined />)
   // ])
@@ -140,7 +146,14 @@ const AdminLayout: React.FC = ({ children }: any) => {
           setTitleHeader('Thống kê báo cáo')
           setKeySider('1')
           break
-
+        case ADMIN_PATH.WAREHOUSE:
+          setTitleHeader('Kho hàng')
+          setKeySider('7')
+          break
+        case ADMIN_PATH.IMPORT_WAREHOUSE:
+          setTitleHeader('Nhập hàng')
+          setKeySider('8')
+          break
         default:
           setTitleHeader('Tổng quan')
       }
