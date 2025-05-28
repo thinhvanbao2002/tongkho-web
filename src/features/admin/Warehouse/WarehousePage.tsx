@@ -1,9 +1,9 @@
-import { Button, Row, Spin } from 'antd'
+import { Button, Row, Spin, Modal, Table } from 'antd'
 import FilterWarehouse from './components/FilterWarehouse'
 import { useCallback, useEffect, useState } from 'react'
 import { IColumnAntD } from 'common/constants/interface'
 import { TooltipCustom } from 'common/components/tooltip/ToolTipComponent'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons'
 import { ShowConfirm } from 'common/components/Alert'
 import { Styled } from 'styles/stylesComponent'
 import ModalComponent from 'common/components/modal/Modal'
@@ -27,6 +27,8 @@ function WarehousePage() {
   const [title, setTitle] = useState<string>('')
   const [count, setCount] = useState<number>(12)
   const [rowSelected, setRowSelected] = useState<IWarehouse>()
+  const [inventoryModalVisible, setInventoryModalVisible] = useState<boolean>(false)
+  const [selectedWarehouse, setSelectedWarehouse] = useState<any>()
 
   const columnsListWarehouse: IColumnAntD[] = [
     {
@@ -56,13 +58,24 @@ function WarehousePage() {
       dataIndex: 'createdAt'
     },
     {
-      width: 80,
+      width: 120,
       title: 'Thao tác',
       key: 'tt',
       dataIndex: 'tt',
       render: (value: number, record: any) => {
         return (
           <div style={{ display: 'flex' }}>
+            <TooltipCustom
+              title={'Xem chi tiết'}
+              children={
+                <Button
+                  type={'text'}
+                  className={'btn-info-text'}
+                  icon={<EyeOutlined />}
+                  onClick={() => handleViewInventory(record)}
+                />
+              }
+            />
             <TooltipCustom
               title={'Cập nhật'}
               children={
@@ -91,9 +104,35 @@ function WarehousePage() {
     }
   ]
 
+  const inventoryColumns = [
+    {
+      title: 'STT',
+      dataIndex: 'STT',
+      key: 'STT',
+      width: 50
+    },
+    {
+      title: 'Tên sản phẩm',
+      dataIndex: 'product',
+      key: 'product',
+      render: (value: string) => value.name
+    },
+    {
+      title: 'Số lượng tồn',
+      dataIndex: 'quantity',
+      key: 'quantity'
+    }
+  ]
+
+  const handleViewInventory = (record: any) => {
+    setSelectedWarehouse(record)
+    setInventoryModalVisible(true)
+  }
+
   const handleGetWarehouses = async (payload?: any) => {
     try {
       const res = await warehouseServices.get(payload)
+      console.log("🚀 ~ handleGetWarehouses ~ res:", res)
       setWarehouses(getDataSource(res?.data, 1))
       setCount(res?.meta?.item_count)
     } catch (error) {
@@ -231,6 +270,20 @@ function WarehousePage() {
         modalVisible={modalVisible}
         children={<AddEditWarehouse onFinish={handleSubmit} onClose={handleClose} rowSelected={rowSelected} />}
       />
+      <Modal
+        title={`Chi tiết tồn kho - ${selectedWarehouse?.warehouse_name}`}
+        open={inventoryModalVisible}
+        onCancel={() => setInventoryModalVisible(false)}
+        width={800}
+        footer={null}
+      >
+        <Table
+          columns={inventoryColumns}
+          dataSource={getDataSource(selectedWarehouse?.product_warehouses || [], 1)}
+          pagination={false}
+          loading={isLoading}
+        />
+      </Modal>
     </>
   )
 }
