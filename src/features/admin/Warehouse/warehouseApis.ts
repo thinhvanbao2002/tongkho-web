@@ -26,5 +26,9 @@ export const warehouseServices = {
   delete: (id: number) => {
     const url = `/a/warehouse/${id}`
     return AxiosClient.delete(url)
+  },
+  getInventory: (warehouseId: number) => {
+    const url = `/a/warehouse/${warehouseId}/inventory`
+    return AxiosClient.get(url)
   }
 }

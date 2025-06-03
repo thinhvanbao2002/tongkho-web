@@ -18,9 +18,22 @@ export const ImportWarehousePage = () => {
 
   const columnsListImportWarehouse = [
     {
-      title: 'Họ tên người nhập',
+      title: 'Tên nhà kho',
+      dataIndex: 'warehouse',
+      key: 'warehouse',
+      render: (value: string) => value.warehouse_name
+    },
+    {
+      title: 'Tên sản phẩm',
+      dataIndex: 'product',
+      key: 'product',
+      render: (value: string) => value.name
+    },
+    {
+      title: 'Người nhập',
       dataIndex: 'staff_name',
-      key: 'staff_name'
+      key: 'staff_name',
+      render: (value: string) => value.staff_name
     },
     {
       title: 'Thời gian nhập',
@@ -30,9 +43,9 @@ export const ImportWarehousePage = () => {
     },
     {
       title: 'Số lượng sản phẩm',
-      dataIndex: 'products',
-      key: 'products',
-      render: (value: any[]) => value.length
+      dataIndex: 'quantity',
+      key: 'quantity'
+      // render: (value: any[]) => value.length
     },
     {
       title: 'Trạng thái',
@@ -50,6 +63,7 @@ export const ImportWarehousePage = () => {
     setLoading(true)
     try {
       const res = await importWarehouseServices.get(payload)
+      console.log('🚀 ~ handleGetListImportWarehouse ~ res:', res)
       setData(res.data)
       setTotal(res.data.length)
     } catch (error) {

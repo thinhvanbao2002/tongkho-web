@@ -12,26 +12,38 @@ interface IImportWarehouseForm {
   onClose?: () => void
 }
 
+interface IProductOption {
+  label: string
+  value: number
+}
+
+interface IWarehouseOption {
+  label: string
+  value: number
+}
+
+interface IUser {
+  id: number
+  name: string
+}
+
 export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm) => {
   const [form] = Form.useForm()
   const [products, setProducts] = useState<IImportProduct[]>([])
-  const [productOptions, setProductOptions] = useState<any[]>([])
-  const [warehouseOptions, setWarehouseOptions] = useState<any[]>([])
-  const currentUser = useSelector((state: any) => state.login.user)
+  const [productOptions, setProductOptions] = useState<IProductOption[]>([])
+  const [warehouseOptions, setWarehouseOptions] = useState<IWarehouseOption[]>([])
+  const currentUser = useSelector((state: { login: { user: IUser } }) => state.login.user)
 
   const handleGetProducts = async () => {
     try {
-      const res = await productServices.get({
-        page: 1
-      })
-      setProductOptions(
-        res.data.map((item: any) => ({
-          label: item.name,
-          value: item.id
-        }))
-      )
+      const res = await productServices.get({ page: 1 })
+      const options = res.data.map((item: any) => ({
+        label: item.name,
+        value: item.id
+      }))
+      setProductOptions(options)
     } catch (error) {
-      console.log('🚀 ~ handleGetProducts ~ error:', error)
+      console.error('Failed to fetch products:', error)
     }
   }
 
@@ -41,14 +53,13 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
         page: 1,
         status: 1
       })
-      setWarehouseOptions(
-        res.data.map((item: any) => ({
-          label: item.warehouse_name,
-          value: item.id
-        }))
-      )
+      const options = res.data.map((item: any) => ({
+        label: item.warehouse_name,
+        value: item.id
+      }))
+      setWarehouseOptions(options)
     } catch (error) {
-      console.log('🚀 ~ handleGetWarehouses ~ error:', error)
+      console.error('Failed to fetch warehouses:', error)
     }
   }
 
@@ -61,27 +72,31 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
         staff_id: currentUser.id
       })
     }
-  }, [currentUser])
+  }, [currentUser, form])
 
   const handleAddProduct = () => {
     setProducts([...products, { product_id: 0, product_name: '', quantity: 1, note: '' }])
   }
 
   const handleRemoveProduct = (index: number) => {
-    const newProducts = [...products]
-    newProducts.splice(index, 1)
-    setProducts(newProducts)
+    setProducts(products.filter((_, i) => i !== index))
   }
 
   const handleProductChange = (value: number, index: number) => {
-    const newProducts = [...products]
     const selectedProduct = productOptions.find((item) => item.value === value)
-    newProducts[index] = {
-      ...newProducts[index],
-      product_id: value,
-      product_name: selectedProduct?.label || ''
-    }
-    setProducts(newProducts)
+    setProducts(
+      products.map((product, i) =>
+        i === index ? { ...product, product_id: value, product_name: selectedProduct?.label || '' } : product
+      )
+    )
+  }
+
+  const handleQuantityChange = (value: number | null, index: number) => {
+    setProducts(products.map((product, i) => (i === index ? { ...product, quantity: value || 1 } : product)))
+  }
+
+  const handleNoteChange = (value: string, index: number) => {
+    setProducts(products.map((product, i) => (i === index ? { ...product, note: value } : product)))
   }
 
   const handleSubmit = (values: any) => {
@@ -89,7 +104,7 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
       ...values,
       staff_id: currentUser.id,
       import_date: values.import_date.format('YYYY-MM-DD HH:mm:ss'),
-      products: products
+      products
     }
     onFinish?.(payload)
   }
@@ -112,12 +127,7 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
           <Form.Item
             name='staff_name'
             label='Họ tên người nhập'
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng nhập họ tên người nhập'
-              }
-            ]}
+            rules={[{ required: true, message: 'Vui lòng nhập họ tên người nhập' }]}
           >
             <Input disabled />
           </Form.Item>
@@ -126,12 +136,7 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
           <Form.Item
             name='warehouse_id'
             label='Kho nhập'
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng chọn kho nhập'
-              }
-            ]}
+            rules={[{ required: true, message: 'Vui lòng chọn kho nhập' }]}
           >
             <Select options={warehouseOptions} placeholder='Chọn kho nhập' />
           </Form.Item>
@@ -142,12 +147,7 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
           <Form.Item
             name='import_date'
             label='Thời gian nhập'
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng chọn thời gian nhập'
-              }
-            ]}
+            rules={[{ required: true, message: 'Vui lòng chọn thời gian nhập' }]}
           >
             <DatePicker showTime format='YYYY-MM-DD HH:mm:ss' style={{ width: '100%' }} />
           </Form.Item>
@@ -166,15 +166,7 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
           <div key={index} className='mb-4 p-4 border rounded-lg'>
             <Row gutter={24}>
               <Col span={8}>
-                <Form.Item
-                  label='Sản phẩm'
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng chọn sản phẩm'
-                    }
-                  ]}
-                >
+                <Form.Item label='Sản phẩm' rules={[{ required: true, message: 'Vui lòng chọn sản phẩm' }]}>
                   <Select
                     options={productOptions}
                     onChange={(value) => handleProductChange(value, index)}
@@ -183,36 +175,17 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
                 </Form.Item>
               </Col>
               <Col span={4}>
-                <Form.Item
-                  label='Số lượng'
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Vui lòng nhập số lượng'
-                    }
-                  ]}
-                >
+                <Form.Item label='Số lượng' rules={[{ required: true, message: 'Vui lòng nhập số lượng' }]}>
                   <InputNumber
                     min={1}
                     style={{ width: '100%' }}
-                    onChange={(value) => {
-                      const newProducts = [...products]
-                      newProducts[index].quantity = value || 1
-                      setProducts(newProducts)
-                    }}
+                    onChange={(value) => handleQuantityChange(value, index)}
                   />
                 </Form.Item>
               </Col>
               <Col span={10}>
                 <Form.Item label='Ghi chú'>
-                  <Input
-                    onChange={(e) => {
-                      const newProducts = [...products]
-                      newProducts[index].note = e.target.value
-                      setProducts(newProducts)
-                    }}
-                    placeholder='Nhập ghi chú'
-                  />
+                  <Input onChange={(e) => handleNoteChange(e.target.value, index)} placeholder='Nhập ghi chú' />
                 </Form.Item>
               </Col>
               <Col span={2} className='flex items-end'>
@@ -224,7 +197,7 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
       </div>
 
       <Row gutter={24}>
-        <Col span={12}> </Col>
+        <Col span={12} />
         <Col span={12} className='flex items-center justify-end'>
           <Button danger onClick={onClose}>
             Thoát

@@ -5,14 +5,14 @@ import { IImportWarehouse, IPayLoadListImportWarehouse } from './ImportWarehouse
 
 export const importWarehouseServices = {
   get: (params: IPayLoadListImportWarehouse) => {
-    const url = '/a/import-warehouse'
+    const url = '/warehouse/import/history'
     const handleParams = handleObjectEmpty(params)
     return AxiosClient.get(url, {
       params: { ...handleParams, limit: RECORD_SIZE }
     })
   },
   post: (payload: IImportWarehouse) => {
-    const url = '/a/import-warehouse'
+    const url = '/warehouse/import'
     return AxiosClient.post(url, {
       ...payload
     })

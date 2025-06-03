@@ -132,7 +132,7 @@ function WarehousePage() {
   const handleGetWarehouses = async (payload?: any) => {
     try {
       const res = await warehouseServices.get(payload)
-      console.log("🚀 ~ handleGetWarehouses ~ res:", res)
+      console.log('🚀 ~ handleGetWarehouses ~ res:', res)
       setWarehouses(getDataSource(res?.data, 1))
       setCount(res?.meta?.item_count)
     } catch (error) {
