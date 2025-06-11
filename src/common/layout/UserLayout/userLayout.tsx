@@ -125,7 +125,7 @@ const UserLayout: React.FC = ({ children }: any) => {
         </div>
       </Header>
       <Content className='bg-baseBackground'>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode='wait'>
           <PageTransition key={location.pathname}>
             <div>{children}</div>
           </PageTransition>

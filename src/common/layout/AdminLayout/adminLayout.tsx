@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useEffect, useState } from 'react'
 import {
   UserOutlined,
@@ -17,7 +18,6 @@ import { openNotification } from 'common/utils'
 import { setLogin } from 'redux/slice/login.slice'
 
 const { Header, Content, Sider } = Layout
-const { Title } = Typography
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -147,41 +147,38 @@ const AdminLayout: React.FC = ({ children }: any) => {
 
   return (
     <Layout style={{ minHeight: '100vh', background: 'white' }}>
-      <Sider 
-        theme='light' 
-        collapsible 
-        collapsed={collapsed} 
+      <Sider
+        theme='light'
+        collapsible
+        collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
         style={{ background: 'white' }}
       >
         <div className='flex flex-col items-center justify-center py-6 px-4'>
-          <img 
-            src="/logo-v2.jpg" 
-            alt="Logo" 
+          <img
+            src='/logo-v2.jpg'
+            alt='Logo'
             className={`${collapsed ? 'w-12 h-12' : 'w-24 h-24'} rounded-full shadow-md object-cover transition-all duration-300`}
           />
         </div>
-        <Menu 
-          selectedKeys={[keySider]} 
-          defaultSelectedKeys={['1']} 
-          mode='inline' 
+        <Menu
+          selectedKeys={[keySider]}
+          defaultSelectedKeys={['1']}
+          mode='inline'
           items={itemsMenu}
-          className="border-0"
+          className='border-0'
           style={{ background: 'white' }}
         />
       </Sider>
       <Layout style={{ background: 'white' }}>
-        <Header 
-          style={{ background: 'white' }} 
-          className='flex items-center justify-between pr-4 pl-4'
-        >
+        <Header style={{ background: 'white' }} className='flex items-center justify-between pr-4 pl-4'>
           <div className='text-lg font-medium'>{titleHeader}</div>
           <div>
             <Dropdown menu={{ items }} placement='bottomRight' arrow>
-              <Avatar 
-                size={40} 
-                icon={<UserOutlined />} 
-                className="cursor-pointer hover:opacity-80 transition-opacity"
+              <Avatar
+                size={40}
+                icon={<UserOutlined />}
+                className='cursor-pointer hover:opacity-80 transition-opacity'
               />
             </Dropdown>
           </div>

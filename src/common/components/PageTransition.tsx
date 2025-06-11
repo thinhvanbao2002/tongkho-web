@@ -12,7 +12,7 @@ const PageTransition = ({ children }: PageTransitionProps) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{
-        type: "spring",
+        type: 'spring',
         stiffness: 260,
         damping: 20
       }}

@@ -49,8 +49,8 @@ function OrderDetail() {
       dataIndex: 'product',
       render: (value: any) => {
         return (
-          <div className="flex items-center gap-4">
-            <Image width={80} height={80} src={value?.image} className="rounded-lg object-cover" />
+          <div className='flex items-center gap-4'>
+            <Image width={80} height={80} src={value?.image} className='rounded-lg object-cover' />
             <div>
               <Text strong>{value?.name}</Text>
             </div>
@@ -65,7 +65,7 @@ function OrderDetail() {
       width: 100,
       align: 'center',
       render: (value: any) => {
-        return <Tag color="blue">{value}</Tag>
+        return <Tag color='blue'>{value}</Tag>
       }
     },
     {
@@ -126,14 +126,14 @@ function OrderDetail() {
 
   return (
     <Spin spinning={loading}>
-      <div className="space-y-6">
+      <div className='space-y-6'>
         <Card>
           <OrderStep step={Number(order_status)} />
         </Card>
 
         <Row gutter={[24, 24]}>
           <Col span={16}>
-            <Card 
+            <Card
               title={
                 <Space>
                   <ShoppingCartOutlined />
@@ -141,18 +141,18 @@ function OrderDetail() {
                 </Space>
               }
             >
-              <Styled.TableStyle 
-                bordered 
-                columns={columnsListAccount} 
-                dataSource={products} 
+              <Styled.TableStyle
+                bordered
+                columns={columnsListAccount}
+                dataSource={products}
                 pagination={false}
-                className="order-detail-table"
+                className='order-detail-table'
               />
             </Card>
           </Col>
 
           <Col span={8}>
-            <Card 
+            <Card
               title={
                 <Space>
                   <UserOutlined />
@@ -160,49 +160,42 @@ function OrderDetail() {
                 </Space>
               }
             >
-              <Space direction="vertical" size="large" className="w-full">
-                <div className="flex items-center gap-2">
-                  <UserOutlined className="text-gray-500" />
+              <Space direction='vertical' size='large' className='w-full'>
+                <div className='flex items-center gap-2'>
+                  <UserOutlined className='text-gray-500' />
                   <Text>Tên khách hàng:</Text>
                   <Text strong>{name}</Text>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <PhoneOutlined className="text-gray-500" />
+                <div className='flex items-center gap-2'>
+                  <PhoneOutlined className='text-gray-500' />
                   <Text>Số điện thoại:</Text>
                   <Text strong>{phone}</Text>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <EnvironmentOutlined className="text-gray-500" />
+                <div className='flex items-center gap-2'>
+                  <EnvironmentOutlined className='text-gray-500' />
                   <Text>Địa chỉ:</Text>
                   <Text strong>{address}</Text>
                 </div>
 
                 <Divider />
 
-                <div className="flex justify-between items-center">
+                <div className='flex justify-between items-center'>
                   <Text strong>Tổng thanh toán:</Text>
-                  <Text strong className="text-xl text-primary">
+                  <Text strong className='text-xl text-primary'>
                     {formatPrice(total_price)}
                   </Text>
                 </div>
 
-                <div className="flex justify-between items-center">
+                <div className='flex justify-between items-center'>
                   <Text strong>Trạng thái:</Text>
-                  <Tag color={getStatusColor(order_status)}>
-                    {getButtonText(order_status)}
-                  </Tag>
+                  <Tag color={getStatusColor(order_status)}>{getButtonText(order_status)}</Tag>
                 </div>
 
                 {order_status !== OrderStatus.PAID && (
-                  <div className="flex justify-end mt-4">
-                    <Button 
-                      type="primary" 
-                      size="large"
-                      onClick={handleNextStep}
-                      loading={loading}
-                    >
+                  <div className='flex justify-end mt-4'>
+                    <Button type='primary' size='large' onClick={handleNextStep} loading={loading}>
                       {getButtonText(order_status)}
                     </Button>
                   </div>
