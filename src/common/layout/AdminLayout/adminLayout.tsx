@@ -9,7 +9,7 @@ import {
   LineChartOutlined
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
-import { Avatar, Dropdown, Layout, Menu, theme } from 'antd'
+import { Avatar, Dropdown, Layout, Menu, theme, Typography } from 'antd'
 import { ADMIN_PATH } from 'common/constants/paths'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
@@ -17,6 +17,7 @@ import { openNotification } from 'common/utils'
 import { setLogin } from 'redux/slice/login.slice'
 
 const { Header, Content, Sider } = Layout
+const { Title } = Typography
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -145,21 +146,47 @@ const AdminLayout: React.FC = ({ children }: any) => {
   }, [pathname])
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider theme='light' collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className='w-full flex justify-center' />
-        <Menu selectedKeys={[keySider]} defaultSelectedKeys={['1']} mode='inline' items={itemsMenu} />
+    <Layout style={{ minHeight: '100vh', background: 'white' }}>
+      <Sider 
+        theme='light' 
+        collapsible 
+        collapsed={collapsed} 
+        onCollapse={(value) => setCollapsed(value)}
+        style={{ background: 'white' }}
+      >
+        <div className='flex flex-col items-center justify-center py-6 px-4'>
+          <img 
+            src="/logo-v2.jpg" 
+            alt="Logo" 
+            className={`${collapsed ? 'w-12 h-12' : 'w-24 h-24'} rounded-full shadow-md object-cover transition-all duration-300`}
+          />
+        </div>
+        <Menu 
+          selectedKeys={[keySider]} 
+          defaultSelectedKeys={['1']} 
+          mode='inline' 
+          items={itemsMenu}
+          className="border-0"
+          style={{ background: 'white' }}
+        />
       </Sider>
-      <Layout>
-        <Header style={{ background: colorBgContainer }} className='flex items-center justify-between pr-4 pl-4'>
-          <div className='text-custom-sm'>{titleHeader}</div>
+      <Layout style={{ background: 'white' }}>
+        <Header 
+          style={{ background: 'white' }} 
+          className='flex items-center justify-between pr-4 pl-4'
+        >
+          <div className='text-lg font-medium'>{titleHeader}</div>
           <div>
             <Dropdown menu={{ items }} placement='bottomRight' arrow>
-              <Avatar size={40} icon={<UserOutlined />} />
+              <Avatar 
+                size={40} 
+                icon={<UserOutlined />} 
+                className="cursor-pointer hover:opacity-80 transition-opacity"
+              />
             </Dropdown>
           </div>
         </Header>
-        <Content className='bg-while p-4'>{children}</Content>
+        <Content className='bg-white p-6'>{children}</Content>
       </Layout>
     </Layout>
   )

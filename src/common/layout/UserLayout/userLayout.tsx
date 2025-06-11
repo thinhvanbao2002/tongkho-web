@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Avatar, Button, Dropdown, Form, Input, Layout } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { UserOutlined } from '@ant-design/icons'
 import { MenuProps } from 'antd/lib'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +10,8 @@ import { openNotification } from 'common/utils'
 import _ from 'lodash'
 import { USER_PATH } from 'common/constants/paths'
 import AccountUser from 'features/customer/account/components/Account'
+import { AnimatePresence } from 'framer-motion'
+import PageTransition from 'common/components/PageTransition'
 
 const { Header, Footer, Content } = Layout
 
@@ -25,6 +27,7 @@ const layoutStyle = {
 
 const UserLayout: React.FC = ({ children }: any) => {
   const navigate = useNavigate()
+  const location = useLocation()
   const dispatch = useDispatch()
   const [userData, setUserData] = useState<any>({})
   const data = useSelector((state: any) => state.login)
@@ -89,7 +92,7 @@ const UserLayout: React.FC = ({ children }: any) => {
     <Layout style={layoutStyle}>
       <Header style={headerStyle} className='flex items-center justify-between h-28 bg-baseBackground'>
         <div>
-          <img className='w-28' src='/LOGO-WEBSHOP.jpg' alt='' />
+          <img className='w-28' src='/logo-v2.jpg' alt='' />
         </div>
         <div className='flex items-center'>
           <div className='text-primary flex items-center justify-center uppercase font-semibold'>
@@ -110,16 +113,7 @@ const UserLayout: React.FC = ({ children }: any) => {
               onClick={() => handleNavigate('/cart')}
             >
               <div>Giỏ hàng</div>
-              {/* <div className='absolute top-7 right-1 text-while text-xs rounded-full w-5 h-5 flex items-center justify-center bg-money'>
-                {10} 
-              </div> */}
             </div>
-            {/* <h4
-              className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200'
-              onClick={() => handleNavigate('/blog')}
-            >
-              Bài viết
-            </h4> */}
           </div>
         </div>
         <div className='flex items-center'>
@@ -131,7 +125,11 @@ const UserLayout: React.FC = ({ children }: any) => {
         </div>
       </Header>
       <Content className='bg-baseBackground'>
-        <div>{children}</div>
+        <AnimatePresence mode="wait">
+          <PageTransition key={location.pathname}>
+            <div>{children}</div>
+          </PageTransition>
+        </AnimatePresence>
       </Content>
       <Footer className='flex items-center justify-between p-0'>
         <div className='bg-[#FFF5EE] text-primary w-1/2 h-96 p-12 flex items-center justify-center'>

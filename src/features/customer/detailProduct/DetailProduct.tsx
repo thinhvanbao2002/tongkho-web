@@ -222,6 +222,7 @@ function DetailProductPage() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => handleAddToCart(cartPayload)}
+              style={{color: '#fff'}}
               className='
                 w-full py-3 px-6 rounded-lg
                 bg-primary hover:bg-primary-dark

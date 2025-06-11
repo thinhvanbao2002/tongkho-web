@@ -4,5 +4,5 @@ export interface IColumnAntD {
   key: string
   width?: number
   render?: (value: any, row?: any, index?: any) => any
-  alight?: string
+  align?: 'left' | 'center' | 'right'
 }

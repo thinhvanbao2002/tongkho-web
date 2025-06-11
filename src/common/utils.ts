@@ -59,7 +59,10 @@ export const getDataSource = (data: any, page: number) => {
 }
 
 export const vldOrderStatus = (value: string) => {
-  return `${ORDER_STATUS[value].text}`
+  if (!value || !ORDER_STATUS[value]) {
+    return 'Không xác định'
+  }
+  return ORDER_STATUS[value].text
 }
 
 export function formatPrice(num: string | any, type?: 'VND' | '$') {
