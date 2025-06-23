@@ -6,18 +6,14 @@ import { productServices } from '../../Product/ProductApis'
 import { warehouseServices } from '../../Warehouse/warehouseApis'
 import dayjs from 'dayjs'
 import { useSelector } from 'react-redux'
+import { supplierServices } from '../../Blog/SupplierApis'
 
 interface IImportWarehouseForm {
   onFinish?: (value: any) => void
   onClose?: () => void
 }
 
-interface IProductOption {
-  label: string
-  value: number
-}
-
-interface IWarehouseOption {
+interface IOption {
   label: string
   value: number
 }
@@ -30,13 +26,14 @@ interface IUser {
 export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm) => {
   const [form] = Form.useForm()
   const [products, setProducts] = useState<IImportProduct[]>([])
-  const [productOptions, setProductOptions] = useState<IProductOption[]>([])
-  const [warehouseOptions, setWarehouseOptions] = useState<IWarehouseOption[]>([])
+  const [productOptions, setProductOptions] = useState<IOption[]>([])
+  const [warehouseOptions, setWarehouseOptions] = useState<IOption[]>([])
+  const [supplierOptions, setSupplierOptions] = useState<IOption[]>([])
   const currentUser = useSelector((state: { login: { user: IUser } }) => state.login.user)
 
   const handleGetProducts = async () => {
     try {
-      const res = await productServices.get({ page: 1 })
+      const res = await productServices.get({ page: 1, take: 1000 }) //get all
       const options = res.data.map((item: any) => ({
         label: item.name,
         value: item.id
@@ -51,7 +48,8 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
     try {
       const res = await warehouseServices.get({
         page: 1,
-        status: 1
+        status: 1,
+        take: 1000 //get all
       })
       const options = res.data.map((item: any) => ({
         label: item.warehouse_name,
@@ -63,14 +61,30 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
     }
   }
 
+  const handleGetSuppliers = async () => {
+    try {
+      const res = await supplierServices.get({ page: 1, take: 1000 }) //get all
+      const options = res.data.map((item: any) => ({
+        label: item.supplier_name,
+        value: item.id
+      }))
+      setSupplierOptions(options)
+    } catch (error) {
+      console.error('Failed to fetch suppliers:', error)
+    }
+  }
+
   useEffect(() => {
     handleGetProducts()
     handleGetWarehouses()
+    handleGetSuppliers()
     if (currentUser) {
       form.setFieldsValue({
         staff_name: currentUser.name,
         staff_id: currentUser.id
       })
+    } else {
+      form.resetFields(['staff_name', 'staff_id'])
     }
   }, [currentUser, form])
 
@@ -118,8 +132,7 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
       scrollToFirstError
       layout='vertical'
       initialValues={{
-        import_date: dayjs(),
-        staff_name: currentUser?.name
+        import_date: dayjs()
       }}
     >
       <Row gutter={24}>
@@ -129,7 +142,7 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
             label='Họ tên người nhập'
             rules={[{ required: true, message: 'Vui lòng nhập họ tên người nhập' }]}
           >
-            <Input disabled />
+            <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -143,6 +156,15 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
         </Col>
       </Row>
       <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item
+            name='supplier_id'
+            label='Nhà cung cấp'
+            rules={[{ required: true, message: 'Vui lòng chọn nhà cung cấp' }]}
+          >
+            <Select options={supplierOptions} placeholder='Chọn nhà cung cấp' />
+          </Form.Item>
+        </Col>
         <Col span={12}>
           <Form.Item
             name='import_date'

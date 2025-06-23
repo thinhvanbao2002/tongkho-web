@@ -46,7 +46,7 @@ function LoginAdminPage() {
         <Spin spinning={isLoading} className='w-full h-full !max-h-none'>
           <div className='w-[500px] h-[600px] shadow-custom-lg rounded-xl p-4'>
             <div>
-              <img className='w-[150px] mx-auto' src='/LOGO-WEBSHOP.jpg' alt='' />
+              <img className='w-[150px] mx-auto' src='/logo-v2.jpg' alt='' />
               <h3 className='text-custom-xl text-center'>Đăng nhập hệ thống quản trị</h3>
               <Form onFinish={handleSubmit} layout='vertical'>
                 <Form.Item

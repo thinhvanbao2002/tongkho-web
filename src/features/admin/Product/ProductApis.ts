@@ -5,6 +5,7 @@ import { IProduct } from './Product.props'
 
 export interface IQuery {
   page: number
+  take?: number
 }
 
 export const productServices = {
@@ -12,7 +13,7 @@ export const productServices = {
     const url = '/a/product'
     const handleParams = handleObjectEmpty(params)
     return AxiosClient.get(url, {
-      params: { ...handleParams, limit: RECORD_SIZE }
+      params: { limit: RECORD_SIZE, ...handleParams }
     })
   },
   post: (value: IProduct) => {

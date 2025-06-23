@@ -21,19 +21,24 @@ export const ImportWarehousePage = () => {
       title: 'Tên nhà kho',
       dataIndex: 'warehouse',
       key: 'warehouse',
-      render: (value: string) => value.warehouse_name
+      render: (value: any) => value?.warehouse_name
     },
     {
       title: 'Tên sản phẩm',
       dataIndex: 'product',
       key: 'product',
-      render: (value: string) => value.name
+      render: (value: any) => value?.name
+    },
+    {
+      title: 'Nhà cung cấp',
+      dataIndex: 'supplier',
+      key: 'supplier',
+      render: (value: any) => value?.supplier_name || 'N/A'
     },
     {
       title: 'Người nhập',
       dataIndex: 'staff_name',
-      key: 'staff_name',
-      render: (value: string) => value.staff_name
+      key: 'staff_name'
     },
     {
       title: 'Thời gian nhập',

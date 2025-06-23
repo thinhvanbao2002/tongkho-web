@@ -3,6 +3,7 @@ export interface IBlog {
   title: string
   blog_photo: string
   content?: string
+  to_date?: string
 }
 
 export interface IDataBlog {
@@ -20,4 +21,13 @@ export interface IPayLoadListBlog {
   status?: string
   from_date?: string
   to_date?: string
+}
+
+export interface ISupplier {
+  id?: string
+  supplier_code: string
+  supplier_name: string
+  phone?: string
+  email?: string
+  createdAt?: string
 }

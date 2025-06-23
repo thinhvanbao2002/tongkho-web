@@ -49,7 +49,7 @@ const itemsMenu: MenuItem[] = [
   getItem('Kho hàng', 'sub2', <HomeOutlined />, [
     getItem(<Link to={ADMIN_PATH.WAREHOUSE}>Nhà kho</Link>, '7', <ImportOutlined />),
     getItem(<Link to={ADMIN_PATH.IMPORT_WAREHOUSE}>Nhập hàng</Link>, '8', <ImportOutlined />),
-    getItem(<Link to={ADMIN_PATH.BLOG}>Xuất hàng</Link>, '9', <ExportOutlined />)
+    getItem(<Link to={ADMIN_PATH.SUPPLIER}>Nhà cung cấp</Link>, '9', <ExportOutlined />)
   ])
 ]
 
@@ -137,6 +137,10 @@ const AdminLayout: React.FC = ({ children }: any) => {
           break
         case ADMIN_PATH.IMPORT_WAREHOUSE:
           setTitleHeader('Nhập hàng')
+          setKeySider('8')
+          break
+        case ADMIN_PATH.SUPPLIER:
+          setTitleHeader('Nhà cung cấp')
           setKeySider('8')
           break
         default:

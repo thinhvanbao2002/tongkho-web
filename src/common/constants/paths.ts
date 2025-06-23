@@ -9,7 +9,7 @@ export const ADMIN_PATH = {
   CREATE_UPDATE_BLOG: '/ad-ce-blog',
   UPDATE_ORDER: '/ad-e-order',
   ORDER: '/ad-order',
-  BLOG: '/ad-blog',
+  SUPPLIER: '/ad-supplier',
   UPLOAD: '/upload',
   UPLOADS: '/upload-multipart',
   WAREHOUSE: '/ad-warehouse',
