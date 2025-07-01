@@ -170,9 +170,7 @@ function AdminOrderPage() {
     <>
       <FilterOrder onChangeValue={handleFilterProduct} />
       <Row className='mb-2 mt-2 flex justify-end'>
-        <Button className='ml-2' type='primary' onClick={() => handleExportOrders(payload)}>
-          Xuất Excel
-        </Button>
+        
       </Row>
       <Row className='flex items-center' justify='start' align='middle'>
         <ResultStyled className='mb-2'>

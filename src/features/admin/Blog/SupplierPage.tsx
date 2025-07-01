@@ -13,12 +13,14 @@ import { isNil } from 'lodash'
 import { ISupplier } from './supplier.props'
 import ModalComponent from 'common/components/modal/Modal'
 import AddEditSupplier from './components/AddEditSupplier'
+import { useAuth } from 'hooks/useAuth'
 
 function SupplierPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [rowSelected, setRowSelected] = useState<ISupplier | undefined>()
-
+  const {user} = useAuth()
+  console.log("🚀 ~ SupplierPage ~ user:", user)
   const [payload, setPayload] = useState<any>({
     page: 1,
     take: 10,
@@ -82,7 +84,8 @@ function SupplierPage() {
       render: (value: number, record: ISupplier) => {
         return (
           <div style={{ display: 'flex' }}>
-            <TooltipCustom
+            {user?.role === 'admin' &&
+              <TooltipCustom
               title={'Cập nhật'}
               children={
                 <Button
@@ -93,7 +96,9 @@ function SupplierPage() {
                 />
               }
             />
-            <ShowConfirm
+            }
+            {user?.role === 'admin' && 
+              <ShowConfirm
               placement='bottomLeft'
               onConfirm={() => handleRemoveSupplier(record)}
               confirmText={'Xóa'}
@@ -104,6 +109,7 @@ function SupplierPage() {
                 children={<Button type='text' className={'btn-delete-text'} icon={<DeleteOutlined />} />}
               />
             </ShowConfirm>
+            }
           </div>
         )
       }
@@ -182,12 +188,11 @@ function SupplierPage() {
     <>
       <FilterSupplier onChangeValue={handleFilter} />
       <Row className='mb-2 flex justify-end mt-2'>
-        <Button type='primary' onClick={handleOpenAddModal}>
+        {user?.role === 'admin' &&
+          <Button type='primary' onClick={handleOpenAddModal}>
           Thêm mới
         </Button>
-        <Button className='ml-2' type='primary'>
-          Xuất Excel
-        </Button>
+        }
       </Row>
       <Spin spinning={isLoading}>
         <Styled.TableStyle

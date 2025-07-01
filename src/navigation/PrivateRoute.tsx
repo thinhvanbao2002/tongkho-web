@@ -23,6 +23,6 @@ export default function PrivateRoute({ component, layout }: PrivateRouteProps) {
       </Suspense>
     )
   ) : (
-    <Navigate to='/login' />
+    <Navigate to='/ad-login' />
   )
 }

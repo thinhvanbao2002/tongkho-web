@@ -20,9 +20,9 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
     email: rowSelected?.email,
     password: rowSelected?.password,
     avatar: rowSelected?.avatar,
-    status: rowSelected?.s
+    status: rowSelected?.s,
+     role: rowSelected?.role
   }
-  console.log('🚀 ~ AddEditManager ~ initialvalue:', initialvalue)
 
   return (
     <Form
@@ -66,7 +66,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
               }
             ]}
           >
-            <Input readOnly />
+            <Input readOnly={!!rowSelected} />
           </Form.Item>
         </Col>
       </Row>
@@ -86,7 +86,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
               }
             ]}
           >
-            <Input readOnly />
+            <Input readOnly={!!rowSelected} />
           </Form.Item>
         </Col>
         {!rowSelected && (
@@ -145,6 +145,26 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
                 console.log('🚀 ~ AddEditManager ~ imageUrl:', imageUrl)
                 form.setFieldsValue({ avatar: imageUrl })
               }}
+            />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label='Vai trò'
+            name='role'
+            rules={[
+              {
+                required: true,
+                message: 'Vai trò: Bắt buộc chọn'
+              }
+            ]}
+          >
+            <RadiusSelection
+              options={[
+                { value: 'admin', text: 'Quản trị viên' },
+                { value: 'staff', text: 'Nhân viên' }
+              ]}
+              placeholder='Chọn vai trò'
             />
           </Form.Item>
         </Col>

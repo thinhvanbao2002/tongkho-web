@@ -11,6 +11,7 @@ import { getDataSource, openNotification } from 'common/utils'
 import { AddEditWarehouse } from './components/AddEditWarehouse'
 import { warehouseServices } from './warehouseApis'
 import { IPayLoadLisWarehouse, IWarehouse } from './Warehouse.props'
+import { useAuth } from 'hooks/useAuth'
 
 function WarehousePage() {
   const [payload, setPayload] = useState<IPayLoadLisWarehouse>({
@@ -29,7 +30,8 @@ function WarehousePage() {
   const [rowSelected, setRowSelected] = useState<IWarehouse>()
   const [inventoryModalVisible, setInventoryModalVisible] = useState<boolean>(false)
   const [selectedWarehouse, setSelectedWarehouse] = useState<any>()
-
+  const { user } = useAuth()
+  console.log("🚀 ~ WarehousePage ~ user:", user)
   const columnsListWarehouse: IColumnAntD[] = [
     {
       title: 'STT',
@@ -76,6 +78,7 @@ function WarehousePage() {
                 />
               }
             />
+            {user?.role === 'admin' &&
             <TooltipCustom
               title={'Cập nhật'}
               children={
@@ -87,7 +90,9 @@ function WarehousePage() {
                 />
               }
             />
-            <ShowConfirm
+            }
+            {user?.role === 'admin' && 
+              <ShowConfirm
               placement='bottomLeft'
               onConfirm={() => handleRemoveWarehouse(record)}
               confirmText={'Xóa'}
@@ -98,6 +103,7 @@ function WarehousePage() {
                 children={<Button type='text' className={'btn-delete-text'} icon={<DeleteOutlined />} />}
               />
             </ShowConfirm>
+            }
           </div>
         )
       }
@@ -231,7 +237,8 @@ function WarehousePage() {
         <FilterWarehouse onChangeValue={handleFilter} />
       </Row>
       <Row className='mb-2 flex justify-end'>
-        <Button
+        {user?.role === 'admin' &&
+           <Button
           type='primary'
           onClick={() => {
             setModalVisible(true)
@@ -240,9 +247,7 @@ function WarehousePage() {
         >
           Thêm mới
         </Button>
-        <Button className='ml-2' type='primary'>
-          Xuất Excel
-        </Button>
+       }
       </Row>
       <Spin spinning={isLoading}>
         <Styled.TableStyle

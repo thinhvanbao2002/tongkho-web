@@ -149,8 +149,10 @@ function ManagerPage() {
       phone: value?.phone,
       email: value?.email,
       status: value?.status || null,
-      avatar: value?.avatar
+      avatar: value?.avatar,
+      role: value?.role
     }
+    console.log("🚀 ~ handleSubmit ~ payLoadAccount:", payLoadAccount)
     let res
     try {
       if (rowSelected?.id) {

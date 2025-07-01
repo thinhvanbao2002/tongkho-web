@@ -19,7 +19,7 @@ function LoginAdminPage() {
       })
       .then((res: any) => {
         if (res.status) {
-          if (res?.data?.role === 'admin') {
+          if (res?.data?.role === 'admin' || res?.data?.role === 'staff') {
             LocalStorage.setToken(res?.data?.token)
             LocalStorage.setData(res?.data?.id)
             LocalStorage.setRole(res?.data?.role)

@@ -19,7 +19,6 @@ export const accountServices = {
     const url = '/admin'
     return AxiosClient.post(url, {
       ...value,
-      role: 'admin'
     })
   },
   put: (value: IAccount) => {

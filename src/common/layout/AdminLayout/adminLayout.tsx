@@ -16,6 +16,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { openNotification } from 'common/utils'
 import { setLogin } from 'redux/slice/login.slice'
+import { useAuth } from 'hooks/useAuth'
 
 const { Header, Content, Sider } = Layout
 
@@ -53,12 +54,23 @@ const itemsMenu: MenuItem[] = [
   ])
 ]
 
+// Menu cho staff: chỉ quản lý kho hàng và đơn hàng
+const itemsMenuStaff: MenuItem[] = [
+  getItem(<Link to={ADMIN_PATH.ORDER}>Đơn hàng</Link>, '6', <UserOutlined />),
+  getItem('Kho hàng', 'sub2', <HomeOutlined />, [
+    getItem(<Link to={ADMIN_PATH.WAREHOUSE}>Nhà kho</Link>, '7', <ImportOutlined />),
+    getItem(<Link to={ADMIN_PATH.IMPORT_WAREHOUSE}>Nhập hàng</Link>, '8', <ImportOutlined />),
+    getItem(<Link to={ADMIN_PATH.SUPPLIER}>Nhà cung cấp</Link>, '9', <ExportOutlined />)
+  ])
+]
+
 const AdminLayout: React.FC = ({ children }: any) => {
   const [collapsed, setCollapsed] = useState(false)
   const [titleHeader, setTitleHeader] = useState<string>('Tổng quan')
   const [keySider, setKeySider] = useState<string>('')
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { user } = useAuth()
   const {
     token: { colorBgContainer }
   } = theme.useToken()
@@ -169,7 +181,7 @@ const AdminLayout: React.FC = ({ children }: any) => {
           selectedKeys={[keySider]}
           defaultSelectedKeys={['1']}
           mode='inline'
-          items={itemsMenu}
+          items={user?.role === 'staff' ? itemsMenuStaff : itemsMenu}
           className='border-0'
           style={{ background: 'white' }}
         />
