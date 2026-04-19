@@ -91,9 +91,9 @@ const UserLayout: React.FC = ({ children }: any) => {
   return (
     <Layout style={layoutStyle}>
       <Header style={headerStyle} className='flex items-center justify-between h-28 bg-baseBackground'>
-        <div>
+        {/* <div>
           <img className='w-28' src='/logo-v2.jpg' alt='' />
-        </div>
+        </div> */}
         <div className='flex items-center'>
           <div className='text-primary flex items-center justify-center uppercase font-semibold'>
             <h4

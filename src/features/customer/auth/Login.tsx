@@ -51,9 +51,8 @@ function LoginPage() {
             transition={{ duration: 0.5 }}
             className='w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden'
           >
-            <div className='flex flex-col md:flex-row'>
-              {/* Left side - Image */}
-              <div className='hidden md:block md:w-1/2 bg-white relative'>
+            {/* Left side - Image */}
+            {/* <div className='hidden md:block md:w-1/2 bg-white relative'>
                 <div className='absolute inset-0 flex items-center justify-center p-8'>
                   <div className='text-center'>
                     <img
@@ -67,84 +66,83 @@ function LoginPage() {
                     <Text className='text-gray-600'>Đăng nhập để tiếp tục mua sắm và quản lý đơn hàng của bạn</Text>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
-              {/* Right side - Login Form */}
-              <div className='w-full md:w-1/2 p-8 md:p-12'>
-                <div className='max-w-md mx-auto'>
-                  <div className='text-center mb-8'>
-                    <img
-                      src='/logo-v2.jpg'
-                      alt='Logo'
-                      className='w-40 h-40 mx-auto mb-4 rounded-full shadow-md md:hidden object-cover'
-                    />
-                    <Title level={3} className='mb-2'>
-                      Đăng nhập
-                    </Title>
-                    <Text className='text-gray-500'>Vui lòng đăng nhập để tiếp tục</Text>
-                  </div>
-
-                  <Form form={form} onFinish={handleSubmit} layout='vertical' size='large' className='space-y-4'>
-                    <Form.Item
-                      name='phone'
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Vui lòng nhập số điện thoại!'
-                        },
-                        {
-                          pattern: /^[0-9]{10}$/,
-                          message: 'Số điện thoại không hợp lệ!'
-                        }
-                      ]}
-                    >
-                      <Input
-                        prefix={<PhoneOutlined className='text-gray-400' />}
-                        placeholder='Số điện thoại của bạn'
-                        className='h-12 rounded-lg'
-                      />
-                    </Form.Item>
-
-                    <Form.Item
-                      name='password'
-                      rules={[
-                        {
-                          required: true,
-                          message: 'Vui lòng nhập mật khẩu!'
-                        }
-                      ]}
-                    >
-                      <Input.Password
-                        prefix={<LockOutlined className='text-gray-400' />}
-                        placeholder='Mật khẩu của bạn'
-                        className='h-12 rounded-lg'
-                      />
-                    </Form.Item>
-
-                    <Form.Item className='mb-4'>
-                      <Button
-                        type='primary'
-                        htmlType='submit'
-                        className='w-full h-12 rounded-lg bg-black hover:bg-gray-800 transition-colors'
-                        loading={isLoading}
-                      >
-                        Đăng nhập
-                      </Button>
-                    </Form.Item>
-
-                    <div className='text-center'>
-                      <Text className='text-gray-600'>
-                        Bạn chưa có tài khoản?{' '}
-                        <a
-                          href='/register'
-                          className='text-primary hover:text-primary-dark font-medium transition-colors'
-                        >
-                          Đăng ký ngay
-                        </a>
-                      </Text>
-                    </div>
-                  </Form>
+            {/* Right side - Login Form */}
+            <div className='w-full p-8 md:p-12'>
+              <div className='max-w-md mx-auto'>
+                <div className='text-center mb-8'>
+                  <img
+                    src='/logo-v2.jpg'
+                    alt='Logo'
+                    className='w-40 h-40 mx-auto mb-4 rounded-full shadow-md md:hidden object-cover'
+                  />
+                  <Title level={3} className='mb-2'>
+                    Đăng nhập
+                  </Title>
+                  <Text className='text-gray-500'>Vui lòng đăng nhập để mua hàng</Text>
                 </div>
+
+                <Form form={form} onFinish={handleSubmit} layout='vertical' size='large' className='space-y-4'>
+                  <Form.Item
+                    name='phone'
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Vui lòng nhập số điện thoại!'
+                      },
+                      {
+                        pattern: /^[0-9]{10}$/,
+                        message: 'Số điện thoại không hợp lệ!'
+                      }
+                    ]}
+                  >
+                    <Input
+                      prefix={<PhoneOutlined className='text-gray-400' />}
+                      placeholder='Số điện thoại của bạn'
+                      className='h-12 rounded-lg'
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    name='password'
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Vui lòng nhập mật khẩu!'
+                      }
+                    ]}
+                  >
+                    <Input.Password
+                      prefix={<LockOutlined className='text-gray-400' />}
+                      placeholder='Mật khẩu của bạn'
+                      className='h-12 rounded-lg'
+                    />
+                  </Form.Item>
+
+                  <Form.Item className='mb-4'>
+                    <Button
+                      type='primary'
+                      htmlType='submit'
+                      className='w-full h-12 rounded-lg bg-black hover:bg-gray-800 transition-colors'
+                      loading={isLoading}
+                    >
+                      Đăng nhập
+                    </Button>
+                  </Form.Item>
+
+                  <div className='text-center'>
+                    <Text className='text-gray-600'>
+                      Bạn chưa có tài khoản?{' '}
+                      <a
+                        href='/register'
+                        className='text-primary hover:text-primary-dark font-medium transition-colors'
+                      >
+                        Đăng ký ngay
+                      </a>
+                    </Text>
+                  </div>
+                </Form>
               </div>
             </div>
           </motion.div>

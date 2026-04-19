@@ -22,14 +22,14 @@ const contentStyle: React.CSSProperties = {
 
 const backGrounds: Array<urlBackground> = [
   {
-    url: '/banner1.png'
+    url: '/banner5.png'
   },
   {
-    url: '/banner2.png'
-  },
-  {
-    url: '/banner3.png'
+    url: '/banner6.png'
   }
+  // {
+  //   url: '/banner3.png'
+  // }
 ]
 
 function HomePage() {

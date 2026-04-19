@@ -169,9 +169,7 @@ function AdminOrderPage() {
   return (
     <>
       <FilterOrder onChangeValue={handleFilterProduct} />
-      <Row className='mb-2 mt-2 flex justify-end'>
-        
-      </Row>
+      <Row className='mb-2 mt-2 flex justify-end'></Row>
       <Row className='flex items-center' justify='start' align='middle'>
         <ResultStyled className='mb-2'>
           <div className='font-semibold'>Kết quả lọc: </div>

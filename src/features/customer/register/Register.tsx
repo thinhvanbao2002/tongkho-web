@@ -46,11 +46,11 @@ function RegisterPage() {
               <div className='hidden md:block md:w-1/2 bg-white relative'>
                 <div className='absolute inset-0 flex items-center justify-center p-8'>
                   <div className='text-center'>
-                    <img
+                    {/* <img
                       src='/logo-v2.jpg'
                       alt='Logo'
                       className='w-64 h-64 mx-auto mb-6 rounded-full shadow-lg object-cover'
-                    />
+                    /> */}
                     <Title level={2} className='text-gray-800 mb-4'>
                       Tạo tài khoản mới
                     </Title>

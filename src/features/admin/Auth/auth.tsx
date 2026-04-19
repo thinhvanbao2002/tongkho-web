@@ -46,8 +46,8 @@ function LoginAdminPage() {
         <Spin spinning={isLoading} className='w-full h-full !max-h-none'>
           <div className='w-[500px] h-[600px] shadow-custom-lg rounded-xl p-4'>
             <div>
-              <img className='w-[150px] mx-auto' src='/logo-v2.jpg' alt='' />
-              <h3 className='text-custom-xl text-center'>Đăng nhập hệ thống quản trị</h3>
+              {/* <img className='w-[150px] mx-auto' src='/logo-v2.jpg' alt='' /> */}
+              <h3 className='text-custom-xl text-center mt-14'>Hệ thống quản trị</h3>
               <Form onFinish={handleSubmit} layout='vertical'>
                 <Form.Item
                   label='Số điện thoại'
@@ -80,7 +80,7 @@ function LoginAdminPage() {
                   <Input placeholder='Mật khẩu của bạn...' className='h-12' />
                 </Form.Item>
                 <Form.Item>
-                  <Button className='bg-[black] hover:bg-hover mt-5' type='primary' htmlType='submit'>
+                  <Button className='bg-[black] hover:bg-hover mt-5 w-full p-5' type='primary' htmlType='submit'>
                     Gửi
                   </Button>
                 </Form.Item>

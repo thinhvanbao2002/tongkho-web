@@ -21,7 +21,7 @@ export const AddEditManager = ({ onFinish, onClose, rowSelected }: IAddEditAccou
     password: rowSelected?.password,
     avatar: rowSelected?.avatar,
     status: rowSelected?.s,
-     role: rowSelected?.role
+    role: rowSelected?.role
   }
 
   return (
