@@ -15,7 +15,7 @@ export const AddEditWarehouse = ({ onFinish, onClose, rowSelected }: IAddEditWar
   const initialvalue = {
     warehouse_name: rowSelected?.warehouse_name,
     warehouse_code: rowSelected?.warehouse_code,
-    status: rowSelected?.status
+    status: rowSelected?.s
   }
 
   return (

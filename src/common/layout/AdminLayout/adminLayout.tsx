@@ -7,10 +7,17 @@ import {
   ImportOutlined,
   ExportOutlined,
   TeamOutlined,
-  LineChartOutlined
+  LineChartOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  ShopOutlined,
+  InboxOutlined,
+  AppstoreOutlined,
+  ShoppingOutlined,
+  BankOutlined
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
-import { Avatar, Dropdown, Layout, Menu, theme, Typography } from 'antd'
+import { Avatar, Badge, Button, Dropdown, Layout, Menu, Typography } from 'antd'
 import { ADMIN_PATH } from 'common/constants/paths'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
@@ -19,6 +26,7 @@ import { setLogin } from 'redux/slice/login.slice'
 import { useAuth } from 'hooks/useAuth'
 
 const { Header, Content, Sider } = Layout
+const { Text } = Typography
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -40,25 +48,24 @@ function getItem(
 
 const itemsMenu: MenuItem[] = [
   getItem(<Link to={ADMIN_PATH.OVERVIEW}>Tổng quan</Link>, '1', <LineChartOutlined />),
-  getItem(<Link to={ADMIN_PATH.CUSTOMER}>Khách hàng</Link>, '2', <UserOutlined />),
-  getItem(<Link to={ADMIN_PATH.MANAGER}>Tài khoản</Link>, '3', <TeamOutlined />),
-  getItem('Bán hàng', 'sub1', <UserOutlined />, [
-    getItem(<Link to={ADMIN_PATH.CATEGORY}>Danh mục</Link>, '4'),
-    getItem(<Link to={ADMIN_PATH.PRODUCT}>Sản phẩm</Link>, '5'),
-    getItem(<Link to={ADMIN_PATH.ORDER}>Đơn hàng</Link>, '6')
+  getItem(<Link to={ADMIN_PATH.CUSTOMER}>Khách hàng</Link>, '2', <TeamOutlined />),
+  getItem(<Link to={ADMIN_PATH.MANAGER}>Tài khoản</Link>, '3', <UserOutlined />),
+  getItem('Bán hàng', 'sub1', <ShopOutlined />, [
+    getItem(<Link to={ADMIN_PATH.CATEGORY}>Danh mục</Link>, '4', <AppstoreOutlined />),
+    getItem(<Link to={ADMIN_PATH.PRODUCT}>Sản phẩm</Link>, '5', <ShoppingOutlined />),
+    getItem(<Link to={ADMIN_PATH.ORDER}>Đơn hàng</Link>, '6', <InboxOutlined />)
   ]),
-  getItem('Kho hàng', 'sub2', <HomeOutlined />, [
-    getItem(<Link to={ADMIN_PATH.WAREHOUSE}>Nhà kho</Link>, '7', <ImportOutlined />),
+  getItem('Kho hàng', 'sub2', <BankOutlined />, [
+    getItem(<Link to={ADMIN_PATH.WAREHOUSE}>Nhà kho</Link>, '7', <HomeOutlined />),
     getItem(<Link to={ADMIN_PATH.IMPORT_WAREHOUSE}>Nhập hàng</Link>, '8', <ImportOutlined />),
     getItem(<Link to={ADMIN_PATH.SUPPLIER}>Nhà cung cấp</Link>, '9', <ExportOutlined />)
   ])
 ]
 
-// Menu cho staff: chỉ quản lý kho hàng và đơn hàng
 const itemsMenuStaff: MenuItem[] = [
-  getItem(<Link to={ADMIN_PATH.ORDER}>Đơn hàng</Link>, '6', <UserOutlined />),
-  getItem('Kho hàng', 'sub2', <HomeOutlined />, [
-    getItem(<Link to={ADMIN_PATH.WAREHOUSE}>Nhà kho</Link>, '7', <ImportOutlined />),
+  getItem(<Link to={ADMIN_PATH.ORDER}>Đơn hàng</Link>, '6', <InboxOutlined />),
+  getItem('Kho hàng', 'sub2', <BankOutlined />, [
+    getItem(<Link to={ADMIN_PATH.WAREHOUSE}>Nhà kho</Link>, '7', <HomeOutlined />),
     getItem(<Link to={ADMIN_PATH.IMPORT_WAREHOUSE}>Nhập hàng</Link>, '8', <ImportOutlined />),
     getItem(<Link to={ADMIN_PATH.SUPPLIER}>Nhà cung cấp</Link>, '9', <ExportOutlined />)
   ])
@@ -67,13 +74,10 @@ const itemsMenuStaff: MenuItem[] = [
 const AdminLayout: React.FC = ({ children }: any) => {
   const [collapsed, setCollapsed] = useState(false)
   const [titleHeader, setTitleHeader] = useState<string>('Tổng quan')
-  const [keySider, setKeySider] = useState<string>('')
+  const [keySider, setKeySider] = useState<string>('1')
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { user } = useAuth()
-  const {
-    token: { colorBgContainer }
-  } = theme.useToken()
 
   const { pathname } = window.location
 
@@ -90,23 +94,19 @@ const AdminLayout: React.FC = ({ children }: any) => {
     handleNavigate(`${ADMIN_PATH.LOGIN}`)
   }, [dispatch])
 
-  const items: MenuItem[] = [
-    getItem(
-      'Đổi mật khẩu',
-      '1',
-      <svg
-        viewBox='64 64 896 896'
-        focusable='false'
-        data-icon='edit'
-        width='1em'
-        height='1em'
-        fill='currentColor'
-        aria-hidden='true'
-      >
-        <path d='M257.7 752c2 0 4-.2 6-.5L431.9 722c2-.4 3.9-1.3 5.3-2.8l423.9-423.9a9.96 9.96 0 000-14.1L694.9 114.9c-1.9-1.9-4.4-2.9-7.1-2.9s-5.2 1-7.1 2.9L256.8 538.8c-1.5 1.5-2.4 3.3-2.8 5.3l-29.5 168.2a33.5 33.5 0 009.4 29.8c6.6 6.4 14.9 9.9 23.8 9.9zm67.4-174.4L687.8 215l73.3 73.3-362.7 362.6-88.9 15.7 15.6-89zM880 836H144c-17.7 0-32 14.3-32 32v36c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-36c0-17.7-14.3-32-32-32z'></path>
-      </svg>
-    ),
-    getItem('Đăng xuất', '2', <LogoutOutlined />, undefined, handleLogout)
+  const userMenuItems: MenuItem[] = [
+    {
+      key: 'profile',
+      label: (
+        <div className='py-1 px-1'>
+          <div className='font-semibold text-gray-800'>{user?.name || 'Admin'}</div>
+          <div className='text-xs text-gray-500 capitalize'>{user?.role}</div>
+        </div>
+      ),
+      disabled: true
+    },
+    { type: 'divider' },
+    getItem('Đăng xuất', 'logout', <LogoutOutlined />, undefined, handleLogout)
   ]
 
   useEffect(() => {
@@ -153,53 +153,167 @@ const AdminLayout: React.FC = ({ children }: any) => {
           break
         case ADMIN_PATH.SUPPLIER:
           setTitleHeader('Nhà cung cấp')
-          setKeySider('8')
+          setKeySider('9')
           break
         default:
           setTitleHeader('Tổng quan')
+          setKeySider('1')
       }
     }
   }, [pathname])
 
   return (
-    <Layout style={{ minHeight: '100vh', background: 'white' }}>
+    <Layout style={{ minHeight: '100vh' }}>
+      {/* ── SIDEBAR ── */}
       <Sider
-        theme='light'
         collapsible
         collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-        style={{ background: 'white' }}
+        onCollapse={setCollapsed}
+        trigger={null}
+        width={230}
+        style={{
+          background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
+          boxShadow: '2px 0 12px rgba(0,0,0,0.15)',
+          position: 'sticky',
+          top: 0,
+          height: '100vh',
+          overflow: 'auto'
+        }}
       >
-        <div className='flex flex-col items-center justify-center py-6 px-4'>
-          <img
-            src='/logo-v2.jpg'
-            alt='Logo'
-            className={`${collapsed ? 'w-12 h-12' : 'w-24 h-24'} rounded-full shadow-md object-cover transition-all duration-300`}
-          />
+        {/* Brand / Logo */}
+        <div className='flex items-center gap-3 px-4 py-5 border-b' style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+          <div
+            className='flex items-center justify-center rounded-xl flex-shrink-0'
+            style={{
+              width: 36,
+              height: 36,
+              background: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
+              boxShadow: '0 0 12px rgba(59,130,246,0.5)'
+            }}
+          >
+            <BankOutlined style={{ color: '#fff', fontSize: 18 }} />
+          </div>
+          {!collapsed && (
+            <div className='overflow-hidden'>
+              <div className='text-white font-bold text-base leading-tight truncate'>Kim khí Tuấn Thịnh</div>
+              <div className='text-xs' style={{ color: 'rgba(255,255,255,0.45)' }}>
+                Quản trị hệ thống
+              </div>
+            </div>
+          )}
         </div>
+
+        {/* Navigation Menu */}
         <Menu
-          selectedKeys={[keySider]}
-          defaultSelectedKeys={['1']}
           mode='inline'
+          selectedKeys={[keySider]}
+          defaultOpenKeys={['sub1', 'sub2']}
           items={user?.role === 'staff' ? itemsMenuStaff : itemsMenu}
-          className='border-0'
-          style={{ background: 'white' }}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            marginTop: 8,
+            color: 'rgba(255,255,255,0.75)'
+          }}
+          theme='dark'
         />
+
+        {/* User info at bottom */}
+        <div
+          className='absolute bottom-0 left-0 right-0 border-t p-3 flex items-center gap-3'
+          style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.2)' }}
+        >
+          <Avatar
+            size={32}
+            icon={<UserOutlined />}
+            style={{ background: 'linear-gradient(135deg, #3b82f6, #06b6d4)', flexShrink: 0 }}
+          />
+          {!collapsed && (
+            <div className='overflow-hidden flex-1 min-w-0'>
+              <div className='text-white text-sm font-medium truncate'>{user?.name || 'Admin'}</div>
+              <div className='text-xs capitalize truncate' style={{ color: 'rgba(255,255,255,0.45)' }}>
+                {user?.role}
+              </div>
+            </div>
+          )}
+        </div>
       </Sider>
-      <Layout style={{ background: 'white' }}>
-        <Header style={{ background: 'white' }} className='flex items-center justify-between pr-4 pl-4'>
-          <div className='text-lg font-medium'>{titleHeader}</div>
-          <div>
-            <Dropdown menu={{ items }} placement='bottomRight' arrow>
-              <Avatar
-                size={40}
-                icon={<UserOutlined />}
-                className='cursor-pointer hover:opacity-80 transition-opacity'
+
+      {/* ── MAIN AREA ── */}
+      <Layout style={{ background: '#f1f5f9' }}>
+        {/* Header */}
+        <Header
+          style={{
+            background: '#fff',
+            padding: '0 24px',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            position: 'sticky',
+            top: 0,
+            zIndex: 100,
+            height: 64
+          }}
+        >
+          {/* Left: toggle + breadcrumb */}
+          <div className='flex items-center gap-4'>
+            <Button
+              type='text'
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{ width: 40, height: 40, fontSize: 16, color: '#475569' }}
+            />
+            <div className='flex items-center gap-2'>
+              <div
+                className='w-1 h-5 rounded-full'
+                style={{ background: 'linear-gradient(180deg, #3b82f6, #06b6d4)' }}
               />
+              <span className='font-semibold text-gray-700 text-base'>{titleHeader}</span>
+            </div>
+          </div>
+
+          {/* Right: actions */}
+          <div className='flex items-center gap-3'>
+            {/* To customer site */}
+            <Button
+              type='text'
+              icon={<HomeOutlined />}
+              onClick={() => window.open('/', '_blank')}
+              style={{ color: '#64748b' }}
+              title='Xem trang khách hàng'
+            />
+
+            {/* User dropdown */}
+            <Dropdown menu={{ items: userMenuItems }} placement='bottomRight' arrow>
+              <div className='flex items-center gap-2 cursor-pointer px-3 py-1.5 rounded-xl hover:bg-gray-50 transition-colors'>
+                <Avatar
+                  size={34}
+                  icon={<UserOutlined />}
+                  style={{ background: 'linear-gradient(135deg, #3b82f6, #06b6d4)' }}
+                />
+                <div className='hidden sm:block'>
+                  <div className='text-sm font-semibold text-gray-700 leading-tight'>{user?.name || 'Admin'}</div>
+                  <div className='text-xs text-gray-400 capitalize leading-tight'>{user?.role}</div>
+                </div>
+              </div>
             </Dropdown>
           </div>
         </Header>
-        <Content className='bg-white p-6'>{children}</Content>
+
+        {/* Content */}
+        <Content
+          style={{
+            margin: '24px',
+            padding: '24px',
+            background: '#fff',
+            borderRadius: 12,
+            boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+            minHeight: 'calc(100vh - 112px)'
+          }}
+        >
+          {children}
+        </Content>
       </Layout>
     </Layout>
   )

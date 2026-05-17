@@ -18,6 +18,7 @@ import { IProduct } from '../Product.props'
 import { useNavigate } from 'react-router-dom'
 import TextArea from 'antd/es/input/TextArea'
 import { ADMIN_PATH } from 'common/constants/paths'
+import { supplierServices } from '../supplierApis'
 
 const AddEditProduct = () => {
   const [form] = Form.useForm()
@@ -27,6 +28,7 @@ const AddEditProduct = () => {
     limit: 5
   })
   const [categoryListOptions, setCategoryListOptions] = useState<any>([])
+  const [supplierListOptions, setSupplierListOptions] = useState<any>([])
   const [images, setImages] = useState<Array<any>>([])
   const location = useLocation()
   const { state } = location || {}
@@ -42,7 +44,8 @@ const AddEditProduct = () => {
     quantity: record?.quantity,
     image: record?.image,
     description: record?.description,
-    introduce: record?.introduce
+    introduce: record?.introduce,
+    supplier_id: record?.supplier_id
   }
 
   useEffect(() => {
@@ -81,10 +84,24 @@ const AddEditProduct = () => {
     }
   }
 
+  const handleGetSupplierOptions = async () => {
+    try {
+      const res = await supplierServices.get({ take: 100, page: 1 })
+      const items = res?.data?.data ?? res?.data ?? []
+      setSupplierListOptions(
+        items.map((item: any) => ({
+          text: item?.supplier_name,
+          value: item?.id
+        }))
+      )
+    } catch (error) {
+      console.log('🚀 ~ handleGetSupplierOptions ~ error:', error)
+    }
+  }
+
   useEffect(() => {
     handleGetCategoryListOptions(payload)
-    // setImages(defaultFile)
-    // form.setFieldsValue({ images: defaultFile })
+    handleGetSupplierOptions()
   }, [payload])
 
   const handleSubmit = async (value: IProduct) => {
@@ -99,7 +116,8 @@ const AddEditProduct = () => {
       image: value?.image,
       product_photo: value?.product_photo,
       introduce: value?.introduce,
-      product_code: value?.product_code
+      product_code: value?.product_code,
+      supplier_id: value?.supplier_id
     }
     console.log('🚀 ~ handleSubmit ~ payLoadAccount:', payLoadAccount)
     let res
@@ -221,6 +239,11 @@ const AddEditProduct = () => {
         <Col span={8}>
           <Form.Item name='quantity' label='Số lượng'>
             <Input />
+          </Form.Item>
+        </Col>
+        <Col md={8}>
+          <Form.Item name={'supplier_id'} label={'Nhà cung cấp'}>
+            <RadiusSelection placeholder={'Chọn nhà cung cấp'} options={supplierListOptions} allowClear={true} />
           </Form.Item>
         </Col>
       </Row>

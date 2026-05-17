@@ -24,18 +24,18 @@ export default {
       lg: '976px',
       xl: '1440px'
     },
-    colors: {
-      ...COLORS,
-      black: '#000',
-      while: '#fff',
-      'border-basic': '#ccc',
-      money: '#FFD700' // Mãu text
-    },
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],
       serif: ['Merriweather', 'serif']
     },
     extend: {
+      colors: {
+        ...COLORS,
+        black: '#000',
+        while: '#fff',
+        'border-basic': '#ccc',
+        money: '#FFD700' // Mãu text
+      },
       spacing: {
         128: '32rem',
         144: '36rem'

@@ -201,9 +201,6 @@ function CategoryPage() {
         >
           Thêm mới
         </Button>
-        <Button className='ml-2' type='primary'>
-          Xuất Excel
-        </Button>
       </Row>
       <Spin spinning={isLoading}>
         <Styled.TableStyle

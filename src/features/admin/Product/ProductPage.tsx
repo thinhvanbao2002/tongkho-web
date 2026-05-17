@@ -60,6 +60,11 @@ function ProductPage() {
       dataIndex: 'category'
     },
     {
+      title: 'Nhà cung cấp',
+      key: 'supplier',
+      dataIndex: 'supplier'
+    },
+    {
       title: 'Giá tiền',
       key: 'price',
       dataIndex: 'price'
@@ -73,11 +78,6 @@ function ProductPage() {
       title: 'Số lượng còn',
       key: 'quantity',
       dataIndex: 'quantity'
-    },
-    {
-      title: 'Số lượng đã bán',
-      key: 'sold',
-      dataIndex: 'sold'
     },
     {
       title: 'Ngày tạo',
@@ -123,7 +123,17 @@ function ProductPage() {
   const handleGetProducts = async (payload?: any) => {
     try {
       const res = await productServices.get(payload)
-      setProducts(getDataSource(res?.data, 1))
+      const mapped = (res?.data ?? []).map((item: any, index: number) => ({
+        ...item,
+        key: item.id,
+        STT: index + 1,
+        status: item.status === 1 ? 'Đang hoạt động' : 'Ngừng hoạt động',
+        s: item.status,
+        createdAt: item.created_at ? new Date(item.created_at).toLocaleDateString('vi-VN') : '',
+        category: item?.category?.name ?? '',
+        supplier: item?.supplier?.supplier_name ?? '—'
+      }))
+      setProducts(mapped)
       setCount(res?.meta?.item_count)
     } catch (error) {
       console.log('🚀 ~ handleGetAccount ~ error:', error)

@@ -6,7 +6,6 @@ import { productServices } from '../../Product/ProductApis'
 import { warehouseServices } from '../../Warehouse/warehouseApis'
 import dayjs from 'dayjs'
 import { useSelector } from 'react-redux'
-import { supplierServices } from '../../Blog/SupplierApis'
 
 interface IImportWarehouseForm {
   onFinish?: (value: any) => void
@@ -28,7 +27,6 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
   const [products, setProducts] = useState<IImportProduct[]>([])
   const [productOptions, setProductOptions] = useState<IOption[]>([])
   const [warehouseOptions, setWarehouseOptions] = useState<IOption[]>([])
-  const [supplierOptions, setSupplierOptions] = useState<IOption[]>([])
   const currentUser = useSelector((state: { login: { user: IUser } }) => state.login.user)
 
   const handleGetProducts = async () => {
@@ -61,23 +59,9 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
     }
   }
 
-  const handleGetSuppliers = async () => {
-    try {
-      const res = await supplierServices.get({ page: 1, take: 1000 }) //get all
-      const options = res.data.map((item: any) => ({
-        label: item.supplier_name,
-        value: item.id
-      }))
-      setSupplierOptions(options)
-    } catch (error) {
-      console.error('Failed to fetch suppliers:', error)
-    }
-  }
-
   useEffect(() => {
     handleGetProducts()
     handleGetWarehouses()
-    handleGetSuppliers()
     if (currentUser) {
       form.setFieldsValue({
         staff_name: currentUser.name,
@@ -156,15 +140,6 @@ export const ImportWarehouseForm = ({ onFinish, onClose }: IImportWarehouseForm)
         </Col>
       </Row>
       <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item
-            name='supplier_id'
-            label='Nhà cung cấp'
-            rules={[{ required: true, message: 'Vui lòng chọn nhà cung cấp' }]}
-          >
-            <Select options={supplierOptions} placeholder='Chọn nhà cung cấp' />
-          </Form.Item>
-        </Col>
         <Col span={12}>
           <Form.Item
             name='import_date'

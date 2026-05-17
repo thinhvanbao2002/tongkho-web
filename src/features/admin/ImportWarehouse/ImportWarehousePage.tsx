@@ -30,12 +30,6 @@ export const ImportWarehousePage = () => {
       render: (value: any) => value?.name
     },
     {
-      title: 'Nhà cung cấp',
-      dataIndex: 'supplier',
-      key: 'supplier',
-      render: (value: any) => value?.supplier_name || 'N/A'
-    },
-    {
       title: 'Người nhập',
       dataIndex: 'staff_name',
       key: 'staff_name'

@@ -1,10 +1,16 @@
 @layer base {
   :root {
-    --primary: #000;
-    --baseBackground: #fff;
-    --hover: #333333;
-    --button: #000;
-    --buttonConfirm: #000;
+    /* Main Theme Colors - Premium E-commerce Red */
+    --primary: #dc2626;
+    /* Red 600 */
+    --hover: #b91c1c;
+    /* Red 700 */
+    --baseBackground: #f9fafb;
+    /* Light Gray */
+    --button: #dc2626;
+    --buttonConfirm: #dc2626;
+
+    /* Text Sizes */
     --text-custom-xl: '24px';
     --text-custom-sm: '18px';
     --text-custom-xs: '16px';

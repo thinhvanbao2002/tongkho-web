@@ -3,6 +3,7 @@ export interface IWarehouse {
   warehouse_name: string
   warehouse_code: string
   status: string
+  s?: number
 }
 
 export interface IPayLoadLisWarehouse {

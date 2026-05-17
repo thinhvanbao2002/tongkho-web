@@ -8,6 +8,7 @@ import { orderServices } from './orderApis'
 import { formatPrice, getOptionListSelector, openNotification, openNotificationError } from 'common/utils'
 import { useLocation, useNavigate } from 'react-router'
 import { USER_PATH } from 'common/constants/paths'
+import { ChevronRight, Home, ShieldCheck, MapPin } from 'lucide-react'
 
 function OrderPage() {
   const [form] = Form.useForm()
@@ -32,6 +33,8 @@ function OrderPage() {
   const getProvince = useCallback(async () => {
     try {
       const res = await orderServices.getProvince(payload)
+
+      console.log('🚀 ~ getProvince ~ res:', res)
       setProvinces(res?.data)
     } catch (error) {
       console.log('🚀 ~ getProvince ~ error:', error)
@@ -82,8 +85,9 @@ function OrderPage() {
     try {
       const res = await orderServices.createOrder({ ...value, items: listOrders, total_price: totalPrice })
       if (res) {
-        navigate(`${USER_PATH.ORDER_SUCCESS}`)
+        navigate(`${USER_PATH.ORDER_HISTORY}`)
         openNotification('success', 'Thành công', 'Bạn đã đặt hàng thành công!')
+        window.dispatchEvent(new Event('cart_updated'))
       }
     } catch (error) {
       openNotificationError(error)
@@ -107,245 +111,226 @@ function OrderPage() {
   }, [listOrders])
 
   return (
-    <>
-      <Form
-        form={form}
-        name='addEditCustomer'
-        labelAlign='left'
-        onFinish={handleSubmit}
-        scrollToFirstError
-        layout='vertical'
-      >
-        <div className='w-full h-[50px] pl-20 pr-20'>
-          <div className='w-full border-b-2 h-[50px] flex items-center justify-start text-custom-sm'>
-            <span>Giỏ hàng</span>
-            <div className='border-r-2 border-border-basic ml-2 mr-2 w-[1px] h-[16px]'></div>
-            <span className='font-semibold'>Thông tin giỏ hàng</span>
+    <div className='min-h-screen bg-gray-50 pb-20'>
+      {/* Breadcrumb */}
+      <div className='bg-white shadow-sm border-b border-gray-100'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center text-sm'>
+          <div
+            className='flex items-center text-gray-500 hover:text-primary cursor-pointer transition-colors'
+            onClick={() => navigate('/')}
+          >
+            <Home className='w-4 h-4 mr-1' />
+            <span>Trang chủ</span>
           </div>
+          <ChevronRight className='w-4 h-4 mx-2 text-gray-400' />
+          <span className='font-medium text-gray-900'>Đặt hàng & Thanh toán</span>
         </div>
-        <div className='w-full pl-20 pr-20 pt-10 pb-20 flex sm:flex-col md:flex-col lg:flex-row'>
-          <div className='p-6 sm:w-full md:w-full lg:w-[60%] flex'>
-            <div className='w-[80%]'>
-              <Form.Item
-                label='Họ và tên'
-                className='w-full text-custom-sm'
-                name='name'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Vui lòng nhập tên đầy đủ!'
-                  },
-                  {
-                    pattern: Config._reg.name,
-                    message: 'Họ và tên không hợp lệ!'
-                  }
-                ]}
-              >
-                <Input className='h-10' placeholder='Nhập họ và tên của bạn...' />
-              </Form.Item>
-              <Form.Item
-                label='Số điện thoại'
-                className='mt-3 '
-                name='phone'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Vui lòng nhập số điện thoại!'
-                  },
-                  {
-                    pattern: Config._reg.phone,
-                    message: 'Số điện thoại không hợp lệ!'
-                  }
-                ]}
-              >
-                <Input className='h-10' placeholder='Nhập số điện thoại của bạn...' />
-              </Form.Item>
-              <Form.Item
-                label='Email'
-                className='mt-5'
-                name='email'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Vui lòng nhập email!'
-                  },
-                  {
-                    pattern: Config._reg.email,
-                    message: 'Email không hợp lệ!'
-                  }
-                ]}
-              >
-                <Input type='email' placeholder='Nhập email của bạn...' className='h-10' />
-              </Form.Item>
+      </div>
 
-              <Form.Item
-                label='Tỉnh/ Thành Phố'
-                className='mt-5 mb-2'
-                name='city'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Vui lòng nhập địa chỉ!'
-                  }
-                ]}
-              >
-                <Select
-                  className='h-10'
-                  showSearch
-                  placeholder='Chọn tỉnh/ Thành phố'
-                  optionFilterProp='label'
-                  onChange={(value) => {
-                    setProvince(value)
-                  }}
-                  options={listProvince}
-                />
-              </Form.Item>
-              <div className='w-full flex'>
-                <div className='w-1/2 pr-4 '>
-                  <Form.Item
-                    label='Quận/ Huyện'
-                    className='mt-5'
-                    name='district'
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng chọn Chọn tỉnh, Thành phố!'
-                      }
-                    ]}
-                  >
-                    <Select
-                      className='h-10'
-                      showSearch
-                      placeholder='Chọn Quận/ Huyện'
-                      optionFilterProp='label'
-                      onChange={(value) => {
-                        setDistrict(value)
-                      }}
-                      // onSearch={onSearch}
-                      options={listDistrict}
-                    />
-                  </Form.Item>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8'>
+        <div className='flex items-center gap-3 mb-8'>
+          <div className='w-2 h-8 bg-primary rounded-full'></div>
+          <h2 className='text-2xl sm:text-3xl font-black text-gray-900 uppercase tracking-tight'>Thanh toán an toàn</h2>
+        </div>
+
+        <Form
+          form={form}
+          name='addEditCustomer'
+          labelAlign='left'
+          onFinish={handleSubmit}
+          scrollToFirstError
+          layout='vertical'
+          className='flex flex-col lg:flex-row gap-8 lg:gap-12'
+        >
+          {/* Left Column: Form Fields */}
+          <div className='w-full lg:w-3/5'>
+            <div className='bg-white p-6 sm:p-10 rounded-3xl shadow-sm border border-gray-100'>
+              <div className='flex items-center gap-2 mb-6 text-xl font-bold text-gray-900 border-b border-gray-100 pb-4'>
+                <MapPin className='w-6 h-6 text-primary' />
+                Thông tin giao hàng
+              </div>
+
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-x-6'>
+                <Form.Item
+                  label={<span className='font-semibold text-gray-700'>Họ và tên</span>}
+                  name='name'
+                  className='md:col-span-2'
+                  rules={[
+                    { required: true, message: 'Vui lòng nhập tên đầy đủ!' },
+                    { pattern: Config._reg.name, message: 'Họ và tên không hợp lệ!' }
+                  ]}
+                >
+                  <Input
+                    size='large'
+                    className='!rounded-xl hover:border-primary focus:border-primary'
+                    placeholder='Nhập họ và tên của bạn'
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label={<span className='font-semibold text-gray-700'>Số điện thoại</span>}
+                  name='phone'
+                  rules={[
+                    { required: true, message: 'Vui lòng nhập số điện thoại!' },
+                    { pattern: Config._reg.phone, message: 'Số điện thoại không hợp lệ!' }
+                  ]}
+                >
+                  <Input
+                    size='large'
+                    className='!rounded-xl hover:border-primary focus:border-primary'
+                    placeholder='Nhập số điện thoại'
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label={<span className='font-semibold text-gray-700'>Email</span>}
+                  name='email'
+                  rules={[
+                    { required: true, message: 'Vui lòng nhập email!' },
+                    { pattern: Config._reg.email, message: 'Email không hợp lệ!' }
+                  ]}
+                >
+                  <Input
+                    size='large'
+                    type='email'
+                    placeholder='Nhập email của bạn'
+                    className='!rounded-xl hover:border-primary focus:border-primary'
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label={<span className='font-semibold text-gray-700'>Tỉnh/Thành Phố</span>}
+                  name='city'
+                  className='md:col-span-2'
+                  rules={[{ required: true, message: 'Vui lòng chọn Tỉnh/Thành phố!' }]}
+                >
+                  <Select
+                    size='large'
+                    showSearch
+                    placeholder='Chọn tỉnh/Thành phố'
+                    optionFilterProp='label'
+                    onChange={(value) => setProvince(value)}
+                    options={listProvince}
+                    className='[&_.ant-select-selector]:!rounded-xl'
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label={<span className='font-semibold text-gray-700'>Quận/Huyện</span>}
+                  name='district'
+                  rules={[{ required: true, message: 'Vui lòng chọn Quận/Huyện!' }]}
+                >
+                  <Select
+                    size='large'
+                    showSearch
+                    placeholder='Chọn Quận/Huyện'
+                    optionFilterProp='label'
+                    onChange={(value) => setDistrict(value)}
+                    options={listDistrict}
+                    className='[&_.ant-select-selector]:!rounded-xl'
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label={<span className='font-semibold text-gray-700'>Phường/Xã</span>}
+                  name='ward'
+                  rules={[{ required: true, message: 'Vui lòng chọn Phường/Xã!' }]}
+                >
+                  <Select
+                    size='large'
+                    showSearch
+                    placeholder='Chọn Phường/Xã'
+                    optionFilterProp='label'
+                    options={listWards}
+                    className='[&_.ant-select-selector]:!rounded-xl'
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label={<span className='font-semibold text-gray-700'>Địa chỉ cụ thể</span>}
+                  name='address'
+                  className='md:col-span-2'
+                  rules={[{ required: true, message: 'Vui lòng nhập địa chỉ cụ thể!' }]}
+                >
+                  <TextArea
+                    className='!rounded-xl hover:border-primary focus:border-primary p-3'
+                    placeholder='Số nhà, tên đường, tòa nhà...'
+                    autoSize={{ minRows: 3, maxRows: 5 }}
+                  />
+                </Form.Item>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Order Summary */}
+          <div className='w-full lg:w-2/5'>
+            <div className='bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sm:p-8 sticky top-24'>
+              <h2 className='text-xl font-black text-gray-900 uppercase tracking-wide mb-6'>Đơn hàng của bạn</h2>
+
+              <div className='w-full border-t border-gray-100 mb-6'></div>
+
+              <div className='max-h-64 overflow-y-auto pr-2 custom-scrollbar space-y-4 mb-6'>
+                {listOrders &&
+                  listOrders.length > 0 &&
+                  listOrders.map((item: any, idx: number) => (
+                    <div key={idx} className='flex flex-col gap-2 p-3 bg-gray-50 rounded-xl'>
+                      <div className='flex justify-between items-start gap-4'>
+                        <div className='font-bold text-gray-800 line-clamp-2 leading-tight'>{item?.product.name}</div>
+                        <div className='font-bold text-primary flex-shrink-0'>{formatPrice(item.total_price)} ₫</div>
+                      </div>
+                      <div className='flex justify-between items-center text-sm text-gray-500 font-medium'>
+                        <span className='bg-white px-2 py-0.5 rounded-md border border-gray-200'>
+                          Size: {item.size?.toUpperCase()}
+                        </span>
+                        <span>
+                          SL: <span className='font-bold text-gray-700'>{item.product_number}</span>
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+
+              <div className='w-full border-t border-dashed border-gray-200 mb-6'></div>
+
+              <div className='space-y-4 mb-6'>
+                <div className='flex items-center justify-between text-gray-600 font-medium'>
+                  <span>Tạm tính</span>
+                  <span className='font-bold text-gray-900'>{formatPrice(totalPrice)} ₫</span>
                 </div>
-                <div className='w-1/2'>
-                  <Form.Item
-                    label='Phường/ Xã'
-                    className='mt-5'
-                    name='ward'
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng chọn phường, xã!'
-                      }
-                    ]}
-                  >
-                    <Select
-                      className='h-10'
-                      showSearch
-                      placeholder='Chọn Phường/ xã'
-                      optionFilterProp='label'
-                      options={listWards}
-                    />
-                  </Form.Item>
+                <div className='flex items-center justify-between text-gray-600 font-medium'>
+                  <span>Giảm giá</span>
+                  <span className='font-bold text-green-600'>-0 ₫</span>
+                </div>
+                <div className='flex items-center justify-between text-gray-600 font-medium'>
+                  <span>Phí vận chuyển</span>
+                  <span className='font-bold text-gray-900'>Miễn phí</span>
                 </div>
               </div>
-              <Form.Item
-                label='Địa chỉ'
-                name='address'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Vui lòng nhập địa chỉ!'
-                  }
-                ]}
-              >
-                <TextArea placeholder='Địa chỉ chi tiết của bạn' autoSize={{ minRows: 3, maxRows: 5 }} />
-              </Form.Item>
-            </div>
-          </div>
 
-          <div className='p-6 sm:w-full md:w-full lg:w-[40%] bg-[#f5f5f5]'>
-            <div>
-              <h2 className='text-custom-xl uppercase font-semibold'>Đơn hàng</h2>
-            </div>
-            <div className='w-full border-t-2 border mt-6 mb-4'></div>
-            <div>
-              {listOrders &&
-                listOrders.length &&
-                listOrders.map((item: any) => (
-                  <div>
-                    <div className='flex justify-between'>
-                      <div className='text-custom-sm font-semibold text-[#555] w-[70%]'>
-                        <h2>{item?.product.name}</h2>
-                      </div>
-                      <div className='text-custom-sm font-semibold text-[#555]'>
-                        <h2>{formatPrice(item.total_price)} VND</h2>
-                      </div>
-                    </div>
-                    <div className='flex justify-between mt-2'>
-                      <div className='text-custom-xs text-[#555]'>
-                        <h3>Size: {item.size}</h3>
-                      </div>
-                      <div className='text-custom-xs text-[#555]'>
-                        <h3> x {item.product_number}</h3>
-                      </div>
-                    </div>
-                    <div className='w-full border-t-2 border-dashed mt-6 mb-4'></div>
+              <div className='w-full border-t border-gray-100 mb-6'></div>
+
+              <div className='mb-8 flex items-end justify-between'>
+                <span className='font-bold text-gray-900 uppercase'>Tổng cộng</span>
+                <div className='text-right'>
+                  <div className='text-3xl font-black text-primary'>
+                    {formatPrice(totalPrice)}{' '}
+                    <span className='text-xl underline decoration-2 underline-offset-4'>đ</span>
                   </div>
-                ))}
-            </div>
-            <div className='text-custom-sm '>
-              <div className='flex justify-between mb-2 font-semibold'>
-                <h2>Đơn hàng</h2>
-                <h2>{formatPrice(totalPrice)} VNĐ</h2>
-              </div>
-              <div className='flex justify-between mb-2 font-semibold'>
-                <h2>Giảm</h2>
-                <h2>-87.000 VNĐ</h2>
-              </div>
-              <div className='flex justify-between mb-2'>
-                <h2>Phí vận chuyển</h2>
-                <h2>0 VNĐ</h2>
-              </div>
-              <div className='flex justify-between mb-2'>
-                <h2>Phí thanh toán</h2>
-                <h2>0 VNĐ</h2>
-              </div>
-              <div className='w-full border-t-2 border-dashed mt-6 mb-4'></div>
-              {/* <div>
-                <h2 className='text-custom-sm font-semibold'>Phương thức thanh toán</h2>
-                <div>
-                  <Form.Item
-                    className='mt-3 mb-2'
-                    name='email'
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Vui lòng chọn phương thức giao hàng!'
-                      }
-                    ]}
-                  >
-                    <Checkbox
-                      className='text-custom-sm'
-                      // onChange={onChange}
-                    >
-                      Thanh toán khi nhận hàng
-                    </Checkbox>
-                  </Form.Item>
                 </div>
-              </div> */}
-              {/* <div className='w-full border-t-2 border-dashed mt-6 mb-4'></div> */}
-              <div>
-                <div className='flex justify-between text-custom-xl uppercase font-semibold mt-6 mb-6'>
-                  <h3>Tổng cộng</h3>
-                  <h3 className='text-money font-extrabold'>{formatPrice(totalPrice)} VNĐ</h3>
-                </div>
-                <CustomButton label='Hoàn tất đặt hàng' />
               </div>
+
+              <button
+                type='submit'
+                className='w-full bg-primary text-white py-4 px-6 rounded-2xl text-lg font-black uppercase shadow-[0_4px_14px_0_rgba(var(--primary-rgb,37,99,235),0.39)] hover:shadow-[0_6px_20px_rgba(var(--primary-rgb,37,99,235),0.23)] hover:bg-hover hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2'
+              >
+                <ShieldCheck className='w-5 h-5' />
+                Hoàn tất đặt hàng
+              </button>
             </div>
           </div>
-        </div>
-      </Form>
-    </>
+        </Form>
+      </div>
+    </div>
   )
 }
 

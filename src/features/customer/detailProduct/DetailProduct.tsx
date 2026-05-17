@@ -1,13 +1,13 @@
-import { Image, Select, InputNumber } from 'antd'
+import { Image, InputNumber } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { productServices } from '../product/productApis'
 import { formatPrice, openNotification, openNotificationError } from 'common/utils'
-import RelatedProducts from 'features/admin/Product/components/RelatedProducts'
+import CardComponent from 'common/components/cart/Cart'
 import { USER_PATH } from 'common/constants/paths'
 import Comment from '../comment/Comment'
 import { motion } from 'framer-motion'
-import { ShoppingCart } from 'lucide-react'
+import { ShoppingCart, ChevronRight, Package, CheckCircle2, Home } from 'lucide-react'
 
 function DetailProductPage() {
   const [product, setProduct] = useState<any>({})
@@ -66,6 +66,7 @@ function DetailProductPage() {
       const res = await productServices.addToCart(payload)
       if (res) {
         openNotification('success', 'Thành công', 'Thêm sản phẩm vào giỏ hàng thành công!')
+        window.dispatchEvent(new Event('cart_updated'))
       }
     } catch (error) {
       openNotificationError(error)
@@ -109,143 +110,174 @@ function DetailProductPage() {
   }, [product])
 
   return (
-    <div className='min-h-screen bg-gray-50'>
+    <div className='min-h-screen bg-gray-50 pb-16'>
       {/* Breadcrumb */}
-      <div className='w-full h-[50px] pl-20 pr-20 bg-white shadow-sm'>
-        <div className='w-full border-b-2 h-[50px] flex items-center justify-start text-custom-sm'>
-          <span className='text-gray-600'>Sản phẩm</span>
-          <div className='border-r-2 border-gray-200 ml-2 mr-2 w-[1px] h-[16px]'></div>
-          <span className='text-gray-600'>{product.category?.name}</span>
-          <div className='border-r-2 border-gray-200 ml-2 mr-2 w-[1px] h-[16px]'></div>
-          <span className='font-semibold text-black'>{product?.name}</span>
+      <div className='bg-white border-b border-gray-100'>
+        <div className='max-w-6xl mx-auto px-4 sm:px-6 h-11 flex items-center text-xs text-gray-500 gap-1'>
+          <span
+            className='flex items-center hover:text-primary cursor-pointer transition-colors'
+            onClick={() => navigate('/')}
+          >
+            <Home className='w-3.5 h-3.5 mr-1' />
+            Trang chủ
+          </span>
+          <ChevronRight className='w-3.5 h-3.5 text-gray-300' />
+          <span
+            className='hover:text-primary cursor-pointer transition-colors'
+            onClick={() => navigate(USER_PATH.PRODUCT)}
+          >
+            Sản phẩm
+          </span>
+          <ChevronRight className='w-3.5 h-3.5 text-gray-300' />
+          <span
+            className='hover:text-primary cursor-pointer transition-colors'
+            onClick={() => {
+              if (product.category_id) navigate(USER_PATH.PRODUCT, { state: { category_id: product.category_id } })
+            }}
+          >
+            {product.category?.name || 'Danh mục'}
+          </span>
+          <ChevronRight className='w-3.5 h-3.5 text-gray-300' />
+          <span className='text-gray-700 font-medium truncate max-w-[200px]'>{product?.name}</span>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className='w-full pl-20 pr-20 pt-10 pb-20 flex sm:flex-col md:flex-col lg:flex-row gap-8'>
-        {/* Product Images */}
-        <div className='p-6 sm:w-full md:w-full lg:w-[60%] bg-white rounded-lg shadow-sm'>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className='w-full aspect-square overflow-hidden rounded-lg'
-          >
-            <Image
-              width={'100%'}
-              height={'100%'}
-              className='object-cover'
-              src={selectedImage || product.image}
-              preview={false}
-            />
-          </motion.div>
+      <div className='max-w-6xl mx-auto px-4 sm:px-6 mt-6'>
+        <div className='flex flex-col lg:flex-row gap-6 bg-white p-5 sm:p-8 rounded-2xl shadow-sm border border-gray-100'>
+          {/* Product Images — compact */}
+          <div className='w-full lg:w-[42%] flex flex-col gap-3'>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className='w-full bg-gray-50 rounded-xl overflow-hidden border border-gray-100 flex items-center justify-center group'
+              style={{ aspectRatio: '1 / 1', maxHeight: 380 }}
+            >
+              <Image
+                width='100%'
+                height='100%'
+                className='object-contain mix-blend-multiply p-6 transition-transform duration-500 group-hover:scale-105'
+                src={selectedImage || product.image}
+                fallback='https://via.placeholder.com/500x500?text=No+Image'
+                preview={false}
+              />
+            </motion.div>
 
-          <div className='flex mt-4 gap-2 overflow-x-auto pb-2'>
-            {product.product_photo?.map((p: any, index: number) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.05 }}
-                className={`cursor-pointer rounded-lg overflow-hidden border-2 ${
-                  selectedImage === p.url ? 'border-black' : 'border-transparent'
-                }`}
-                onClick={() => setSelectedImage(p.url)}
-              >
-                <Image width={100} height={100} className='object-cover' src={p?.url} preview={false} />
-              </motion.div>
-            ))}
+            {/* Thumbnail strip */}
+            <div className='flex gap-2 overflow-x-auto pb-1'>
+              {product.product_photo?.map((p: any, index: number) => (
+                <motion.div
+                  key={index}
+                  whileHover={{ scale: 1.04 }}
+                  className={`flex-shrink-0 w-16 h-16 cursor-pointer rounded-lg overflow-hidden border-2 transition-all bg-white flex items-center justify-center
+                    ${selectedImage === p.url ? 'border-primary ring-1 ring-primary/20' : 'border-gray-100 hover:border-gray-300'}`}
+                  onClick={() => setSelectedImage(p.url)}
+                >
+                  <Image
+                    width='100%'
+                    height='100%'
+                    className='object-contain mix-blend-multiply p-1.5'
+                    src={p?.url}
+                    preview={false}
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Product Info — refined typography */}
+          <div className='w-full lg:w-[58%] flex flex-col'>
+            <motion.div
+              initial={{ opacity: 0, x: 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className='flex-1 flex flex-col'
+            >
+              {/* Badges */}
+              <div className='flex flex-wrap gap-2 mb-3'>
+                <span className='inline-flex items-center gap-1 text-xs font-medium text-gray-500 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-md'>
+                  <Package className='w-3.5 h-3.5' />
+                  {product?.product_code || '—'}
+                </span>
+                <span className='inline-flex items-center gap-1 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1 rounded-md'>
+                  <CheckCircle2 className='w-3.5 h-3.5' />
+                  Còn hàng
+                </span>
+              </div>
+
+              {/* Product Name */}
+              <h1 className='text-xl sm:text-2xl font-bold text-gray-900 leading-snug mb-1'>{product?.name}</h1>
+              <p className='text-xs text-gray-400 mb-4'>{product.category?.name}</p>
+
+              {/* Price */}
+              <div className='flex items-baseline gap-1.5 py-3 px-4 bg-blue-50 rounded-xl border border-blue-100 mb-5 w-fit'>
+                <span className='text-2xl sm:text-3xl font-extrabold text-primary leading-none'>
+                  {formatPrice(product.price)}
+                </span>
+                <span className='text-base font-semibold text-primary underline underline-offset-2'>đ</span>
+              </div>
+
+              {/* Description */}
+              <div className='mb-5'>
+                <h3 className='text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2 flex items-center gap-2'>
+                  <div className='w-1 h-3.5 bg-primary rounded-full' />
+                  Mô tả sản phẩm
+                </h3>
+                <p className='text-sm text-gray-600 leading-relaxed bg-gray-50 rounded-xl p-4 border border-gray-100 min-h-[80px]'>
+                  {product.introduce || 'Chưa có mô tả cho sản phẩm này.'}
+                </p>
+              </div>
+
+              {/* Quantity + Add to cart */}
+              <div className='mt-auto pt-4 border-t border-gray-100'>
+                <div className='flex flex-col sm:flex-row items-stretch sm:items-center gap-3'>
+                  <div className='flex flex-col gap-1 sm:w-32'>
+                    <label className='text-xs font-semibold text-gray-500 uppercase tracking-wide'>Số lượng</label>
+                    <InputNumber
+                      min={1}
+                      max={999}
+                      defaultValue={1}
+                      size='middle'
+                      className='w-full !rounded-lg !border-gray-200'
+                      onChange={(value) => handleSetCartPayload('product_number', value)}
+                    />
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02, y: -1 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleAddToCart(cartPayload)}
+                    className='flex-1 mt-auto py-2.5 px-5 rounded-xl bg-primary hover:bg-hover text-white font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg'
+                  >
+                    <ShoppingCart className='w-4 h-4' />
+                    Thêm vào giỏ hàng
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
 
-        {/* Product Info */}
-        <div className='w-full p-6 lg:w-[40%] bg-white rounded-lg shadow-sm'>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <h2 className='uppercase text-2xl font-bold text-gray-800'>{product?.name}</h2>
-
-            <div className='flex items-center justify-between text-sm mt-4 text-gray-600'>
-              <div className='flex items-center'>
-                <span>Mã sản phẩm:</span>
-                <h3 className='font-semibold ml-2'>{product?.product_code}</h3>
-              </div>
-              <div className='flex items-center'>
-                <span>Tình trạng:</span>
-                <h3 className='font-semibold ml-2 text-green-600'>Còn hàng</h3>
-              </div>
-            </div>
-
-            <div className='mt-6'>
-              <h2 className='font-extrabold text-3xl text-money'>{formatPrice(product.price)} VND</h2>
-            </div>
-
-            <div className='w-full border-t border-gray-200 my-6'></div>
-
-            <div className='mt-5'>
-              <p className='text-sm text-gray-600 leading-relaxed'>{product.introduce}</p>
-            </div>
-
-            <div className='w-full border-t border-gray-200 my-6'></div>
-
-            <div className='flex items-center justify-between gap-4 mt-6'>
-              <div className='flex-1'>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>SIZE</label>
-                <Select
-                  defaultValue='l'
-                  className='w-full'
-                  onChange={(value) => handleSetCartPayload('size', value)}
-                  options={[
-                    { value: 's', label: 'S' },
-                    { value: 'm', label: 'M' },
-                    { value: 'l', label: 'L' },
-                    { value: 'xl', label: 'XL' },
-                    { value: '2xl', label: '2XL' },
-                    { value: '3xl', label: '3XL' }
-                  ]}
-                />
-              </div>
-              <div className='flex-1'>
-                <label className='block text-sm font-medium text-gray-700 mb-2'>SỐ LƯỢNG</label>
-                <InputNumber
-                  min={1}
-                  defaultValue={1}
-                  className='w-full'
-                  onChange={(value) => handleSetCartPayload('product_number', value)}
-                />
-              </div>
-            </div>
-
-            <div className='w-full border-t border-gray-200 my-6'></div>
-
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleAddToCart(cartPayload)}
-              style={{ color: '#fff' }}
-              className='
-                w-full py-3 px-6 rounded-lg
-                bg-primary hover:bg-primary-dark
-                !text-white font-medium
-                transition-colors duration-300
-                flex items-center justify-center gap-2
-              '
-            >
-              <ShoppingCart className='w-5 h-5' />
-              Thêm vào giỏ hàng
-            </motion.button>
-          </motion.div>
+        {/* Related Products */}
+        <div className='mt-12'>
+          <div className='flex items-center gap-2.5 mb-5'>
+            <div className='w-1.5 h-6 bg-primary rounded-full' />
+            <h2 className='text-lg font-bold text-gray-900'>Sản phẩm liên quan</h2>
+          </div>
+          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4'>
+            {relatedProducts && relatedProducts.length > 0 ? (
+              relatedProducts.slice(0, 5).map((item: any, index: number) => <CardComponent key={index} data={item} />)
+            ) : (
+              <div className='col-span-full text-center py-10 text-gray-400 text-sm'>Đang tải sản phẩm...</div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Related Products */}
-      <div className='mb-10'>
-        <RelatedProducts productList={relatedProducts} handleClick={handleRelatedProductClick} />
-      </div>
-
-      {/* Comments */}
-      <div className='mt-20'>
-        <Comment id={id} reviews={product.product_reviews} getProduct={getProductById} />
+        {/* Comments */}
+        <div className='mt-10 bg-white p-5 sm:p-8 rounded-2xl shadow-sm border border-gray-100'>
+          <Comment id={id} reviews={product.product_reviews} getProduct={getProductById} />
+        </div>
       </div>
     </div>
   )
