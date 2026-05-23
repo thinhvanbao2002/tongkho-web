@@ -172,7 +172,7 @@ const AdminLayout: React.FC = ({ children }: any) => {
       >
         <div className='flex flex-col items-center justify-center py-6 px-4'>
           <img
-            src='/logo-v2.jpg'
+            src='/luna-v2.png'
             alt='Logo'
             className={`${collapsed ? 'w-12 h-12' : 'w-24 h-24'} rounded-full shadow-md object-cover transition-all duration-300`}
           />

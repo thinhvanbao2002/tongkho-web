@@ -57,7 +57,7 @@ function LoginPage() {
                 <div className='absolute inset-0 flex items-center justify-center p-8'>
                   <div className='text-center'>
                     <img
-                      src='/logo-v2.jpg'
+                      src='/luna-v2.png'
                       alt='Logo'
                       className='w-64 h-64 mx-auto mb-6 rounded-full shadow-lg object-cover'
                     />

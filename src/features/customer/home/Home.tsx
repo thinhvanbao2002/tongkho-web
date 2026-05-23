@@ -22,9 +22,6 @@ const contentStyle: React.CSSProperties = {
 
 const backGrounds: Array<urlBackground> = [
   {
-    url: '/banner1.png'
-  },
-  {
     url: '/banner2.png'
   },
   {
