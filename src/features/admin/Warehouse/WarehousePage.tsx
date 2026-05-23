@@ -31,7 +31,7 @@ function WarehousePage() {
   const [inventoryModalVisible, setInventoryModalVisible] = useState<boolean>(false)
   const [selectedWarehouse, setSelectedWarehouse] = useState<any>()
   const { user } = useAuth()
-  console.log("🚀 ~ WarehousePage ~ user:", user)
+  console.log('🚀 ~ WarehousePage ~ user:', user)
   const columnsListWarehouse: IColumnAntD[] = [
     {
       title: 'STT',
@@ -78,32 +78,32 @@ function WarehousePage() {
                 />
               }
             />
-            {user?.role === 'admin' &&
-            <TooltipCustom
-              title={'Cập nhật'}
-              children={
-                <Button
-                  type={'text'}
-                  className={'btn-success-text'}
-                  icon={<EditOutlined />}
-                  onClick={() => handleEditWarehouse(record)}
-                />
-              }
-            />
-            }
-            {user?.role === 'admin' && 
-              <ShowConfirm
-              placement='bottomLeft'
-              onConfirm={() => handleRemoveWarehouse(record)}
-              confirmText={'Xóa'}
-              title={'Bạn có chắc chắn muốn xóa?'}
-            >
+            {user?.role === 'admin' && (
               <TooltipCustom
-                title='Xóa'
-                children={<Button type='text' className={'btn-delete-text'} icon={<DeleteOutlined />} />}
+                title={'Cập nhật'}
+                children={
+                  <Button
+                    type={'text'}
+                    className={'btn-success-text'}
+                    icon={<EditOutlined />}
+                    onClick={() => handleEditWarehouse(record)}
+                  />
+                }
               />
-            </ShowConfirm>
-            }
+            )}
+            {user?.role === 'admin' && (
+              <ShowConfirm
+                placement='bottomLeft'
+                onConfirm={() => handleRemoveWarehouse(record)}
+                confirmText={'Xóa'}
+                title={'Bạn có chắc chắn muốn xóa?'}
+              >
+                <TooltipCustom
+                  title='Xóa'
+                  children={<Button type='text' className={'btn-delete-text'} icon={<DeleteOutlined />} />}
+                />
+              </ShowConfirm>
+            )}
           </div>
         )
       }
@@ -237,17 +237,17 @@ function WarehousePage() {
         <FilterWarehouse onChangeValue={handleFilter} />
       </Row>
       <Row className='mb-2 flex justify-end'>
-        {user?.role === 'admin' &&
-           <Button
-          type='primary'
-          onClick={() => {
-            setModalVisible(true)
-            setTitle('Thêm mới kho')
-          }}
-        >
-          Thêm mới
-        </Button>
-       }
+        {user?.role === 'admin' && (
+          <Button
+            type='primary'
+            onClick={() => {
+              setModalVisible(true)
+              setTitle('Thêm mới kho')
+            }}
+          >
+            Thêm mới
+          </Button>
+        )}
       </Row>
       <Spin spinning={isLoading}>
         <Styled.TableStyle

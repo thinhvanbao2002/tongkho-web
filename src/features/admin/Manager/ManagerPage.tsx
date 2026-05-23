@@ -152,7 +152,7 @@ function ManagerPage() {
       avatar: value?.avatar,
       role: value?.role
     }
-    console.log("🚀 ~ handleSubmit ~ payLoadAccount:", payLoadAccount)
+    console.log('🚀 ~ handleSubmit ~ payLoadAccount:', payLoadAccount)
     let res
     try {
       if (rowSelected?.id) {

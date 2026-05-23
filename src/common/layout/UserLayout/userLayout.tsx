@@ -92,7 +92,7 @@ const UserLayout: React.FC = ({ children }: any) => {
     <Layout style={layoutStyle}>
       <Header style={headerStyle} className='flex items-center justify-between h-28 bg-baseBackground'>
         <div>
-          <img style={{width: 200}} src='/luna-v2.png' alt='' />
+          <img style={{ width: 200 }} src='/luna-v2.png' alt='' />
         </div>
         <div className='flex items-center'>
           <div className='text-primary flex items-center justify-center uppercase font-semibold'>

@@ -19,8 +19,8 @@ function SupplierPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [rowSelected, setRowSelected] = useState<ISupplier | undefined>()
-  const {user} = useAuth()
-  console.log("🚀 ~ SupplierPage ~ user:", user)
+  const { user } = useAuth()
+  console.log('🚀 ~ SupplierPage ~ user:', user)
   const [payload, setPayload] = useState<any>({
     page: 1,
     take: 10,
@@ -84,32 +84,32 @@ function SupplierPage() {
       render: (value: number, record: ISupplier) => {
         return (
           <div style={{ display: 'flex' }}>
-            {user?.role === 'admin' &&
+            {user?.role === 'admin' && (
               <TooltipCustom
-              title={'Cập nhật'}
-              children={
-                <Button
-                  type={'text'}
-                  className={'btn-success-text'}
-                  icon={<EditOutlined />}
-                  onClick={() => handleOpenEditModal(record)}
-                />
-              }
-            />
-            }
-            {user?.role === 'admin' && 
-              <ShowConfirm
-              placement='bottomLeft'
-              onConfirm={() => handleRemoveSupplier(record)}
-              confirmText={'Xóa'}
-              title={'Bạn có chắc chắn muốn xóa nhà cung cấp này?'}
-            >
-              <TooltipCustom
-                title='Xóa'
-                children={<Button type='text' className={'btn-delete-text'} icon={<DeleteOutlined />} />}
+                title={'Cập nhật'}
+                children={
+                  <Button
+                    type={'text'}
+                    className={'btn-success-text'}
+                    icon={<EditOutlined />}
+                    onClick={() => handleOpenEditModal(record)}
+                  />
+                }
               />
-            </ShowConfirm>
-            }
+            )}
+            {user?.role === 'admin' && (
+              <ShowConfirm
+                placement='bottomLeft'
+                onConfirm={() => handleRemoveSupplier(record)}
+                confirmText={'Xóa'}
+                title={'Bạn có chắc chắn muốn xóa nhà cung cấp này?'}
+              >
+                <TooltipCustom
+                  title='Xóa'
+                  children={<Button type='text' className={'btn-delete-text'} icon={<DeleteOutlined />} />}
+                />
+              </ShowConfirm>
+            )}
           </div>
         )
       }
@@ -188,11 +188,11 @@ function SupplierPage() {
     <>
       <FilterSupplier onChangeValue={handleFilter} />
       <Row className='mb-2 flex justify-end mt-2'>
-        {user?.role === 'admin' &&
+        {user?.role === 'admin' && (
           <Button type='primary' onClick={handleOpenAddModal}>
-          Thêm mới
-        </Button>
-        }
+            Thêm mới
+          </Button>
+        )}
       </Row>
       <Spin spinning={isLoading}>
         <Styled.TableStyle
