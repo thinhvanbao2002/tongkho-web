@@ -32,6 +32,7 @@ function OrderPage() {
   const getProvince = useCallback(async () => {
     try {
       const res = await orderServices.getProvince(payload)
+      console.log('🚀 ~ OrderPage ~ res:', res)
       setProvinces(res?.data)
     } catch (error) {
       console.log('🚀 ~ getProvince ~ error:', error)

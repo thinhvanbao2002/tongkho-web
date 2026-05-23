@@ -174,32 +174,34 @@ const AddEditProduct = () => {
         </Col>
       </Row>
       <Row gutter={24}>
-        <Col md={8}>
-          <Form.Item
-            name={'product_type'}
-            label={'Loại hàng'}
-            rules={[
-              {
-                required: true,
-                message: `Loại hàng: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
-              }
-            ]}
-          >
-            <RadiusSelection
-              placeholder={'Trạng thái hoạt động'}
-              // onChange={(value: number) => {
-              //   let tmpValue
-              //   value === undefined ? (tmpValue = null) : (tmpValue = value)
-              //   onChangeValue({ product_type: tmpValue })
-              // }}
-              options={[
-                { value: ProductTypes.BEST_SELLING, text: 'Hàng bán chạy' },
-                { value: ProductTypes.INVENTORY, text: 'Hàng tồn kho' },
-                { value: ProductTypes.NEW_PRODUCT, text: 'Hàng mới về' }
+        {record.id && (
+          <Col md={8}>
+            <Form.Item
+              name={'product_type'}
+              label={'Loại hàng'}
+              rules={[
+                {
+                  required: true,
+                  message: `Loại hàng: ${TEXT_CONSTANTS.IS_NOT_EMPTY} `
+                }
               ]}
-            />
-          </Form.Item>
-        </Col>
+            >
+              <RadiusSelection
+                placeholder={'Trạng thái hoạt động'}
+                // onChange={(value: number) => {
+                //   let tmpValue
+                //   value === undefined ? (tmpValue = null) : (tmpValue = value)
+                //   onChangeValue({ product_type: tmpValue })
+                // }}
+                options={[
+                  { value: ProductTypes.BEST_SELLING, text: 'Hàng bán chạy' },
+                  { value: ProductTypes.INVENTORY, text: 'Hàng tồn kho' },
+                  { value: ProductTypes.NEW_PRODUCT, text: 'Hàng mới về' }
+                ]}
+              />
+            </Form.Item>
+          </Col>
+        )}
         <Col span={8}>
           <Form.Item
             name='price'

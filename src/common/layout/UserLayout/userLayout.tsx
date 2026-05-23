@@ -1,17 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { Avatar, Button, Dropdown, Form, Input, Layout } from 'antd'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Avatar, AutoComplete, Button, Dropdown, Form, Input, Layout } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { UserOutlined } from '@ant-design/icons'
 import { MenuProps } from 'antd/lib'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLogin } from 'redux/slice/login.slice'
-import { openNotification } from 'common/utils'
+import { formatPrice, openNotification } from 'common/utils'
 import _ from 'lodash'
 import { USER_PATH } from 'common/constants/paths'
 import AccountUser from 'features/customer/account/components/Account'
 import { AnimatePresence } from 'framer-motion'
 import PageTransition from 'common/components/PageTransition'
+import { productServices } from 'features/customer/product/productApis'
 
 const { Header, Footer, Content } = Layout
 
@@ -32,10 +33,62 @@ const UserLayout: React.FC = ({ children }: any) => {
   const [userData, setUserData] = useState<any>({})
   const data = useSelector((state: any) => state.login)
   const [modalAccountIsvisible, setModalAccountIsVisible] = useState<boolean>(false)
+  const [searchValue, setSearchValue] = useState<string>('')
+  const [searchResults, setSearchResults] = useState<Array<any>>([])
+  const [searchLoading, setSearchLoading] = useState<boolean>(false)
 
   const handleNavigate = (path: string) => {
     navigate(path)
   }
+
+  const searchProducts = useMemo(
+    () =>
+      _.debounce(async (value: string) => {
+        const query = String(value || '').trim()
+        if (!query) {
+          setSearchResults([])
+          setSearchLoading(false)
+          return
+        }
+
+        setSearchLoading(true)
+        try {
+          const res = await productServices.get({ page: 1, take: 10, q: query })
+          console.log('🚀 ~ UserLayout ~ res:', res)
+          setSearchResults(res?.data || [])
+        } catch {
+          setSearchResults([])
+        } finally {
+          setSearchLoading(false)
+        }
+      }, 300),
+    []
+  )
+
+  const handleSelectProduct = (value: string, option: any) => {
+    const productId = option?.productId || option?.value
+    if (productId) {
+      navigate(`${USER_PATH.PRODUCT_DETAIL}/${productId}`)
+      setSearchValue('')
+      setSearchResults([])
+    }
+  }
+
+  const handleSearchValueChange = (value: string) => {
+    setSearchValue(value)
+  }
+
+  useEffect(() => {
+    if (!searchValue) {
+      setSearchResults([])
+      setSearchLoading(false)
+      return
+    }
+    searchProducts(searchValue)
+    return () => {
+      searchProducts.cancel?.()
+    }
+  }, [searchValue, searchProducts])
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem('token')
@@ -90,36 +143,76 @@ const UserLayout: React.FC = ({ children }: any) => {
 
   return (
     <Layout style={layoutStyle}>
-      <Header style={headerStyle} className='flex items-center justify-between h-28 bg-baseBackground'>
+      <Header style={headerStyle} className='flex items-center justify-between h-32 px-8 bg-baseBackground shadow-sm'>
         <div>
-          <img style={{ width: 200 }} src='/luna-v2.png' alt='' />
+          <img style={{ width: 220 }} src='/luna-v2.png' alt='Luna Logo' />
         </div>
-        <div className='flex items-center'>
-          <div className='text-primary flex items-center justify-center uppercase font-semibold'>
+        <div className='flex items-center gap-5'>
+          <div className='text-primary flex items-center justify-center uppercase font-semibold space-x-2'>
             <h4
-              className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200'
+              className='cursor-pointer px-4 py-3 text-custom-xs hover:text-money transition duration-200 rounded-lg hover:bg-white/10'
               onClick={() => handleNavigate('/')}
             >
               Trang chủ
             </h4>
             <h4
-              className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200'
+              className='cursor-pointer px-4 py-3 text-custom-xs hover:text-money transition duration-200 rounded-lg hover:bg-white/10'
               onClick={() => handleNavigate('/product')}
             >
               Sản phẩm
             </h4>
             <div
-              className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200 relative'
+              className='cursor-pointer px-4 py-3 text-custom-xs hover:text-money transition duration-200 rounded-lg hover:bg-white/10 relative'
               onClick={() => handleNavigate('/cart')}
             >
               <div>Giỏ hàng</div>
             </div>
           </div>
+          <div className='w-[380px] min-w-[280px] mb-3'>
+            <AutoComplete
+              value={searchValue}
+              options={searchResults.map((product: any) => ({
+                value: String(product?.id),
+                label: (
+                  <div className='flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100'>
+                    <img
+                      src={product?.image || product?.thumbnail || 'https://via.placeholder.com/48'}
+                      alt={product?.name}
+                      className='h-12 w-12 rounded object-cover'
+                    />
+                    <div className='overflow-hidden'>
+                      <div className='text-sm font-semibold text-gray-900 line-clamp-2'>{product?.name}</div>
+                      {product?.price != null && (
+                        <div className='text-[11px] text-gray-500'>{formatPrice(product.price)} VND</div>
+                      )}
+                    </div>
+                  </div>
+                ),
+                productId: product?.id
+              }))}
+              onSelect={handleSelectProduct}
+              onSearch={handleSearchValueChange}
+              onChange={handleSearchValueChange}
+              notFoundContent={searchLoading ? 'Đang tìm...' : 'Không tìm thấy sản phẩm'}
+              className='w-full rounded-full'
+              dropdownMatchSelectWidth={380}
+              dropdownStyle={{ maxHeight: 420, overflowY: 'auto', borderRadius: 16 }}
+            >
+              <Input.Search
+                size='middle'
+                placeholder='Tìm sản phẩm...'
+                enterButton={false}
+                loading={searchLoading}
+                allowClear
+                className='rounded-full bg-white border-slate-200'
+              />
+            </AutoComplete>
+          </div>
         </div>
         <div className='flex items-center'>
           <h4 className='cursor-pointer p-5 text-custom-xs hover:text-money transition duration-200'>
             <Dropdown menu={{ items }} placement='bottomRight' arrow={{ pointAtCenter: true }}>
-              <Avatar size={40} src={userData?.user?.avatar} icon={<UserOutlined />} />
+              <Avatar size={44} src={userData?.user?.avatar} icon={<UserOutlined />} />
             </Dropdown>
           </h4>
         </div>
