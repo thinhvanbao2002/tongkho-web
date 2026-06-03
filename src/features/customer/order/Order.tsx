@@ -30,11 +30,9 @@ function OrderPage() {
   const listDistrict = getOptionListSelector(districts, 'name', 'id')
   const listWards = getOptionListSelector(wards, 'name', 'id')
 
-  const getProvince = useCallback(async () => {
+   const getProvince = useCallback(async () => {
     try {
       const res = await orderServices.getProvince(payload)
-
-      console.log('🚀 ~ getProvince ~ res:', res)
       setProvinces(res?.data)
     } catch (error) {
       console.log('🚀 ~ getProvince ~ error:', error)

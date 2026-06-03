@@ -9,9 +9,9 @@ export const PRODUCT_VALUES = {
     text: 'Hàng bán chạy'
   },
   [PRODUCT_TYPES.INVENTORY]: {
-    text: 'Hàng tồn kho'
+    text: 'Hàng mới về'
   },
   [PRODUCT_TYPES.NEW]: {
-    text: 'Hàng mới về'
+    text: 'Hàng tồn kho'
   }
 }
